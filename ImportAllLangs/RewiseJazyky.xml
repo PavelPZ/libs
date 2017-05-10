@@ -1,0 +1,1235 @@
+<?xml version="1.0"?>
+<LangMetas xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Langs>
+    <LangMeta>
+      <LCID>1078</LCID>
+      <Id>af-za</Id>
+      <Descr>Afrikaans</Descr>
+      <Location>South Africa</Location>
+      <EnglishName>Afrikaans (South Africa)</EnglishName>
+      <NativeName>Afrikaans (Suid-Afrika)</NativeName>
+      <DisplayName>Afrikaans (South Africa)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1025</LCID>
+      <Id>ar-sa</Id>
+      <Descr>Arabic</Descr>
+      <Location>Saudi Arabia</Location>
+      <EnglishName>Arabic (Saudi Arabia)</EnglishName>
+      <NativeName>العربية (المملكة العربية السعودية)</NativeName>
+      <DisplayName>Arabic (Saudi Arabia)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>true</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1101</LCID>
+      <Id>as-in</Id>
+      <Descr>Assamese</Descr>
+      <Location>India</Location>
+      <EnglishName>Assamese (India)</EnglishName>
+      <NativeName>অসমীয়া (ভাৰত)</NativeName>
+      <DisplayName>Assamese (India)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1068</LCID>
+      <Id>az-latn-az</Id>
+      <Descr>Azerbaijani (Latin)</Descr>
+      <Location>Azerbaijan</Location>
+      <EnglishName>Azerbaijani (Latin, Azerbaijan)</EnglishName>
+      <NativeName>Azərbaycan dili (Azərbaycan)</NativeName>
+      <DisplayName>Azerbaijani (Latin, Azerbaijan)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1059</LCID>
+      <Id>be-by</Id>
+      <Descr>Belarusian</Descr>
+      <Location>Belarus</Location>
+      <EnglishName>Belarusian (Belarus)</EnglishName>
+      <NativeName>Беларуская (Беларусь)</NativeName>
+      <DisplayName>Belarusian (Belarus)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>false</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1026</LCID>
+      <Id>bg-bg</Id>
+      <Descr>Bulgarian</Descr>
+      <Location>Bulgaria</Location>
+      <EnglishName>Bulgarian (Bulgaria)</EnglishName>
+      <NativeName>български (България)</NativeName>
+      <DisplayName>Bulgarian (Bulgaria)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1093</LCID>
+      <Id>bn-in</Id>
+      <Descr>Bangla</Descr>
+      <Location>India</Location>
+      <EnglishName>Bangla (India)</EnglishName>
+      <NativeName>বাংলা (ভারত)</NativeName>
+      <DisplayName>Bangla (India)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1105</LCID>
+      <Id>bo-cn</Id>
+      <Descr>Tibetan</Descr>
+      <Location>People's Republic of China</Location>
+      <EnglishName>Tibetan (China)</EnglishName>
+      <NativeName>བོད་ཡིག (ཀྲུང་ཧྭ་མི་དམངས་སྤྱི་མཐུན་རྒྱལ་ཁབ།)</NativeName>
+      <DisplayName>Tibetan (PRC)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1150</LCID>
+      <Id>br-fr</Id>
+      <Descr>Breton</Descr>
+      <Location>France</Location>
+      <EnglishName>Breton (France)</EnglishName>
+      <NativeName>brezhoneg (Frañs)</NativeName>
+      <DisplayName>Breton (France)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>5146</LCID>
+      <Id>bs-latn-ba</Id>
+      <Descr>Bosnian (Latin)</Descr>
+      <Location>Bosnia and Herzegovina</Location>
+      <EnglishName>Bosnian (Latin, Bosnia and Herzegovina)</EnglishName>
+      <NativeName>bosanski (Bosna i Hercegovina)</NativeName>
+      <DisplayName>Bosnian (Latin, Bosnia and Herzegovina)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>false</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1027</LCID>
+      <Id>ca-es</Id>
+      <Descr>Catalan</Descr>
+      <Location>Spain</Location>
+      <EnglishName>Catalan (Catalan)</EnglishName>
+      <NativeName>català (català)</NativeName>
+      <DisplayName>Catalan (Catalan)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1155</LCID>
+      <Id>co-fr</Id>
+      <Descr>Corsican</Descr>
+      <Location>France</Location>
+      <EnglishName>Corsican (France)</EnglishName>
+      <NativeName>Corsu (Francia)</NativeName>
+      <DisplayName>Corsican (France)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1029</LCID>
+      <Id>cs-cz</Id>
+      <Descr>Czech</Descr>
+      <Location>Czech Republic</Location>
+      <EnglishName>Czech (Czech Republic)</EnglishName>
+      <NativeName>čeština (Česká republika)</NativeName>
+      <DisplayName>Czech (Czech Republic)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1030</LCID>
+      <Id>da-dk</Id>
+      <Descr>Danish</Descr>
+      <Location>Denmark</Location>
+      <EnglishName>Danish (Denmark)</EnglishName>
+      <NativeName>dansk (Danmark)</NativeName>
+      <DisplayName>Danish (Denmark)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1031</LCID>
+      <Id>de-de</Id>
+      <Descr>German</Descr>
+      <Location>Germany</Location>
+      <EnglishName>German (Germany)</EnglishName>
+      <NativeName>Deutsch (Deutschland)</NativeName>
+      <DisplayName>German (Germany)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1032</LCID>
+      <Id>el-gr</Id>
+      <Descr>Greek</Descr>
+      <Location>Greece</Location>
+      <EnglishName>Greek (Greece)</EnglishName>
+      <NativeName>Ελληνικά (Ελλάδα)</NativeName>
+      <DisplayName>Greek (Greece)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>2057</LCID>
+      <Id>en-gb</Id>
+      <Descr>English</Descr>
+      <Location>United Kingdom</Location>
+      <EnglishName>English (United Kingdom)</EnglishName>
+      <NativeName>English (United Kingdom)</NativeName>
+      <DisplayName>English (United Kingdom)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1033</LCID>
+      <Id>en-us</Id>
+      <Descr>English</Descr>
+      <Location>United States</Location>
+      <EnglishName>English (United States)</EnglishName>
+      <NativeName>English (United States)</NativeName>
+      <DisplayName>English (United States)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>3082</LCID>
+      <Id>es-es</Id>
+      <Descr>Spanish</Descr>
+      <Location>Spain</Location>
+      <EnglishName>Spanish (Spain, International Sort)</EnglishName>
+      <NativeName>español (España, alfabetización internacional)</NativeName>
+      <DisplayName>Spanish (Spain)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1061</LCID>
+      <Id>et-ee</Id>
+      <Descr>Estonian</Descr>
+      <Location>Estonia</Location>
+      <EnglishName>Estonian (Estonia)</EnglishName>
+      <NativeName>eesti (Eesti)</NativeName>
+      <DisplayName>Estonian (Estonia)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1069</LCID>
+      <Id>eu-es</Id>
+      <Descr>Basque</Descr>
+      <Location>Spain</Location>
+      <EnglishName>Basque (Basque)</EnglishName>
+      <NativeName>euskara (euskara)</NativeName>
+      <DisplayName>Basque (Basque)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1065</LCID>
+      <Id>fa-ir</Id>
+      <Descr>Persian</Descr>
+      <Location>Iran</Location>
+      <EnglishName>Persian (Iran)</EnglishName>
+      <NativeName>فارسى (ایران)</NativeName>
+      <DisplayName>Persian (Iran)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>true</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1035</LCID>
+      <Id>fi-fi</Id>
+      <Descr>Finnish</Descr>
+      <Location>Finland</Location>
+      <EnglishName>Finnish (Finland)</EnglishName>
+      <NativeName>suomi (Suomi)</NativeName>
+      <DisplayName>Finnish (Finland)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1036</LCID>
+      <Id>fr-fr</Id>
+      <Descr>French</Descr>
+      <Location>France</Location>
+      <EnglishName>French (France)</EnglishName>
+      <NativeName>français (France)</NativeName>
+      <DisplayName>French (France)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>2108</LCID>
+      <Id>ga-ie</Id>
+      <Descr>Irish</Descr>
+      <Location>Ireland</Location>
+      <EnglishName>Irish (Ireland)</EnglishName>
+      <NativeName>Gaeilge (Éire)</NativeName>
+      <DisplayName>Irish (Ireland)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1110</LCID>
+      <Id>gl-es</Id>
+      <Descr>Galician</Descr>
+      <Location>Spain</Location>
+      <EnglishName>Galician (Galician)</EnglishName>
+      <NativeName>galego (galego)</NativeName>
+      <DisplayName>Galician (Galician)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1128</LCID>
+      <Id>ha-latn-ng</Id>
+      <Descr>Hausa (Latin)</Descr>
+      <Location>Nigeria</Location>
+      <EnglishName>Hausa (Latin, Nigeria)</EnglishName>
+      <NativeName>Hausa (Najeriya)</NativeName>
+      <DisplayName>Hausa (Latin, Nigeria)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1037</LCID>
+      <Id>he-il</Id>
+      <Descr>Hebrew</Descr>
+      <Location>Israel</Location>
+      <EnglishName>Hebrew (Israel)</EnglishName>
+      <NativeName>עברית (ישראל)</NativeName>
+      <DisplayName>Hebrew (Israel)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>true</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1081</LCID>
+      <Id>hi-in</Id>
+      <Descr>Hindi</Descr>
+      <Location>India</Location>
+      <EnglishName>Hindi (India)</EnglishName>
+      <NativeName>हिंदी (भारत)</NativeName>
+      <DisplayName>Hindi (India)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>false</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1050</LCID>
+      <Id>hr-hr</Id>
+      <Descr>Croatian</Descr>
+      <Location>Croatia</Location>
+      <EnglishName>Croatian (Croatia)</EnglishName>
+      <NativeName>hrvatski (Hrvatska)</NativeName>
+      <DisplayName>Croatian (Croatia)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1038</LCID>
+      <Id>hu-hu</Id>
+      <Descr>Hungarian</Descr>
+      <Location>Hungary</Location>
+      <EnglishName>Hungarian (Hungary)</EnglishName>
+      <NativeName>magyar (Magyarország)</NativeName>
+      <DisplayName>Hungarian (Hungary)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1067</LCID>
+      <Id>hy-am</Id>
+      <Descr>Armenian</Descr>
+      <Location>Armenia</Location>
+      <EnglishName>Armenian (Armenia)</EnglishName>
+      <NativeName>Հայերեն (Հայաստան)</NativeName>
+      <DisplayName>Armenian (Armenia)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1057</LCID>
+      <Id>id-id</Id>
+      <Descr>Indonesian</Descr>
+      <Location>Indonesia</Location>
+      <EnglishName>Indonesian (Indonesia)</EnglishName>
+      <NativeName>Indonesia (Indonesia)</NativeName>
+      <DisplayName>Indonesian (Indonesia)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1136</LCID>
+      <Id>ig-ng</Id>
+      <Descr>Igbo</Descr>
+      <Location>Nigeria</Location>
+      <EnglishName>Igbo (Nigeria)</EnglishName>
+      <NativeName>Igbo (Nigeria)</NativeName>
+      <DisplayName>Igbo (Nigeria)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1039</LCID>
+      <Id>is-is</Id>
+      <Descr>Icelandic</Descr>
+      <Location>Iceland</Location>
+      <EnglishName>Icelandic (Iceland)</EnglishName>
+      <NativeName>íslenska (Ísland)</NativeName>
+      <DisplayName>Icelandic (Iceland)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1040</LCID>
+      <Id>it-it</Id>
+      <Descr>Italian</Descr>
+      <Location>Italy</Location>
+      <EnglishName>Italian (Italy)</EnglishName>
+      <NativeName>italiano (Italia)</NativeName>
+      <DisplayName>Italian (Italy)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1041</LCID>
+      <Id>ja-jp</Id>
+      <Descr>Japanese</Descr>
+      <Location>Japan</Location>
+      <EnglishName>Japanese (Japan)</EnglishName>
+      <NativeName>日本語 (日本)</NativeName>
+      <DisplayName>Japanese (Japan)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1079</LCID>
+      <Id>ka-ge</Id>
+      <Descr>Georgian</Descr>
+      <Location>Georgia</Location>
+      <EnglishName>Georgian (Georgia)</EnglishName>
+      <NativeName>ქართული (საქართველო)</NativeName>
+      <DisplayName>Georgian (Georgia)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1107</LCID>
+      <Id>km-kh</Id>
+      <Descr>Khmer</Descr>
+      <Location>Cambodia</Location>
+      <EnglishName>Khmer (Cambodia)</EnglishName>
+      <NativeName>ភាសាខ្មែរ (កម្ពុជា)</NativeName>
+      <DisplayName>Khmer (Cambodia)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1042</LCID>
+      <Id>ko-kr</Id>
+      <Descr>Korean</Descr>
+      <Location>Korea</Location>
+      <EnglishName>Korean (Korea)</EnglishName>
+      <NativeName>한국어(대한민국)</NativeName>
+      <DisplayName>Korean (Korea)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1088</LCID>
+      <Id>ky-kg</Id>
+      <Descr>Kyrgyz</Descr>
+      <Location>Kyrgyzstan</Location>
+      <EnglishName>Kyrgyz (Kyrgyzstan)</EnglishName>
+      <NativeName>Кыргыз (Кыргызстан)</NativeName>
+      <DisplayName>Kyrgyz (Kyrgyzstan)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1063</LCID>
+      <Id>lt-lt</Id>
+      <Descr>Lithuanian</Descr>
+      <Location>Lithuania</Location>
+      <EnglishName>Lithuanian (Lithuania)</EnglishName>
+      <NativeName>lietuvių (Lietuva)</NativeName>
+      <DisplayName>Lithuanian (Lithuania)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1062</LCID>
+      <Id>lv-lv</Id>
+      <Descr>Latvian</Descr>
+      <Location>Latvia</Location>
+      <EnglishName>Latvian (Latvia)</EnglishName>
+      <NativeName>latviešu (Latvija)</NativeName>
+      <DisplayName>Latvian (Latvia)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1153</LCID>
+      <Id>mi-nz</Id>
+      <Descr>Maori</Descr>
+      <Location>New Zealand</Location>
+      <EnglishName>Maori (New Zealand)</EnglishName>
+      <NativeName>Reo Māori (Aotearoa)</NativeName>
+      <DisplayName>Maori (New Zealand)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1071</LCID>
+      <Id>mk-mk</Id>
+      <Descr>Macedonian</Descr>
+      <Location>Macedonia (Former Yugoslav Republic of Macedonia)</Location>
+      <EnglishName>Macedonian (Macedonia, FYRO)</EnglishName>
+      <NativeName>македонски (Република Македонија)</NativeName>
+      <DisplayName>Macedonian (Former Yugoslav Republic of Macedonia)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1100</LCID>
+      <Id>ml-in</Id>
+      <Descr>Malayalam</Descr>
+      <Location>India</Location>
+      <EnglishName>Malayalam (India)</EnglishName>
+      <NativeName>മലയാളം (ഇന്ത്യ)</NativeName>
+      <DisplayName>Malayalam (India)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1104</LCID>
+      <Id>mn-mn</Id>
+      <Descr>Mongolian (Cyrillic)</Descr>
+      <Location>Mongolia</Location>
+      <EnglishName>Mongolian (Mongolia)</EnglishName>
+      <NativeName>монгол (Монгол)</NativeName>
+      <DisplayName>Mongolian (Cyrillic, Mongolia)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1102</LCID>
+      <Id>mr-in</Id>
+      <Descr>Marathi</Descr>
+      <Location>India</Location>
+      <EnglishName>Marathi (India)</EnglishName>
+      <NativeName>मराठी (भारत)</NativeName>
+      <DisplayName>Marathi (India)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>false</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1086</LCID>
+      <Id>ms-my</Id>
+      <Descr>Malay</Descr>
+      <Location>Malaysia</Location>
+      <EnglishName>Malay (Malaysia)</EnglishName>
+      <NativeName>Bahasa Melayu (Malaysia)</NativeName>
+      <DisplayName>Malay (Malaysia)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1082</LCID>
+      <Id>mt-mt</Id>
+      <Descr>Maltese</Descr>
+      <Location>Malta</Location>
+      <EnglishName>Maltese (Malta)</EnglishName>
+      <NativeName>Malti (Malta)</NativeName>
+      <DisplayName>Maltese (Malta)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1044</LCID>
+      <Id>nb-no</Id>
+      <Descr>Norwegian (Bokmal)</Descr>
+      <Location>Norway</Location>
+      <EnglishName>Norwegian Bokmål (Norway)</EnglishName>
+      <NativeName>norsk bokmål (Norge)</NativeName>
+      <DisplayName>Norwegian, Bokmål (Norway)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1043</LCID>
+      <Id>nl-nl</Id>
+      <Descr>Dutch</Descr>
+      <Location>Netherlands</Location>
+      <EnglishName>Dutch (Netherlands)</EnglishName>
+      <NativeName>Nederlands (Nederland)</NativeName>
+      <DisplayName>Dutch (Netherlands)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1132</LCID>
+      <Id>nso-za</Id>
+      <Descr>Sesotho sa Leboa</Descr>
+      <Location>South Africa</Location>
+      <EnglishName>Sesotho sa Leboa (South Africa)</EnglishName>
+      <NativeName>Sesotho sa Leboa (Afrika Borwa)</NativeName>
+      <DisplayName>Sesotho sa Leboa (South Africa)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1154</LCID>
+      <Id>oc-fr</Id>
+      <Descr>Occitan</Descr>
+      <Location>France</Location>
+      <EnglishName>Occitan (France)</EnglishName>
+      <NativeName>Occitan (França)</NativeName>
+      <DisplayName>Occitan (France)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1094</LCID>
+      <Id>pa-in</Id>
+      <Descr>Punjabi</Descr>
+      <Location>India</Location>
+      <EnglishName>Punjabi (India)</EnglishName>
+      <NativeName>ਪੰਜਾਬੀ (ਭਾਰਤ)</NativeName>
+      <DisplayName>Punjabi (India)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>false</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1045</LCID>
+      <Id>pl-pl</Id>
+      <Descr>Polish</Descr>
+      <Location>Poland</Location>
+      <EnglishName>Polish (Poland)</EnglishName>
+      <NativeName>polski (Polska)</NativeName>
+      <DisplayName>Polish (Poland)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1123</LCID>
+      <Id>ps-af</Id>
+      <Descr>Pashto</Descr>
+      <Location>Afghanistan</Location>
+      <EnglishName>Pashto (Afghanistan)</EnglishName>
+      <NativeName>پښتو (افغانستان)</NativeName>
+      <DisplayName>Pashto (Afghanistan)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>true</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1046</LCID>
+      <Id>pt-br</Id>
+      <Descr>Portuguese</Descr>
+      <Location>Brazil</Location>
+      <EnglishName>Portuguese (Brazil)</EnglishName>
+      <NativeName>português (Brasil)</NativeName>
+      <DisplayName>Portuguese (Brazil)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>2070</LCID>
+      <Id>pt-pt</Id>
+      <Descr>Portuguese</Descr>
+      <Location>Portugal</Location>
+      <EnglishName>Portuguese (Portugal)</EnglishName>
+      <NativeName>português (Portugal)</NativeName>
+      <DisplayName>Portuguese (Portugal)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>3179</LCID>
+      <Id>quz-pe</Id>
+      <Descr>Quechua</Descr>
+      <Location>Peru</Location>
+      <EnglishName>Quechua (Peru)</EnglishName>
+      <NativeName>runasimi (Peru)</NativeName>
+      <DisplayName>Quechua (Peru)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1048</LCID>
+      <Id>ro-ro</Id>
+      <Descr>Romanian</Descr>
+      <Location>Romania</Location>
+      <EnglishName>Romanian (Romania)</EnglishName>
+      <NativeName>română (România)</NativeName>
+      <DisplayName>Romanian (Romania)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1049</LCID>
+      <Id>ru-ru</Id>
+      <Descr>Russian</Descr>
+      <Location>Russia</Location>
+      <EnglishName>Russian (Russia)</EnglishName>
+      <NativeName>русский (Россия)</NativeName>
+      <DisplayName>Russian (Russia)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1051</LCID>
+      <Id>sk-sk</Id>
+      <Descr>Slovak</Descr>
+      <Location>Slovakia</Location>
+      <EnglishName>Slovak (Slovakia)</EnglishName>
+      <NativeName>slovenčina (Slovensko)</NativeName>
+      <DisplayName>Slovak (Slovakia)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1060</LCID>
+      <Id>sl-si</Id>
+      <Descr>Slovenian</Descr>
+      <Location>Slovenia</Location>
+      <EnglishName>Slovenian (Slovenia)</EnglishName>
+      <NativeName>slovenščina (Slovenija)</NativeName>
+      <DisplayName>Slovenian (Slovenia)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1052</LCID>
+      <Id>sq-al</Id>
+      <Descr>Albanian</Descr>
+      <Location>Albania</Location>
+      <EnglishName>Albanian (Albania)</EnglishName>
+      <NativeName>shqip (Shqipëri)</NativeName>
+      <DisplayName>Albanian (Albania)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>2074</LCID>
+      <Id>sr-latn-cs</Id>
+      <Descr>Serbian (Latin)</Descr>
+      <Location>Serbia and Montenegro (Former)</Location>
+      <EnglishName>Serbian (Latin, Serbia and Montenegro (Former))</EnglishName>
+      <NativeName>srpski (Srbija i Crna Gora (Bivša))</NativeName>
+      <DisplayName>Serbian (Latin, Serbia and Montenegro (Former))</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1053</LCID>
+      <Id>sv-se</Id>
+      <Descr>Swedish</Descr>
+      <Location>Sweden</Location>
+      <EnglishName>Swedish (Sweden)</EnglishName>
+      <NativeName>svenska (Sverige)</NativeName>
+      <DisplayName>Swedish (Sweden)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1089</LCID>
+      <Id>sw-ke</Id>
+      <Descr>Kiswahili</Descr>
+      <Location>Kenya</Location>
+      <EnglishName>Kiswahili (Kenya)</EnglishName>
+      <NativeName>Kiswahili (Kenya)</NativeName>
+      <DisplayName>Kiswahili (Kenya)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1097</LCID>
+      <Id>ta-in</Id>
+      <Descr>Tamil</Descr>
+      <Location>India</Location>
+      <EnglishName>Tamil (India)</EnglishName>
+      <NativeName>தமிழ் (இந்தியா)</NativeName>
+      <DisplayName>Tamil (India)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>false</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1098</LCID>
+      <Id>te-in</Id>
+      <Descr>Telugu</Descr>
+      <Location>India</Location>
+      <EnglishName>Telugu (India)</EnglishName>
+      <NativeName>తెలుగు (భారత దేశం)</NativeName>
+      <DisplayName>Telugu (India)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>false</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1054</LCID>
+      <Id>th-th</Id>
+      <Descr>Thai</Descr>
+      <Location>Thailand</Location>
+      <EnglishName>Thai (Thailand)</EnglishName>
+      <NativeName>ไทย (ไทย)</NativeName>
+      <DisplayName>Thai (Thailand)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1074</LCID>
+      <Id>tn-za</Id>
+      <Descr>Setswana</Descr>
+      <Location>South Africa</Location>
+      <EnglishName>Setswana (South Africa)</EnglishName>
+      <NativeName>Setswana (Aforika Borwa)</NativeName>
+      <DisplayName>Setswana (South Africa)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1055</LCID>
+      <Id>tr-tr</Id>
+      <Descr>Turkish</Descr>
+      <Location>Turkey</Location>
+      <EnglishName>Turkish (Turkey)</EnglishName>
+      <NativeName>Türkçe (Türkiye)</NativeName>
+      <DisplayName>Turkish (Turkey)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1058</LCID>
+      <Id>uk-ua</Id>
+      <Descr>Ukrainian</Descr>
+      <Location>Ukraine</Location>
+      <EnglishName>Ukrainian (Ukraine)</EnglishName>
+      <NativeName>українська (Україна)</NativeName>
+      <DisplayName>Ukrainian (Ukraine)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1056</LCID>
+      <Id>ur-pk</Id>
+      <Descr>Urdu</Descr>
+      <Location>Islamic Republic of Pakistan</Location>
+      <EnglishName>Urdu (Pakistan)</EnglishName>
+      <NativeName>اُردو (پاکستان)</NativeName>
+      <DisplayName>Urdu (Islamic Republic of Pakistan)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>true</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1091</LCID>
+      <Id>uz-latn-uz</Id>
+      <Descr>Uzbek (Latin)</Descr>
+      <Location>Uzbekistan</Location>
+      <EnglishName>Uzbek (Latin, Uzbekistan)</EnglishName>
+      <NativeName>o‘zbek (Oʻzbekiston)</NativeName>
+      <DisplayName>Uzbek (Latin, Uzbekistan)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1066</LCID>
+      <Id>vi-vn</Id>
+      <Descr>Vietnamese</Descr>
+      <Location>Vietnam</Location>
+      <EnglishName>Vietnamese (Vietnam)</EnglishName>
+      <NativeName>Tiếng Việt (Việt Nam)</NativeName>
+      <DisplayName>Vietnamese (Vietnam)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>true</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1076</LCID>
+      <Id>xh-za</Id>
+      <Descr>Xhosa</Descr>
+      <Location>South Africa</Location>
+      <EnglishName>isiXhosa (South Africa)</EnglishName>
+      <NativeName>isiXhosa (eMzantsi Afrika)</NativeName>
+      <DisplayName>isiXhosa (South Africa)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1130</LCID>
+      <Id>yo-ng</Id>
+      <Descr>Yoruba</Descr>
+      <Location>Nigeria</Location>
+      <EnglishName>Yoruba (Nigeria)</EnglishName>
+      <NativeName>Èdè Yorùbá (Orílẹ́ède Nàìjíríà)</NativeName>
+      <DisplayName>Yoruba (Nigeria)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>2052</LCID>
+      <Id>zh-cn</Id>
+      <Descr>Chinese (Simplified)</Descr>
+      <Location>People's Republic of China</Location>
+      <EnglishName>Chinese (Simplified, China)</EnglishName>
+      <NativeName>中文(中国)</NativeName>
+      <DisplayName>Chinese (Simplified, PRC)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>true</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>true</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>3076</LCID>
+      <Id>zh-hk</Id>
+      <Descr>Chinese (Traditional)</Descr>
+      <Location>Hong Kong S.A.R.</Location>
+      <EnglishName>Chinese (Traditional, Hong Kong SAR)</EnglishName>
+      <NativeName>中文(香港特別行政區)</NativeName>
+      <DisplayName>Chinese (Traditional, Hong Kong S.A.R.)</DisplayName>
+      <isFulltext>true</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+    <LangMeta>
+      <LCID>1077</LCID>
+      <Id>zu-za</Id>
+      <Descr>Zulu</Descr>
+      <Location>South Africa</Location>
+      <EnglishName>isiZulu (South Africa)</EnglishName>
+      <NativeName>isiZulu (i-South Africa)</NativeName>
+      <DisplayName>isiZulu (South Africa)</DisplayName>
+      <isFulltext>false</isFulltext>
+      <isSpellCheck>false</isSpellCheck>
+      <isLingea>false</isLingea>
+      <isEuroTalk>true</isEuroTalk>
+      <isGoethe>false</isGoethe>
+      <IsRightToLeft>false</IsRightToLeft>
+    </LangMeta>
+  </Langs>
+</LangMetas>
