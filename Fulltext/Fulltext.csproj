@@ -98,6 +98,9 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StemmerBreaker\StemmerBreaker.cs" />
+    <Compile Include="StemmerBreaker\StemmerBreakerCOM.cs" />
+    <Compile Include="StemmerBreaker\StemmerBreakerLib.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

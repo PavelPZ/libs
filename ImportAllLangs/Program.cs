@@ -1,6 +1,7 @@
 ﻿using Excel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Globalization;
 using System.IO;
@@ -18,18 +19,19 @@ namespace ImportAllLangs {
     public string Location;
     public string EnglishName;
     public string NativeName;
-    public string DisplayName;
-    public bool isFulltext;
-    public bool isSpellCheck;
-    public bool isLingea;
-    public bool isEuroTalk;
-    public bool isGoethe;
+    //public string DisplayName;
+    public bool IsFulltext;
+    public bool IsSpellCheck;
+    public string SpellCheckId;
+    public bool IsLingea;
+    public bool IsEuroTalk;
+    public bool IsGoethe;
     public bool IsRightToLeft;
     [XmlIgnore]
     public CultureInfo lc;
   }
 
-  public class LangMetas {
+  public class Metas {
     public LangMeta[] Langs;
   }
 
@@ -41,29 +43,32 @@ namespace ImportAllLangs {
         DataSet result = excelReader.AsDataSet();
         var tb = result.Tables.OfType<DataTable>().First(t => t.TableName == "ToPZCode");
         var rows = tb.Rows.Cast<DataRow>().Where(r => !r.IsNull(0)).ToArray();
-        int lcid; CultureInfo lc;
+        int lcid; CultureInfo lc; string SpellCheckId;
         var metas = rows.Select(r => new LangMeta() {
           LCID = lcid = int.Parse(r[0].ToString()),
           lc = lc = CultureInfo.GetCultureInfo(lcid),
           IsRightToLeft = lc.TextInfo.IsRightToLeft,
           EnglishName = lc.EnglishName,
           NativeName = lc.NativeName,
-          DisplayName = lc.DisplayName,
+          //DisplayName = lc.DisplayName,
           Descr = r[1].ToString(),
           Location = r[2].ToString(),
           Id = r[3].ToString().Replace('_', '-').ToLower(),
-          isFulltext = r[4].ToString() == "ANO",
-          isEuroTalk = r[5].ToString() == "ANO",
-          isGoethe = r[6].ToString() == "ANO",
-          isLingea = r[7].ToString() == "ANO",
-          isSpellCheck = r[9].ToString() == "ANO",
+          IsFulltext = r[4].ToString() == "ANO",
+          IsEuroTalk = r[5].ToString() == "ANO",
+          IsGoethe = r[6].ToString() == "ANO",
+          IsLingea = r[7].ToString() == "ANO",
+          SpellCheckId = SpellCheckId = r[10].ToString(),
+          IsSpellCheck = r[9].ToString() == "ANO" || !string.IsNullOrEmpty(SpellCheckId),
         }).OrderBy(m => m.Id).ToArray();
         //kontroly
         var errors = metas.Where(m => m.lc.Name.ToLower()!=m.Id).ToArray();
         //to XML
-        var ser = new XmlSerializer(typeof(LangMetas));
-        using (var fs = File.OpenWrite(@"c:\rw\libs\ImportAllLangs\RewiseJazyky.xml"))
-          ser.Serialize(fs, new LangMetas() { Langs = metas });
+        const string fn = @"c:\rw\libs\ImportAllLangs\RewiseJazyky.xml";
+        if (File.Exists(fn)) File.Delete(fn);
+        var ser = new XmlSerializer(typeof(Metas));
+        using (var fs = File.OpenWrite(fn))
+          ser.Serialize(fs, new Metas() { Langs = metas });
       }
     }
   }
