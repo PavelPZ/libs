@@ -13,7 +13,7 @@ namespace Fulltext {
     public int Id { get; set; } //internal unique ID
     [MaxLength(26)]
     public string Word { get; set; } // first two chars has ord value of 32 plus LANG code. First LANG code is DictLang, second is Phrase Lang. If DictLang==Lang => Phrase means source, otherwise translation.
-    public int PhraseId { get; set; } //ID of phrase
+    public string PhraseId { get; set; } //ID of phrase
   }
 
   public class Phrase {
@@ -22,7 +22,7 @@ namespace Fulltext {
     public string Text { get; set; }
     public byte[] WordIdxs { get; set; } //pos a length of word in the Text. Word Breaking result.
   }
-
+  
   public class BloggingContext : DbContext {
     public DbSet<PhraseWord> PhraseWords { get; set; }
     public DbSet<Phrase> Phrases { get; set; }
