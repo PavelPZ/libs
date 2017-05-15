@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.ComponentModel.DataAnnotations;
+using Langs;
+
 
 
 namespace Fulltext {
@@ -16,16 +14,16 @@ namespace Fulltext {
     public string PhraseId { get; set; } //ID of phrase
   }
 
-  public class Phrase {
-    [Key]
-    public int Id { get; set; } //unique ID
-    public string Text { get; set; }
-    public byte[] WordIdxs { get; set; } //pos a length of word in the Text. Word Breaking result.
-  }
+  //public class Phrase {
+  //  [Key]
+  //  public int Id { get; set; } //unique ID
+  //  public string Text { get; set; }
+  //  public byte[] WordIdxs { get; set; } //pos a length of word in the Text. Word Breaking result.
+  //}
   
   public class BloggingContext : DbContext {
     public DbSet<PhraseWord> PhraseWords { get; set; }
-    public DbSet<Phrase> Phrases { get; set; }
+    //public DbSet<Phrase> Phrases { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
       optionsBuilder.UseSqlServer(@"Data Source=PZ-W8VIRTUAL\SQLEXPRESS;Initial Catalog=test;Integrated Security=True;");
@@ -39,9 +37,15 @@ namespace Fulltext {
       Database.EnsureDeleted();
       Database.EnsureCreated();
     }
+    public void insert(string phraseId, PhraseSide dictSide /*dict and its side, e.g. czech part of English-Czech dict*/, string oldText /*null => insert, else update*/, byte[] oldIdxs, string newText /*null => delete else update or insert*/, out byte[] newIdxs) {
+      newIdxs = null;
+    }
+    public string[] searchPhrase(PhraseSide dictSide, string text) {
+      return null; //matching phrase ids
+    }
   }
 
-  public class Class1 {
+    public class Class1 {
     protected void Page_Load() {
       var ctx = new BloggingContext();
       ctx.recreate();

@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <Metas xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Langs>
-    <LangMeta>
+    <Meta>
+      <Idx>1</Idx>
       <LCID>1078</LCID>
       <Id>af-za</Id>
       <Descr>Afrikaans</Descr>
@@ -15,8 +16,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>3</Idx>
       <LCID>1025</LCID>
       <Id>ar-sa</Id>
       <Descr>Arabic</Descr>
@@ -30,8 +32,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>true</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>5</Idx>
       <LCID>1101</LCID>
       <Id>as-in</Id>
       <Descr>Assamese</Descr>
@@ -45,8 +48,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>6</Idx>
       <LCID>1068</LCID>
       <Id>az-latn-az</Id>
       <Descr>Azerbaijani (Latin)</Descr>
@@ -60,8 +64,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>9</Idx>
       <LCID>1059</LCID>
       <Id>be-by</Id>
       <Descr>Belarusian</Descr>
@@ -75,8 +80,9 @@
       <IsEuroTalk>false</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>12</Idx>
       <LCID>1026</LCID>
       <Id>bg-bg</Id>
       <Descr>Bulgarian</Descr>
@@ -90,8 +96,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>7</Idx>
       <LCID>1093</LCID>
       <Id>bn-in</Id>
       <Descr>Bangla</Descr>
@@ -105,8 +112,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>76</Idx>
       <LCID>1105</LCID>
       <Id>bo-cn</Id>
       <Descr>Tibetan</Descr>
@@ -120,8 +128,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>11</Idx>
       <LCID>1150</LCID>
       <Id>br-fr</Id>
       <Descr>Breton</Descr>
@@ -135,8 +144,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>10</Idx>
       <LCID>5146</LCID>
       <Id>bs-latn-ba</Id>
       <Descr>Bosnian (Latin)</Descr>
@@ -150,8 +160,9 @@
       <IsEuroTalk>false</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>13</Idx>
       <LCID>1027</LCID>
       <Id>ca-es</Id>
       <Descr>Catalan</Descr>
@@ -165,8 +176,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>14</Idx>
       <LCID>1155</LCID>
       <Id>co-fr</Id>
       <Descr>Corsican</Descr>
@@ -180,8 +192,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>16</Idx>
       <LCID>1029</LCID>
       <Id>cs-cz</Id>
       <Descr>Czech</Descr>
@@ -195,8 +208,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>17</Idx>
       <LCID>1030</LCID>
       <Id>da-dk</Id>
       <Descr>Danish</Descr>
@@ -210,8 +224,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>26</Idx>
       <LCID>1031</LCID>
       <Id>de-de</Id>
       <Descr>German</Descr>
@@ -225,8 +240,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>27</Idx>
       <LCID>1032</LCID>
       <Id>el-gr</Id>
       <Descr>Greek</Descr>
@@ -240,8 +256,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>20</Idx>
       <LCID>2057</LCID>
       <Id>en-gb</Id>
       <Descr>English</Descr>
@@ -255,8 +272,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>19</Idx>
       <LCID>1033</LCID>
       <Id>en-us</Id>
       <Descr>English</Descr>
@@ -270,8 +288,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>71</Idx>
       <LCID>3082</LCID>
       <Id>es-es</Id>
       <Descr>Spanish</Descr>
@@ -285,8 +304,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>21</Idx>
       <LCID>1061</LCID>
       <Id>et-ee</Id>
       <Descr>Estonian</Descr>
@@ -300,8 +320,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>8</Idx>
       <LCID>1069</LCID>
       <Id>eu-es</Id>
       <Descr>Basque</Descr>
@@ -315,8 +336,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>58</Idx>
       <LCID>1065</LCID>
       <Id>fa-ir</Id>
       <Descr>Persian</Descr>
@@ -330,8 +352,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>true</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>22</Idx>
       <LCID>1035</LCID>
       <Id>fi-fi</Id>
       <Descr>Finnish</Descr>
@@ -345,8 +368,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>23</Idx>
       <LCID>1036</LCID>
       <Id>fr-fr</Id>
       <Descr>French</Descr>
@@ -360,8 +384,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>38</Idx>
       <LCID>2108</LCID>
       <Id>ga-ie</Id>
       <Descr>Irish</Descr>
@@ -375,8 +400,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>24</Idx>
       <LCID>1110</LCID>
       <Id>gl-es</Id>
       <Descr>Galician</Descr>
@@ -390,8 +416,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>28</Idx>
       <LCID>1095</LCID>
       <Id>gu-in</Id>
       <Descr>Gujarati</Descr>
@@ -405,8 +432,9 @@
       <IsEuroTalk>false</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>29</Idx>
       <LCID>1128</LCID>
       <Id>ha-latn-ng</Id>
       <Descr>Hausa (Latin)</Descr>
@@ -420,8 +448,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>30</Idx>
       <LCID>1037</LCID>
       <Id>he-il</Id>
       <Descr>Hebrew</Descr>
@@ -435,8 +464,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>true</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>31</Idx>
       <LCID>1081</LCID>
       <Id>hi-in</Id>
       <Descr>Hindi</Descr>
@@ -450,8 +480,9 @@
       <IsEuroTalk>false</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>15</Idx>
       <LCID>1050</LCID>
       <Id>hr-hr</Id>
       <Descr>Croatian</Descr>
@@ -465,8 +496,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>32</Idx>
       <LCID>1038</LCID>
       <Id>hu-hu</Id>
       <Descr>Hungarian</Descr>
@@ -480,8 +512,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>4</Idx>
       <LCID>1067</LCID>
       <Id>hy-am</Id>
       <Descr>Armenian</Descr>
@@ -495,8 +528,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>37</Idx>
       <LCID>1057</LCID>
       <Id>id-id</Id>
       <Descr>Indonesian</Descr>
@@ -510,8 +544,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>36</Idx>
       <LCID>1136</LCID>
       <Id>ig-ng</Id>
       <Descr>Igbo</Descr>
@@ -525,8 +560,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>35</Idx>
       <LCID>1039</LCID>
       <Id>is-is</Id>
       <Descr>Icelandic</Descr>
@@ -540,8 +576,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>39</Idx>
       <LCID>1040</LCID>
       <Id>it-it</Id>
       <Descr>Italian</Descr>
@@ -555,8 +592,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>40</Idx>
       <LCID>1041</LCID>
       <Id>ja-jp</Id>
       <Descr>Japanese</Descr>
@@ -570,8 +608,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>25</Idx>
       <LCID>1079</LCID>
       <Id>ka-ge</Id>
       <Descr>Georgian</Descr>
@@ -585,8 +624,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>42</Idx>
       <LCID>1107</LCID>
       <Id>km-kh</Id>
       <Descr>Khmer</Descr>
@@ -600,8 +640,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>41</Idx>
       <LCID>1099</LCID>
       <Id>kn-in</Id>
       <Descr>Kannada</Descr>
@@ -615,8 +656,9 @@
       <IsEuroTalk>false</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>44</Idx>
       <LCID>1042</LCID>
       <Id>ko-kr</Id>
       <Descr>Korean</Descr>
@@ -630,8 +672,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>45</Idx>
       <LCID>1088</LCID>
       <Id>ky-kg</Id>
       <Descr>Kyrgyz</Descr>
@@ -645,8 +688,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>47</Idx>
       <LCID>1063</LCID>
       <Id>lt-lt</Id>
       <Descr>Lithuanian</Descr>
@@ -660,8 +704,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>46</Idx>
       <LCID>1062</LCID>
       <Id>lv-lv</Id>
       <Descr>Latvian</Descr>
@@ -675,8 +720,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>52</Idx>
       <LCID>1153</LCID>
       <Id>mi-nz</Id>
       <Descr>Maori</Descr>
@@ -690,8 +736,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>48</Idx>
       <LCID>1071</LCID>
       <Id>mk-mk</Id>
       <Descr>Macedonian</Descr>
@@ -705,8 +752,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>50</Idx>
       <LCID>1100</LCID>
       <Id>ml-in</Id>
       <Descr>Malayalam</Descr>
@@ -720,8 +768,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>54</Idx>
       <LCID>1104</LCID>
       <Id>mn-mn</Id>
       <Descr>Mongolian (Cyrillic)</Descr>
@@ -735,8 +784,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>53</Idx>
       <LCID>1102</LCID>
       <Id>mr-in</Id>
       <Descr>Marathi</Descr>
@@ -750,8 +800,9 @@
       <IsEuroTalk>false</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>49</Idx>
       <LCID>1086</LCID>
       <Id>ms-my</Id>
       <Descr>Malay</Descr>
@@ -765,8 +816,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>51</Idx>
       <LCID>1082</LCID>
       <Id>mt-mt</Id>
       <Descr>Maltese</Descr>
@@ -780,8 +832,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>55</Idx>
       <LCID>1044</LCID>
       <Id>nb-no</Id>
       <Descr>Norwegian (Bokmal)</Descr>
@@ -795,8 +848,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>18</Idx>
       <LCID>1043</LCID>
       <Id>nl-nl</Id>
       <Descr>Dutch</Descr>
@@ -810,8 +864,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>67</Idx>
       <LCID>1132</LCID>
       <Id>nso-za</Id>
       <Descr>Sesotho sa Leboa</Descr>
@@ -825,8 +880,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>56</Idx>
       <LCID>1154</LCID>
       <Id>oc-fr</Id>
       <Descr>Occitan</Descr>
@@ -840,8 +896,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>62</Idx>
       <LCID>1094</LCID>
       <Id>pa-in</Id>
       <Descr>Punjabi</Descr>
@@ -855,8 +912,9 @@
       <IsEuroTalk>false</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>59</Idx>
       <LCID>1045</LCID>
       <Id>pl-pl</Id>
       <Descr>Polish</Descr>
@@ -870,8 +928,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>57</Idx>
       <LCID>1123</LCID>
       <Id>ps-af</Id>
       <Descr>Pashto</Descr>
@@ -885,8 +944,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>true</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>60</Idx>
       <LCID>1046</LCID>
       <Id>pt-br</Id>
       <Descr>Portuguese</Descr>
@@ -900,8 +960,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>61</Idx>
       <LCID>2070</LCID>
       <Id>pt-pt</Id>
       <Descr>Portuguese</Descr>
@@ -915,8 +976,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>63</Idx>
       <LCID>3179</LCID>
       <Id>quz-pe</Id>
       <Descr>Quechua</Descr>
@@ -930,8 +992,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>64</Idx>
       <LCID>1048</LCID>
       <Id>ro-ro</Id>
       <Descr>Romanian</Descr>
@@ -945,8 +1008,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>65</Idx>
       <LCID>1049</LCID>
       <Id>ru-ru</Id>
       <Descr>Russian</Descr>
@@ -960,8 +1024,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>69</Idx>
       <LCID>1051</LCID>
       <Id>sk-sk</Id>
       <Descr>Slovak</Descr>
@@ -975,8 +1040,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>70</Idx>
       <LCID>1060</LCID>
       <Id>sl-si</Id>
       <Descr>Slovenian</Descr>
@@ -990,8 +1056,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>2</Idx>
       <LCID>1052</LCID>
       <Id>sq-al</Id>
       <Descr>Albanian</Descr>
@@ -1005,23 +1072,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
-      <LCID>3098</LCID>
-      <Id>sr-cyrl-cs</Id>
-      <Descr>Serbian (Cyrillic)</Descr>
-      <Location>Serbia and Montenegro (Former)</Location>
-      <EnglishName>Serbian (Cyrillic, Serbia and Montenegro (Former))</EnglishName>
-      <NativeName>српски (Србија и Црна Гора (Бивша))</NativeName>
-      <IsFulltext>true</IsFulltext>
-      <IsSpellCheck>false</IsSpellCheck>
-      <SpellCheckId />
-      <IsLingea>false</IsLingea>
-      <IsEuroTalk>false</IsEuroTalk>
-      <IsGoethe>false</IsGoethe>
-      <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>66</Idx>
       <LCID>2074</LCID>
       <Id>sr-latn-cs</Id>
       <Descr>Serbian (Latin)</Descr>
@@ -1035,8 +1088,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>72</Idx>
       <LCID>1053</LCID>
       <Id>sv-se</Id>
       <Descr>Swedish</Descr>
@@ -1050,8 +1104,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>43</Idx>
       <LCID>1089</LCID>
       <Id>sw-ke</Id>
       <Descr>Kiswahili</Descr>
@@ -1065,8 +1120,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>73</Idx>
       <LCID>1097</LCID>
       <Id>ta-in</Id>
       <Descr>Tamil</Descr>
@@ -1080,8 +1136,9 @@
       <IsEuroTalk>false</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>74</Idx>
       <LCID>1098</LCID>
       <Id>te-in</Id>
       <Descr>Telugu</Descr>
@@ -1095,8 +1152,9 @@
       <IsEuroTalk>false</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>75</Idx>
       <LCID>1054</LCID>
       <Id>th-th</Id>
       <Descr>Thai</Descr>
@@ -1110,8 +1168,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>68</Idx>
       <LCID>1074</LCID>
       <Id>tn-za</Id>
       <Descr>Setswana</Descr>
@@ -1125,8 +1184,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>77</Idx>
       <LCID>1055</LCID>
       <Id>tr-tr</Id>
       <Descr>Turkish</Descr>
@@ -1140,8 +1200,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>78</Idx>
       <LCID>1058</LCID>
       <Id>uk-ua</Id>
       <Descr>Ukrainian</Descr>
@@ -1155,8 +1216,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>79</Idx>
       <LCID>1056</LCID>
       <Id>ur-pk</Id>
       <Descr>Urdu</Descr>
@@ -1170,8 +1232,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>true</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>80</Idx>
       <LCID>1091</LCID>
       <Id>uz-latn-uz</Id>
       <Descr>Uzbek (Latin)</Descr>
@@ -1185,8 +1248,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>81</Idx>
       <LCID>1066</LCID>
       <Id>vi-vn</Id>
       <Descr>Vietnamese</Descr>
@@ -1200,8 +1264,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>82</Idx>
       <LCID>1076</LCID>
       <Id>xh-za</Id>
       <Descr>Xhosa</Descr>
@@ -1215,8 +1280,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>83</Idx>
       <LCID>1130</LCID>
       <Id>yo-ng</Id>
       <Descr>Yoruba</Descr>
@@ -1230,8 +1296,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>33</Idx>
       <LCID>2052</LCID>
       <Id>zh-cn</Id>
       <Descr>Chinese (Simplified)</Descr>
@@ -1245,8 +1312,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>true</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>34</Idx>
       <LCID>3076</LCID>
       <Id>zh-hk</Id>
       <Descr>Chinese (Traditional)</Descr>
@@ -1260,8 +1328,9 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
-    <LangMeta>
+    </Meta>
+    <Meta>
+      <Idx>84</Idx>
       <LCID>1077</LCID>
       <Id>zu-za</Id>
       <Descr>Zulu</Descr>
@@ -1275,6 +1344,6 @@
       <IsEuroTalk>true</IsEuroTalk>
       <IsGoethe>false</IsGoethe>
       <IsRightToLeft>false</IsRightToLeft>
-    </LangMeta>
+    </Meta>
   </Langs>
 </Metas>
