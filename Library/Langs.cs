@@ -1,12 +1,13 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace Langs {
+namespace LangsLib {
 
   public class Meta {
-    public byte Idx;
+    //public byte Idx;
     public int LCID;
     public string Id;
     public string Descr;
@@ -39,13 +40,21 @@ namespace Langs {
         return ser.Deserialize(fs) as Metas;
 
     }
-    static char[] langCodes = Enumerable.Range(32, 126 - 32).Concat(Enumerable.Range(192, 255 - 192)).Select(n => (char)n).ToArray();
+    
     public static char langToCharCode(Langs lng) { return langCodes[(int)lng]; }
+    static char[] langCodes = Enumerable.Range(32, 126 - 32).Concat(Enumerable.Range(192, 255 - 192)).Select(n => (char)n).ToArray();
+
+    public static string lang2string(Langs lang) { return lang.ToString().Replace('_', '-'); }
+    public static Langs string2lang(string lang) { try { return (Langs)Enum.Parse(typeof(Langs), lang.Replace('-', '_').ToLower()); } catch { return LangsLib.Langs._; } }
+
   }
 
   public struct PhraseSide {
     public Langs src;
     public Langs dest;
+    public string encode(string word) { return PhraseSide.encode(src, dest, word); }
+    public static string encode(Langs src, Langs dest, string word) { return Metas.langToCharCode(src) + Metas.langToCharCode(dest) + word; }
+    public Langs textLang() { return dest == Langs._ ? src : dest; }
   }
 
   public enum Langs {

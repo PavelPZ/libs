@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations;
-using Langs;
+using LangsLib;
 
 
 
@@ -37,7 +37,8 @@ namespace Fulltext {
       Database.EnsureDeleted();
       Database.EnsureCreated();
     }
-    public void insert(string phraseId, PhraseSide dictSide /*dict and its side, e.g. czech part of English-Czech dict*/, string oldText /*null => insert, else update*/, byte[] oldIdxs, string newText /*null => delete else update or insert*/, out byte[] newIdxs) {
+    public void insert(string phraseId, PhraseSide phraseSide /*dict and its side, e.g. czech part of English-Czech dict*/, string oldText /*null => insert, else update*/, byte[] oldIdxs, string newText /*null => delete else update or insert*/, out byte[] newIdxs) {
+      var stemmer = new StemmerBreaker.Runner(phraseSide.textLang());
       newIdxs = null;
     }
     public string[] searchPhrase(PhraseSide dictSide, string text) {

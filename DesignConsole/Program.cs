@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace DesignConsole {
   class Program {
     static void Main(string[] args) {
-      ImportAllLangs.Run();
+      //ImportAllLangs.Run();
+      StemmerBreaker.Runner.test("");
     }
   }
 }
