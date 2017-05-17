@@ -28,7 +28,7 @@ namespace Fulltext {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
       optionsBuilder.UseSqlServer(@"Data Source=PZ-W8VIRTUAL\SQLEXPRESS;Initial Catalog=test;Integrated Security=True;");
     }
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
       modelBuilder.Entity<PhraseWord>().HasIndex(p => p.Word);
     }

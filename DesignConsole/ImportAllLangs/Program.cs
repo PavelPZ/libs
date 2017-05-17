@@ -1,5 +1,6 @@
 ﻿using Excel;
 using Langs;
+using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
@@ -39,13 +40,23 @@ internal class ImportAllLangs {
       //to XML
       new Metas() { Langs = metas }.toFile(importPath + @"RewiseJazyky.xml");
       //C:\rw\libs\Library\LangsIdx.cs
+      //so far defined LANG consts:
+      var langEnum = typeof(Langs.Langs);
+      var soFarLangs = langEnum.GetEnumValues().Cast<int>().ToDictionary(en => langEnum.GetEnumName(en), en => en);
+      //add new LANG consts
+      var maxLang = soFarLangs.Values.Max();
+      foreach (var id in metas.Where(m => m.LCID > 0).OrderBy(m => m.Id).Select(m => m.Id.Replace('-', '_')).Where(idd => !soFarLangs.ContainsKey(idd)))
+        soFarLangs.Add(id,++maxLang);
+      //Print
       StringBuilder sb = new StringBuilder();
       using (StringWriter cs = new StringWriter(sb)) {
         cs.WriteLine("public enum Langs {");
-        cs.WriteLine("  no = 0,");
-        foreach (var meta in metas.Where(m => m.Idx > 0).OrderBy(m => m.Idx)) {
-          cs.WriteLine(string.Format("  {0} = {1},", meta.Id.Replace('-', '_'), meta.Idx));
-        };
+        foreach (var kv in soFarLangs.OrderBy(sf => sf.Key))
+          cs.WriteLine(string.Format("  {0} = {1},", kv.Key, kv.Value));
+        //cs.WriteLine("  no = 0,");
+        //foreach (var meta in metas.Where(m => m.Idx > 0).OrderBy(m => m.Idx)) {
+        //  cs.WriteLine(string.Format("  {0} = {1},", meta.Id.Replace('-', '_'), meta.Idx));
+        //};
         cs.WriteLine("}");
       }
       File.WriteAllText(importPath + @"library-langs-cs.txt", sb.ToString());
