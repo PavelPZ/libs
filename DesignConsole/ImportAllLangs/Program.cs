@@ -51,15 +51,11 @@ internal class ImportAllLangs {
       StringBuilder sb = new StringBuilder();
       using (StringWriter cs = new StringWriter(sb)) {
         cs.WriteLine("public enum Langs {");
-        foreach (var kv in soFarLangs.OrderBy(sf => sf.Key))
-          cs.WriteLine(string.Format("  {0} = {1},", kv.Key, kv.Value));
-        //cs.WriteLine("  no = 0,");
-        //foreach (var meta in metas.Where(m => m.Idx > 0).OrderBy(m => m.Idx)) {
-        //  cs.WriteLine(string.Format("  {0} = {1},", meta.Id.Replace('-', '_'), meta.Idx));
-        //};
+        foreach (var kv in soFarLangs.OrderBy(sf => sf.Key)) cs.WriteLine(string.Format("  {0} = {1}, // {2}", kv.Key, kv.Value, Metas.langToCharCode((Langs.Langs) kv.Value)));
         cs.WriteLine("}");
       }
-      File.WriteAllText(importPath + @"library-langs-cs.txt", sb.ToString());
+      File.WriteAllText(importPath + @"library-langs-cs.txt", sb.ToString(), Encoding.UTF8);
     }
   }
+  //const string chars
 }
