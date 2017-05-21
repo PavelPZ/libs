@@ -1,82 +1,104 @@
 ﻿namespace SpellChecker {
-  using System.Collections.Generic;
-  using System.Linq;
-  using System.Windows.Controls;
-  using System.Windows.Documents;
-  using System.Windows.Markup;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Threading;
+	using System.Windows;
+	using System.Windows.Controls;
+	using System.Windows.Documents;
+	using System.Windows.Markup;
 
-  public struct TPosLen { public int pos; public int len; }
-  public class SpellLangResult : List<TPosLen> { }
-  public class SpellLang {
+	public struct TPosLen { public int idx; public int pos; public int len; }
+	public class SpellLangResult : List<TPosLen> { }
 
-    public SpellLang(string lang) {
-      tb = new TextBox();
-      tb.Language = XmlLanguage.GetLanguage(lang);
-    }
+	public class SpellLang {
 
-    TextBox tb;
+		public SpellLang(string lang) {
+			tb = new TextBox();
+			tb.SpellCheck.IsEnabled = true;
+			tb.Language = XmlLanguage.GetLanguage(lang);
+		}
 
-    SpellLangResult check(string text) {
-      if (string.IsNullOrEmpty(text)) return null;
-      SpellLangResult res = null;
-      lock (tb) {
-        tb.Text = text; int index = 0;
-        while ((index = tb.GetNextSpellingErrorCharacterIndex(index, LogicalDirection.Forward)) != -1) {
-          if (res == null) res = new SpellLangResult();
-          int errLen;
-          res.Add(new TPosLen { pos = index, len = errLen = tb.GetSpellingErrorLength(index) });
-          index += errLen;
-        }
-      }
-      return res;
-    }
+		TextBox tb;
 
-    static Dictionary<string, SpellLang> spellLangs = new Dictionary<string, SpellLang>();
+		SpellLangResult check(string[] words) {
+			if (words == null || words.Length == 0 || words[0] == null) return null;
+			SpellLangResult res = null; int errLen; int wordIdx = 0;
+			lock (tb) {
+				foreach (var text in words) {
+					tb.Text = text; int index = 0;
+					while ((index = tb.GetNextSpellingErrorCharacterIndex(index, LogicalDirection.Forward)) != -1) {
+						if (res == null) res = new SpellLangResult();
+						res.Add(new TPosLen { idx = wordIdx, pos = index, len = errLen = tb.GetSpellingErrorLength(index) });
+						index += errLen;
+					}
+					wordIdx++;
+				}
+			}
+			return res;
+		}
 
-    public static SpellLangResult Check (string lang, string text) {
-      SpellLang sl;
-      if (!spellLangs.TryGetValue(lang, out sl))
-        lock (typeof(SpellLang))
-          if (!spellLangs.TryGetValue(lang, out sl))
-            spellLangs.Add(lang, sl = new SpellLang(lang));
-      return sl.check(text);
-    }
+		static Dictionary<string, SpellLang> spellLangs = new Dictionary<string, SpellLang>();
 
-    const string otherLang = "ru-ru";
+		public static void Check(string lang, string[] words, Action<SpellLangResult> callback) {
+			Thread t = new Thread(() => {
+				SpellLang sl;
+				if (!spellLangs.TryGetValue(lang, out sl))
+					lock (typeof(SpellLang))
+						if (!spellLangs.TryGetValue(lang, out sl))
+							spellLangs.Add(lang, sl = new SpellLang(lang));
+				callback(sl.check(words));
+			});
+			t.SetApartmentState(ApartmentState.STA);
+			t.Start();
+		}
 
-    //https://blogs.msdn.microsoft.com/wpf/2015/10/29/wpf-in-net-4-6-1/
-    void v(TextBox TextInput, string actLang) {
-      //string actLang = TextInput.Language.IetfLanguageTag == "en-gb" ? otherLang : "en-gb";
-      lock (TextInput) {
-        TextInput.Language = XmlLanguage.GetLanguage(actLang);
+		public static void Check(string lang, string text, Action<SpellLangResult> callback) {
+			Check(lang, new string[] { text }, callback);
+		}
 
-        int index = 0;
-
-        List<string> suggestions = new List<string>();
-
-        while ((index = TextInput.GetNextSpellingErrorCharacterIndex(index, LogicalDirection.Forward)) != -1) {
-
-          string currentError = TextInput.Text.Substring(index, TextInput.GetSpellingErrorLength(index));
+		public static void test() {
+			var src = new string[] { "Ahoj", "Verčo", "jak", "se", "máš" };
+			Check("cs-cz", src, res => {
+				var errors = res == null ? null : res.Select(pl => src[pl.idx].Substring(pl.pos, pl.len)).Aggregate((r, i) => r + ", " + i);
+				errors = null;
+			});
+		}
 
 
-          suggestions.Add(currentError);
+		//https://blogs.msdn.microsoft.com/wpf/2015/10/29/wpf-in-net-4-6-1/
+		void v(TextBox TextInput, string actLang) {
+			//string actLang = TextInput.Language.IetfLanguageTag == "en-gb" ? otherLang : "en-gb";
+			lock (TextInput) {
+				TextInput.Language = XmlLanguage.GetLanguage(actLang);
 
-          foreach (string suggestion in TextInput.GetSpellingError(index).Suggestions) {
+				int index = 0;
 
-            suggestions.Add(suggestion);
+				List<string> suggestions = new List<string>();
 
-          }
+				while ((index = TextInput.GetNextSpellingErrorCharacterIndex(index, LogicalDirection.Forward)) != -1) {
 
-          //spellingErrors.Add(index, suggestions.ToArray());
+					string currentError = TextInput.Text.Substring(index, TextInput.GetSpellingErrorLength(index));
 
-          index += currentError.Length;
 
-        }
+					suggestions.Add(currentError);
 
-        var Errors = suggestions.DefaultIfEmpty().Aggregate((r, i) => r + "\r\n" + i);
-      }
+					foreach (string suggestion in TextInput.GetSpellingError(index).Suggestions) {
 
-    }
-  }
+						suggestions.Add(suggestion);
+
+					}
+
+					//spellingErrors.Add(index, suggestions.ToArray());
+
+					index += currentError.Length;
+
+				}
+
+				var Errors = suggestions.DefaultIfEmpty().Aggregate((r, i) => r + "\r\n" + i);
+			}
+
+		}
+	}
 }
 

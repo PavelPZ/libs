@@ -54,7 +54,7 @@ namespace LangsLib {
     public Langs dest;
     public string encode(string word) { return PhraseSide.encode(src, dest, word); }
     public static string encode(Langs src, Langs dest, string word) { return Metas.langToCharCode(src) + Metas.langToCharCode(dest) + word; }
-    public Langs textLang() { return dest == Langs._ ? src : dest; }
+    public Langs langOfText() { return dest == Langs._ ? src : dest; }
   }
 
   public enum Langs {

@@ -66,6 +66,10 @@
       <Project>{304f4870-f6ad-4f77-90af-adafb76f101b}</Project>
       <Name>Library</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SpellChecker\SpellChecker.csproj">
+      <Project>{034ae400-7592-4cf2-93a4-7ab55e1fd270}</Project>
+      <Name>SpellChecker</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ImportAllLangs\library-langs-cs.txt" />

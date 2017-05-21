@@ -38,8 +38,9 @@ namespace Fulltext {
       Database.EnsureCreated();
     }
     public void insert(string phraseId, PhraseSide phraseSide /*dict and its side, e.g. czech part of English-Czech dict*/, string oldText /*null => insert, else update*/, byte[] oldIdxs, string newText /*null => delete else update or insert*/, out byte[] newIdxs) {
-      var stemmer = new StemmerBreaker.Runner(phraseSide.textLang());
-      newIdxs = null;
+      var stemmer = new StemmerBreaker.Runner(phraseSide.langOfText());
+			//stemmer.wordBreak();
+			newIdxs = null;
     }
     public string[] searchPhrase(PhraseSide dictSide, string text) {
       return null; //matching phrase ids

@@ -74,6 +74,7 @@
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Diagnostics.DiagnosticSource.4.3.0\lib\portable-net45+win8+wpa81\System.Diagnostics.DiagnosticSource.dll</HintPath>
@@ -111,6 +112,10 @@
     <ProjectReference Include="..\Library\Library.csproj">
       <Project>{304f4870-f6ad-4f77-90af-adafb76f101b}</Project>
       <Name>Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SpellChecker\SpellChecker.csproj">
+      <Project>{034ae400-7592-4cf2-93a4-7ab55e1fd270}</Project>
+      <Name>SpellChecker</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
