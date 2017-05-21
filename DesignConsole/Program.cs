@@ -8,8 +8,8 @@ namespace DesignConsole {
   class Program {
     static void Main(string[] args) {
       //ImportAllLangs.Run();
-      StemmerBreaker.Runner.test();
-			//SpellChecker.SpellLang.test();
-    }
+			SpellChecker.SpellLang.test().Wait();
+			//StemmerBreaker.Runner.test();
+		}
   }
 }

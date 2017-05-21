@@ -1,4 +1,10 @@
-﻿public enum Langs {
+﻿public static HashSet<Langs> SpellCheckLangs = new HashSet<Langs>() {
+  Langs.ar_sa, Langs.bg_bg, Langs.bn_in, Langs.ca_es, Langs.cs_cz, Langs.da_dk, Langs.de_de, Langs.el_gr, Langs.en_gb, Langs.en_us, Langs.es_es, Langs.fi_fi, Langs.fr_fr, Langs.gu_in, Langs.he_il, Langs.hi_in, Langs.hr_hr, Langs.hu_hu, Langs.id_id, Langs.it_it, Langs.kn_in, Langs.lt_lt, Langs.lv_lv, Langs.ml_in, Langs.mr_in, Langs.ms_my, Langs.nb_no, Langs.nl_nl, Langs.pa_in, Langs.pl_pl, Langs.pt_br, Langs.pt_pt, Langs.ro_ro, Langs.ru_ru, Langs.sk_sk, Langs.sl_si, Langs.sv_se, Langs.ta_in, Langs.te_in, Langs.tr_tr, Langs.uk_ua, Langs.ur_pk, Langs.vi_vn
+};
+public static HashSet<Langs> StemmerBreakerLangs = new HashSet<Langs>() {
+  Langs.ar_sa, Langs.bg_bg, Langs.bn_in, Langs.ca_es, Langs.cs_cz, Langs.da_dk, Langs.de_de, Langs.el_gr, Langs.en_gb, Langs.en_us, Langs.es_es, Langs.fr_fr, Langs.gu_in, Langs.he_il, Langs.hi_in, Langs.hr_hr, Langs.id_id, Langs.is_is, Langs.it_it, Langs.ja_jp, Langs.kn_in, Langs.ko_kr, Langs.lt_lt, Langs.lv_lv, Langs.ml_in, Langs.mr_in, Langs.ms_my, Langs.nb_no, Langs.nl_nl, Langs.pa_in, Langs.pl_pl, Langs.pt_br, Langs.pt_pt, Langs.ro_ro, Langs.ru_ru, Langs.sk_sk, Langs.sl_si, Langs.sr_latn_cs, Langs.sv_se, Langs.ta_in, Langs.te_in, Langs.th_th, Langs.tr_tr, Langs.uk_ua, Langs.ur_pk, Langs.vi_vn, Langs.zh_cn, Langs.zh_hk
+};
+public enum Langs {
   _ = 0, //  
   af_za = 1, // !
   ar_sa = 2, // "

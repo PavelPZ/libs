@@ -7,16 +7,18 @@
 	using System.Windows.Controls;
 	using System.Windows.Documents;
 	using System.Windows.Markup;
+	using LangsLib;
+	using System.Threading.Tasks;
 
 	public struct TPosLen { public int idx; public int pos; public int len; }
 	public class SpellLangResult : List<TPosLen> { }
 
 	public class SpellLang {
 
-		public SpellLang(string lang) {
+		public SpellLang(Langs lang) {
 			tb = new TextBox();
 			tb.SpellCheck.IsEnabled = true;
-			tb.Language = XmlLanguage.GetLanguage(lang);
+			tb.Language = XmlLanguage.GetLanguage(Metas.lang2string(lang));
 		}
 
 		TextBox tb;
@@ -38,31 +40,33 @@
 			return res;
 		}
 
-		static Dictionary<string, SpellLang> spellLangs = new Dictionary<string, SpellLang>();
+		static Dictionary<Langs, SpellLang> spellLangs = new Dictionary<Langs, SpellLang>();
 
-		public static void Check(string lang, string[] words, Action<SpellLangResult> callback) {
+		public static Task<SpellLangResult> Check(Langs lang, string[] words) {
+			var task = new TaskCompletionSource<SpellLangResult>();
+			if (!Metas.SpellCheckLangs.Contains(lang)) { task.TrySetResult(null); return task.Task; }
 			Thread t = new Thread(() => {
 				SpellLang sl;
 				if (!spellLangs.TryGetValue(lang, out sl))
 					lock (typeof(SpellLang))
 						if (!spellLangs.TryGetValue(lang, out sl))
 							spellLangs.Add(lang, sl = new SpellLang(lang));
-				callback(sl.check(words));
+				task.TrySetResult(sl.check(words));
 			});
 			t.SetApartmentState(ApartmentState.STA);
 			t.Start();
+			return task.Task;
 		}
 
-		public static void Check(string lang, string text, Action<SpellLangResult> callback) {
-			Check(lang, new string[] { text }, callback);
+		public static Task<SpellLangResult> Check(Langs lang, string text) {
+			return Check(lang, new string[] { text });
 		}
 
-		public static void test() {
+		public static async Task test() {
 			var src = new string[] { "Ahoj", "Verčo", "jak", "se", "máš" };
-			Check("cs-cz", src, res => {
-				var errors = res == null ? null : res.Select(pl => src[pl.idx].Substring(pl.pos, pl.len)).Aggregate((r, i) => r + ", " + i);
-				errors = null;
-			});
+			var res = await Check(Langs.cs_cz, src);
+			var errors = res == null ? null : res.Select(pl => src[pl.idx].Substring(pl.pos, pl.len)).Aggregate((r, i) => r + ", " + i);
+			errors = null;
 		}
 
 

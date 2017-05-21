@@ -8,8 +8,9 @@ using System.Linq;
 using System.Text;
 
 internal class ImportAllLangs {
-  const string importPath = @"c:\rw\libs\DesignConsole\ImportAllLangs\";
-  internal static void Run() {
+  //const string importPath = @"c:\rw\libs\DesignConsole\ImportAllLangs\";
+	const string importPath = @"d:\rw\libs\DesignConsole\ImportAllLangs\";
+	internal static void Run() {
     using (FileStream stream = File.Open(importPath + @"RewiseJazyky.xlsx", FileMode.Open, FileAccess.Read))
     using (IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream)) {
       excelReader.IsFirstRowAsColumnNames = true;
@@ -19,26 +20,26 @@ internal class ImportAllLangs {
       int lcid; CultureInfo lc; string SpellCheckId;
       var metas = rows.Select(r => new Meta() {
         //Idx = byte.Parse(r[0].ToString()),
-        LCID = lcid = int.Parse(r[1].ToString()),
+        LCID = lcid = int.Parse(r[0].ToString()),
         lc = lc = CultureInfo.GetCultureInfo(lcid),
         IsRightToLeft = lc.TextInfo.IsRightToLeft,
         EnglishName = lc.EnglishName,
         NativeName = lc.NativeName,
         //DisplayName = lc.DisplayName,
-        Descr = r[2].ToString(),
-        Location = r[3].ToString(),
-        Id = lc.Name.ToLower().Replace('_', '-').ToLower(),
-        IsFulltext = r[5].ToString() == "ANO",
-        IsEuroTalk = r[6].ToString() == "ANO",
-        IsGoethe = r[7].ToString() == "ANO",
-        IsLingea = r[8].ToString() == "ANO",
-        SpellCheckId = SpellCheckId = r[11].ToString(),
-        IsSpellCheck = r[10].ToString() == "ANO" || !string.IsNullOrEmpty(SpellCheckId),
+        Descr = r[1].ToString(),
+        Location = r[2].ToString(),
+        Id = lc.Name.ToLower().ToLower(),
+        IsFulltext = r[4].ToString() == "ANO",
+        IsEuroTalk = r[5].ToString() == "ANO",
+        IsGoethe = r[6].ToString() == "ANO",
+        IsLingea = r[7].ToString() == "ANO",
+        SpellCheckId = SpellCheckId = r[10].ToString(),
+        IsSpellCheck = r[9].ToString() == "ANO" || !string.IsNullOrEmpty(SpellCheckId),
       }).OrderBy(m => m.Id).ToArray();
       //kontroly
       //var errors = metas.Where(m => m.lc.Name.ToLower() != m.Id).ToArray();
       //to XML
-      new Metas() { Langs = metas }.toFile(importPath + @"RewiseJazyky.xml");
+      new Metas() { Items = metas }.toFile(importPath + @"RewiseJazyky.xml");
       //C:\rw\libs\Library\LangsIdx.cs
       //so far defined LANG consts:
       var langEnum = typeof(LangsLib.Langs);
@@ -50,8 +51,17 @@ internal class ImportAllLangs {
       //Print
       StringBuilder sb = new StringBuilder();
       using (StringWriter cs = new StringWriter(sb)) {
-        cs.WriteLine("public enum Langs {");
-        foreach (var kv in soFarLangs.OrderBy(sf => sf.Key)) cs.WriteLine(string.Format("  {0} = {1}, // {2}", kv.Key, kv.Value, Metas.langToCharCode((LangsLib.Langs) kv.Value)));
+				//SpellCheck langs
+				cs.WriteLine("public static HashSet<Langs> SpellCheckLangs = new HashSet<Langs>() {");
+				cs.WriteLine("  " + metas.Where(m => m.IsSpellCheck).Select(m => "Langs." + Metas.string2lang(m.Id).ToString()).Aggregate((r,i) => r + ", " + i));
+				cs.WriteLine("};");
+				//StemmerBreakerLangs
+				cs.WriteLine("public static HashSet<Langs> StemmerBreakerLangs = new HashSet<Langs>() {");
+				cs.WriteLine("  " + metas.Where(m => m.IsFulltext).Select(m => "Langs." + Metas.string2lang(m.Id).ToString()).Aggregate((r, i) => r + ", " + i));
+				cs.WriteLine("};");
+				//Langs
+				cs.WriteLine("public enum Langs {");
+        foreach (var kv in soFarLangs.OrderBy(sf => sf.Key)) cs.WriteLine(string.Format("  {0} = {1}, // {2}", kv.Key, kv.Value, Metas.langToCharCode((Langs) kv.Value)));
         cs.WriteLine("}");
       }
       File.WriteAllText(importPath + @"library-langs-cs.txt", sb.ToString(), Encoding.UTF8);
