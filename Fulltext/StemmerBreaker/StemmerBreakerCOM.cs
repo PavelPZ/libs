@@ -24,8 +24,10 @@ namespace StemmerBreaker {
 
     internal static T CreateInstance<T>(IClassFactory classFactory) where T : class {
       object obj;
-      classFactory.CreateInstance(null, ref classFactoryIid, out obj);
-      return obj as T;
+			//var wbGuid = new Guid("D53552C8-77E3-101A-B552-08002B33B0E6");
+			classFactory.CreateInstance(null, ref classFactoryIid, out obj);
+			//classFactory.CreateInstance(null, ref wbGuid, out obj);
+			return obj as T;
     }
 
     internal static IClassFactory GetClassFactory(LibraryModule libraryModule, Guid clsid) {

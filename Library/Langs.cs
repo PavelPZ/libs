@@ -53,17 +53,29 @@ namespace LangsLib {
 		};
 
 		public static HashSet<Langs> StemmerBreakerLangs = new HashSet<Langs>() {
-    	Langs.ar_sa, Langs.bg_bg, Langs.bn_in, Langs.ca_es, Langs.cs_cz, Langs.da_dk, Langs.de_de, Langs.el_gr, Langs.en_gb, Langs.en_us, Langs.es_es, Langs.fr_fr, Langs.gu_in, Langs.he_il, Langs.hi_in, Langs.hr_hr, Langs.id_id, Langs.is_is, Langs.it_it, Langs.ja_jp, Langs.kn_in, Langs.ko_kr, Langs.lt_lt, Langs.lv_lv, Langs.ml_in, Langs.mr_in, Langs.ms_my, Langs.nb_no, Langs.nl_nl, Langs.pa_in, Langs.pl_pl, Langs.pt_br, Langs.pt_pt, Langs.ro_ro, Langs.ru_ru, Langs.sk_sk, Langs.sl_si, Langs.sr_latn_cs, Langs.sv_se, Langs.ta_in, Langs.te_in, Langs.th_th, Langs.tr_tr, Langs.uk_ua, Langs.ur_pk, Langs.vi_vn, Langs.zh_cn, Langs.zh_hk
-    };
+			Langs.ar_sa, Langs.bg_bg, Langs.bn_in, Langs.ca_es, Langs.cs_cz, Langs.da_dk, Langs.de_de, Langs.el_gr, Langs.en_gb, Langs.en_us, Langs.es_es, Langs.fr_fr, Langs.gu_in, Langs.he_il, Langs.hi_in, Langs.hr_hr, Langs.id_id, Langs.is_is, Langs.it_it, Langs.ja_jp, Langs.kn_in, Langs.ko_kr, Langs.lt_lt, Langs.lv_lv, Langs.ml_in, Langs.mr_in, Langs.ms_my, Langs.nb_no, Langs.nl_nl, Langs.pa_in, Langs.pl_pl, Langs.pt_br, Langs.pt_pt, Langs.ro_ro, Langs.ru_ru, Langs.sk_sk, Langs.sl_si, Langs.sr_latn_cs, Langs.sv_se, Langs.ta_in, Langs.te_in, Langs.th_th, Langs.tr_tr, Langs.uk_ua, Langs.ur_pk, Langs.vi_vn, Langs.zh_cn, Langs.zh_hk
+		};
+	}
+
+	public struct PhraseWord {
+		public int Pos;
+		public int Len; //could be negative when SpellChecker error
+	}
+
+	public class PhraseWords {
+		public string Text;
+		public PhraseWord[] Idxs; //list of 
+		public string[] getWords(bool incErrors = false) { return Idxs.Select(idx => !incErrors && idx.Len<0 ? null : Text.Substring(idx.Pos, Math.Abs(idx.Len))).Where(w => w!=null).ToArray(); }
 	}
 
 	public struct PhraseSide {
 		public Langs src;
 		public Langs dest;
-		public string encode(string word) { return PhraseSide.encode(src, dest, word); }
-		public static string encode(Langs src, Langs dest, string word) { return Metas.langToCharCode(src) + Metas.langToCharCode(dest) + word; }
+		//public string encode(string word) { return PhraseSide.encode(src, dest, word); }
+		//public static string encode(Langs src, Langs dest, string word) { return Metas.langToCharCode(src) + Metas.langToCharCode(dest) + word; }
 		public Langs langOfText() { return dest == Langs._ ? src : dest; }
-	}
+		public byte[] getDictId() { return new byte[] { (byte) src, (byte) dest }; }
+		}
 
 	public enum Langs {
 		_ = 0, //  
