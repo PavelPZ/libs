@@ -13,6 +13,8 @@ namespace Fulltext {
 	public class PhraseWord {
 
 		public const int maxWordLen = 24;
+		public const string PhraseIdName = "PhraseId";
+		public const string DictIdName = "DictId";
 
 		[Key]
 		public int Id { get; set; } //internal unique ID
@@ -68,7 +70,7 @@ namespace Fulltext {
 			};
 
 			if (newWords == null) { //DELETE
-				ctx.Database.ExecuteSqlCommand("delete PhraseWords where PhraseId = {0}", new object[] { phraseId });
+				ctx.Database.ExecuteSqlCommand(string.Format("delete PhraseWords where {0}={{0}} and {1}={{1}}", PhraseWord.PhraseIdName, PhraseWord.DictIdName), new object[] { phraseId, phraseSide.getDictId() });
 				return null;
 			}
 			//Word breaking
@@ -99,50 +101,8 @@ namespace Fulltext {
 		public static Task<Object> insert(Int64 phraseId, PhraseSide phraseSide /*dict and its side, e.g. czech part of English-Czech dict*/, PhraseWords oldText /*null => insert, else update*/, string newWords /*null => delete, else update or insert*/) {
 			var res = Lib.Run(new RunInsertPhrase(phraseId, phraseSide, oldText, newWords)) as Task<Object>;
 			return res;
-
-			//var lang = phraseSide.langOfText(); var newText = new PhraseWords { Text = newWords };
-
-			//Func<PhraseWords, WordIdx[]> getWordIdx = phr => phr.Idxs.Where(idx => idx.Len > 0).Select((idx, i) => new WordIdx { idx = i, word = phr.Text.Substring(idx.Pos, Math.Min(idx.Len, PhraseWord.maxWordLen)).ToLower() }).ToArray();
-
-			//Func<WordIdx[], Task> addNews = async nws => {
-			//	//Spell check
-			//	var errorIdxs = await RunSpellCheckWords.Check(lang, nws) as List<int>;
-			//	//update Len for wrong words
-			//	if (errorIdxs != null) foreach (var errIdx in errorIdxs) newText.Idxs[errIdx] = new LangsLib.TPosLen() { Pos = newText.Idxs[errIdx].Pos, Len = -newText.Idxs[errIdx].Len };
-			//	//
-			//	for (var i = 0; i < nws.Length; i++) if (newText.Idxs[nws[i].idx].Len > 0)
-			//			PhraseWords.Add(new PhraseWord() { DictId = phraseSide.getDictId(), Word = nws[i].word, PhraseId = phraseId });
-			//};
-
-			//if (newWords == null) { //DELETE
-			//	Database.ExecuteSqlCommand("delete PhraseWords where PhraseId = {0}", new object[] { phraseId });
-			//	return null;
-			//}
-			////Word breaking
-			////var x = new StemmerBreaker.Runner(Langs.cs_cz).wordBreak("Ahoj");
-			//newText.Idxs = await StemmerBreaker.RunBreaker.WordBreak(lang, newText.Text) as List<LangsLib.TPosLen>;
-			////using (var st = new StemmerBreaker.Runner(lang)) newText.Idxs = st.wordBreak(newText.Text);
-
-			//var newWordIdx = getWordIdx(newText);
-			//if (oldText == null) { //insert
-			//	await addNews(newWordIdx); //Add news 
-			//} else { //update
-
-			//	//Delete olds
-			//	var olds = getWordIdx(oldText);
-			//	var dict = phraseSide.getDictId();
-			//	var oldsDB = PhraseWords.Where(pw => pw.PhraseId == phraseId && pw.DictId == dict).ToArray();
-			//	foreach (var w in olds.Except(newWordIdx)) ctx.PhraseWords.Remove(oldsDB.First(db => db.Word == w.word)); //oldsDB.Where(ww => !boths.Contains(ww.Word))) ctx.PhraseWords.Remove(w);
-
-			//	//Add news
-			//	var news = newWordIdx.Except(olds).ToArray();
-			//	await addNews(news);
-			//}
-
-			//SaveChanges();
-			//return newText;
-			//stemmer.wordBreak();
 		}
+
 		public string[] searchPhrase(PhraseSide dictSide, string text) {
 			return null; //matching phrase ids
 		}
@@ -164,9 +124,8 @@ namespace Fulltext {
 			ctx.Database.ExecuteSqlCommand("delete PhraseWords");
 			for (var idx = 0; idx < 100; idx++) {
 				var phrase = await insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, null, "Ahoj, jak se máš?") as PhraseWords;
-				//var x = new StemmerBreaker.Runner(Langs.cs_cz).wordBreak("Ahoj");
-				phrase = await insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, phrase, "Ahoj, jak se máš? Asi dobře dldlo.") as PhraseWords;
-				phrase = await insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, phrase, "Asi dobře, trdlo.") as PhraseWords;
+				phrase = await insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, phrase, "Ahoj, jak se máš? Asi dobře Kadle.") as PhraseWords;
+				phrase = await insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, phrase, "Asi dobře, Karle.") as PhraseWords;
 				phrase = await insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, null, null) as PhraseWords;
 			}
 
