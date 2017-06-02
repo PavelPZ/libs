@@ -12,7 +12,10 @@
 	using System.Windows.Markup;
 
 	//STA runner
-	public class RunSpellCheckWords : RunObject {
+	public class RunSpellCheckWords : RunObject<List<int>> {
+
+		public TaskCompletionSource<List<int>> tcs { get; set; }
+		public void doRun() { tcs.TrySetResult(Run()); }
 
 		public RunSpellCheckWords(Langs lng, IEnumerable<WordIdx> wordIdx) {
 			this.lng = lng; this.wordIdx = wordIdx;
@@ -47,15 +50,14 @@
 			return wrongIdxs;
 		}
 
-		public override object Run() {
+		public List<int> Run() {
 			return doRun(lng, wordIdx);
 		}
 
 		static Dictionary<Langs, TextBox> textBoxes = new Dictionary<Langs, TextBox>();
 
-		public static Task<Object> Check(Langs lang, IEnumerable<WordIdx> words) {
-			var res = Lib.Run(new RunSpellCheckWords(lang, words)) as Task<Object>;
-			return res;
+		public static Task<List<int>> Check(Langs lang, IEnumerable<WordIdx> words) {
+			return Lib.Run(new RunSpellCheckWords(lang, words));
 		}
 
 		public static List<int> STACheck(Langs lng, IEnumerable<WordIdx> wordIdx) {

@@ -12,7 +12,7 @@ namespace DesignConsole {
 				//ImportAllLangs.Run();
 				//SpellChecker.SpellLang.test().Wait();
 				//StemmerBreaker.Runner.test();
-				Fulltext.BloggingContext.test();
+				Fulltext.FulltextContext.test();
 			});
 			th.Start();
 		}

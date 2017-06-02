@@ -12,29 +12,31 @@ namespace STALib {
 
 		static Lib() {
 			Thread t = new Thread(() => {
-				while (true) {
-					var data = checkThread.Take();
-					data.tcs.TrySetResult(data.Run());
-				}
+				while (true)
+					checkThread.Take().doRun();
 			});
 			t.SetApartmentState(ApartmentState.STA);
 			t.Priority = ThreadPriority.Lowest;
 			t.Start();
 		}
 
-		public static Task Run(RunObject runObj) {
-			var tcs = new TaskCompletionSource<Object>();
+		public static Task<T> Run<T>(RunObject<T> runObj) where T : class {
+			var tcs = new TaskCompletionSource<T>();
 			runObj.tcs = tcs;
 			checkThread.Add(runObj);
 			return tcs.Task;
 		}
 
-		static BlockingCollection<RunObject> checkThread = new BlockingCollection<RunObject>();
+		static BlockingCollection<RunObjectLow> checkThread = new BlockingCollection<RunObjectLow>();
 	}
 
-	public class RunObject {
-		public TaskCompletionSource<Object> tcs;
-		public virtual object Run() { throw new Exception(); }
+	public interface RunObjectLow {
+		void doRun();
+	}
+
+	public interface RunObject<T> : RunObjectLow where T : class {
+		TaskCompletionSource<T> tcs { get; set; }
+		T Run();
 	}
 
 }

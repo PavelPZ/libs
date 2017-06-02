@@ -25,18 +25,37 @@ namespace Fulltext {
 		public byte[] DictId { get; set; } //First byte is Dict Lang, second is Phrase Lang. If Phrase Lang==_ => Phrase means source, otherwise translation.
 	}
 
-	public class RunInsertPhrase : RunObject {
+	public class RunInsertPhrase : RunObject<PhraseWords> {
+
+		public TaskCompletionSource<PhraseWords> tcs { get; set; }
+		public void doRun() { tcs.TrySetResult(Run()); }
+
 		public RunInsertPhrase(Int64 phraseId, PhraseSide phraseSide, PhraseWords oldText, string newWords) {
 			this.phraseId = phraseId; this.phraseSide = phraseSide; this.oldText = oldText; this.newWords = newWords;
 		}
 		Int64 phraseId; PhraseSide phraseSide; PhraseWords oldText; string newWords;
 
-		public override object Run() {
-			return BloggingContext.STAInsert(phraseId, phraseSide, oldText, newWords);
+		public PhraseWords Run() {
+			return FulltextContext.STAInsert(phraseId, phraseSide, oldText, newWords);
 		}
 	}
 
-	public class BloggingContext : DbContext {
+	public class RunSearchPhrase : RunObject<Int64[]> {
+
+		public TaskCompletionSource<Int64[]> tcs { get; set; }
+		public void doRun() { tcs.TrySetResult(Run()); }
+
+		public RunSearchPhrase(PhraseSide phraseSide, string text) {
+			this.phraseSide = phraseSide; this.text = text;
+		}
+		PhraseSide phraseSide; string text;
+
+		public Int64[] Run() {
+			return FulltextContext.STASearchPhrase(phraseSide, text);
+		}
+	}
+
+	public class FulltextContext : DbContext {
 		public DbSet<PhraseWord> PhraseWords { get; set; }
 		//public DbSet<Phrase> Phrases { get; set; }
 
@@ -55,13 +74,11 @@ namespace Fulltext {
 		}
 
 		public static PhraseWords STAInsert(Int64 phraseId, PhraseSide phraseSide /*dict and its side, e.g. czech part of English-Czech dict*/, PhraseWords oldText /*null => insert, else update*/, string newWords /*null => delete, else update or insert*/) {
-			var ctx = new BloggingContext(); var lang = phraseSide.langOfText(); var newText = new PhraseWords { Text = newWords };
-
-			Func<PhraseWords, WordIdx[]> getWordIdx = phr => phr.Idxs.Where(idx => idx.Len > 0).Select((idx, i) => new WordIdx { idx = i, word = phr.Text.Substring(idx.Pos, Math.Min(idx.Len, PhraseWord.maxWordLen)).ToLower() }).ToArray();
+			var ctx = new FulltextContext(); var lang = phraseSide.langOfText(); var newText = new PhraseWords { Text = newWords };
 
 			Action<WordIdx[]> addNews = nws => {
 				//Spell check
-				var errorIdxs = RunSpellCheckWords.STACheck(lang, nws) as List<int>;
+				var errorIdxs = RunSpellCheckWords.STACheck(lang, nws);
 				//update Len for wrong words
 				if (errorIdxs != null) foreach (var errIdx in errorIdxs) newText.Idxs[errIdx] = new LangsLib.TPosLen() { Pos = newText.Idxs[errIdx].Pos, Len = -newText.Idxs[errIdx].Len };
 				//
@@ -75,7 +92,7 @@ namespace Fulltext {
 			}
 			//Word breaking
 			//var x = new StemmerBreaker.Runner(Langs.cs_cz).wordBreak("Ahoj");
-			newText.Idxs = StemmerBreaker.RunBreaker.STAWordBreak(lang, newText.Text) as List<LangsLib.TPosLen>;
+			newText.Idxs = StemmerBreaker.RunBreaker.STAWordBreak(lang, newText.Text);
 			//using (var st = new StemmerBreaker.Runner(lang)) newText.Idxs = st.wordBreak(newText.Text);
 
 			var newWordIdx = getWordIdx(newText);
@@ -98,35 +115,38 @@ namespace Fulltext {
 			return newText;
 		}
 
-		public static Task<Object> insert(Int64 phraseId, PhraseSide phraseSide /*dict and its side, e.g. czech part of English-Czech dict*/, PhraseWords oldText /*null => insert, else update*/, string newWords /*null => delete, else update or insert*/) {
-			var res = Lib.Run(new RunInsertPhrase(phraseId, phraseSide, oldText, newWords)) as Task<Object>;
-			return res;
+		public static Task<PhraseWords> Insert(Int64 phraseId, PhraseSide phraseSide /*dict and its side, e.g. czech part of English-Czech dict*/, PhraseWords oldText /*null => insert, else update*/, string newWords /*null => delete, else update or insert*/) {
+			return Lib.Run(new RunInsertPhrase(phraseId, phraseSide, oldText, newWords));
 		}
 
-		public string[] searchPhrase(PhraseSide dictSide, string text) {
-			return null; //matching phrase ids
+		public static Int64[] STASearchPhrase(PhraseSide phraseSide, string text) {
+			var ctx = new FulltextContext(); var lang = phraseSide.langOfText(); var txt = new PhraseWords { Text = text }; var dict = phraseSide.getDictId();
+			txt.Idxs = StemmerBreaker.RunBreaker.STAWordBreak(lang, text);
+			var words = getWordIdx(txt);
+			List<string> res = new List<string>();
+			foreach (var w in words) res.AddRange(StemmerBreaker.RunStemmer.STAStemm(lang, w.word));
+			res = res.Distinct().ToList();
+			var ids = ctx.PhraseWords.Where(w => w.DictId == dict && res.Contains(w.Word)).Select(w => w.PhraseId).Distinct().ToArray();
+			return ids;
 		}
 
-		//TODO: spell check only modified words
-		//public static async Task<LangsLib.TPosLen[]> spellCheckedWordBreak(Langs lang, string text) {
-		//	//var stemmer = new StemmerBreaker.Runner(lang);
-		//	//var words = stemmer.wordBreak(text);
-		//	//var errors = await RunSpellCheck.Check(lang, words.Select(idx => text.Substring(idx.srcPos, idx.srcLen))) as SpellLangResult;
-		//	//if (errors != null) { };
-		//	//return new LangsLib.TPosLen[0];
-		//	return null;
-		//}
+		public static Task<Int64[]> SearchPhrase(PhraseSide phraseSide, string text) {
+			return Lib.Run(new RunSearchPhrase(phraseSide, text));
+		}
+
+		static Func<PhraseWords, WordIdx[]> getWordIdx = phr => phr.Idxs.Where(idx => idx.Len > 0).Select((idx, i) => new WordIdx { idx = i, word = phr.Text.Substring(idx.Pos, Math.Min(idx.Len, PhraseWord.maxWordLen)).ToLower() }).ToArray();
 
 		public static async void test() {
 
-			var ctx = new BloggingContext();
+			var ctx = new FulltextContext();
 			//ctx.recreate();
 			ctx.Database.ExecuteSqlCommand("delete PhraseWords");
 			for (var idx = 0; idx < 100; idx++) {
-				var phrase = await insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, null, "Ahoj, jak se máš?") as PhraseWords;
-				phrase = await insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, phrase, "Ahoj, jak se máš? Asi dobře Kadle.") as PhraseWords;
-				phrase = await insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, phrase, "Asi dobře, Karle.") as PhraseWords;
-				phrase = await insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, null, null) as PhraseWords;
+				var phrase = await Insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, null, "Ahoj, jak se máš?");
+				var search = await SearchPhrase(new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, "měj");
+				phrase = await Insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, phrase, "Ahoj, jak se máš? Asi dobře Kadle.");
+				phrase = await Insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, phrase, "Asi dobře, Karle.");
+				phrase = await Insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, null, null);
 			}
 
 			return;
@@ -206,7 +226,7 @@ namespace Fulltext {
 
 	public class Class1 {
 		protected void Page_Load() {
-			var ctx = new BloggingContext();
+			var ctx = new FulltextContext();
 			ctx.recreate();
 			//var all = ctx.Blogs.ToArray();
 		}
