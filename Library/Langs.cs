@@ -47,6 +47,7 @@ namespace LangsLib {
 
 		public static string lang2string(Langs lang) { return lang.ToString().Replace('_', '-'); }
 		public static Langs string2lang(string lang) { try { return (Langs)Enum.Parse(typeof(Langs), lang.Replace('-', '_').ToLower()); } catch { return Langs._; } }
+		public static int lang2LCID(Langs lang) { return CultureInfo.GetCultureInfo(lang2string(lang)).LCID; }
 
 		public static HashSet<Langs> SpellCheckLangs = new HashSet<Langs>() {
 			Langs.ar_sa, Langs.bg_bg, Langs.bn_in, Langs.ca_es, Langs.cs_cz, Langs.da_dk, Langs.de_de, Langs.el_gr, Langs.en_gb, Langs.en_us, Langs.es_es, Langs.fi_fi, Langs.fr_fr, Langs.gu_in, Langs.he_il, Langs.hi_in, Langs.hr_hr, Langs.hu_hu, Langs.id_id, Langs.it_it, Langs.kn_in, Langs.lt_lt, Langs.lv_lv, Langs.ml_in, Langs.mr_in, Langs.ms_my, Langs.nb_no, Langs.nl_nl, Langs.pa_in, Langs.pl_pl, Langs.pt_br, Langs.pt_pt, Langs.ro_ro, Langs.ru_ru, Langs.sk_sk, Langs.sl_si, Langs.sv_se, Langs.ta_in, Langs.te_in, Langs.tr_tr, Langs.uk_ua, Langs.ur_pk, Langs.vi_vn
@@ -57,15 +58,15 @@ namespace LangsLib {
 		};
 	}
 
-	public struct PhraseWord {
+	public struct TPosLen {
 		public int Pos;
 		public int Len; //could be negative when SpellChecker error
 	}
 
 	public class PhraseWords {
 		public string Text;
-		public PhraseWord[] Idxs; //list of 
-		public string[] getWords(bool incErrors = false) { return Idxs.Select(idx => !incErrors && idx.Len<0 ? null : Text.Substring(idx.Pos, Math.Abs(idx.Len))).Where(w => w!=null).ToArray(); }
+		public List<TPosLen> Idxs; //list of 
+		//public string[] getWords(bool toLower = true, bool incErrors = false) { return Idxs.Select(idx => !incErrors && idx.Len<0 ? null : Text.Substring(idx.Pos, Math.Abs(idx.Len))).Where(w => w!=null).Select(w => toLower ? w.ToLower() : w).ToArray(); }
 	}
 
 	public struct PhraseSide {

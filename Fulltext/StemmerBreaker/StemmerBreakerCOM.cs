@@ -13,21 +13,23 @@ namespace StemmerBreaker {
     delegate int DllGetClassObject(ref Guid clsid, ref Guid iid, [Out, MarshalAs(UnmanagedType.Interface)] out IClassFactory classFactory);
     static Guid classFactoryIid = new Guid("00000000-0000-0000-C000-000000000046");
 
-    internal static T CreateInstance<T>(LibraryModule libraryModule, Guid clsid) where T : class {
-      var classFactory = GetClassFactory(libraryModule, clsid);
-      return CreateInstance<T>(classFactory);
-      //var iid = new Guid("00000000-0000-0000-C000-000000000046"); // IUnknown
-      //object obj;
-      //classFactory.CreateInstance(null, ref classFactoryIid, out obj);
-      //return obj;
-    }
+    //internal static T CreateInstance<T>(LibraryModule libraryModule, Guid clsid) where T : class {
+    //  var classFactory = GetClassFactory(libraryModule, clsid);
+    //  return CreateInstance<T>(classFactory);
+    //  //var iid = new Guid("00000000-0000-0000-C000-000000000046"); // IUnknown
+    //  //object obj;
+    //  //classFactory.CreateInstance(null, ref classFactoryIid, out obj);
+    //  //return obj;
+    //}
 
-    internal static T CreateInstance<T>(IClassFactory classFactory) where T : class {
+    internal static T CreateInstance<T>(IClassFactory classFactory, Type interfaceType) where T : class {
       object obj;
-			//var wbGuid = new Guid("D53552C8-77E3-101A-B552-08002B33B0E6");
-			classFactory.CreateInstance(null, ref classFactoryIid, out obj);
-			//classFactory.CreateInstance(null, ref wbGuid, out obj);
-			return obj as T;
+			var wbGuid = interfaceType.GUID;
+			//classFactory.CreateInstance(null, ref classFactoryIid, out obj);
+			classFactory.CreateInstance(null, ref wbGuid, out obj);
+			var res = obj as T;
+			if (res == null) throw new Exception("res == null");
+			return res;
     }
 
     internal static IClassFactory GetClassFactory(LibraryModule libraryModule, Guid clsid) {

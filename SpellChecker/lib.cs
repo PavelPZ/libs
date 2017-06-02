@@ -12,46 +12,105 @@
 	using System.Windows.Markup;
 
 	//STA runner
-	public class RunSpellCheck : RunObject {
+	public class RunSpellCheckWords : RunObject {
 
-		public RunSpellCheck(Langs lng, string[] words) {
-			this.lng = lng; this.words = words;
+		public RunSpellCheckWords(Langs lng, IEnumerable<WordIdx> wordIdx) {
+			this.lng = lng; this.wordIdx = wordIdx;
 		}
 
-		Langs lng; string[] words;
+		Langs lng; IEnumerable<WordIdx> wordIdx;
+		const int maxWordLen = 48;
+
+		static List<int> doRun(Langs lang, IEnumerable<WordIdx> wordIdx) {
+			if (wordIdx == null) return null;
+			List<int> wrongIdxs = null;
+			TextBox tb = null;
+			foreach (var wi in wordIdx) {
+				var isError = false;
+				if (wi.word.Length > maxWordLen) //too long word => error
+					isError = true;
+				else { //else check TextBox
+					if (tb == null && !textBoxes.TryGetValue(lang, out tb)) {
+						tb = new TextBox(); tb.SpellCheck.IsEnabled = true; tb.Language = XmlLanguage.GetLanguage(Metas.lang2string(lang));
+						textBoxes.Add(lang, tb);
+					}
+					tb.Text = wi.word;
+					if (tb.GetNextSpellingErrorCharacterIndex(0, LogicalDirection.Forward) != -1) isError = true;
+				}
+				if (isError) {
+					if (wrongIdxs == null) wrongIdxs = new List<int>();
+					wrongIdxs.Add(wi.idx);
+				}
+			}
+			//if (wrongIdxs==null)
+			//return wrongIdxs;
+			return wrongIdxs;
+		}
 
 		public override object Run() {
-			if (words == null || words.Length == 0 || words[0] == null) return null;
-			SpellLangResult res = null; int errLen; int wordIdx = 0;
-			TextBox tb;
-			if (!textBoxes.TryGetValue(lng, out tb)) {
-				tb = new TextBox(); tb.SpellCheck.IsEnabled = true; tb.Language = XmlLanguage.GetLanguage("cs-CZ");
-				textBoxes.Add(lng, tb);
-			}
-			foreach (var text in words) {
-				tb.Text = text; int index = 0;
-				while ((index = tb.GetNextSpellingErrorCharacterIndex(index, LogicalDirection.Forward)) != -1) {
-					if (res == null) res = new SpellLangResult();
-					res.Add(new TPosLen { idx = wordIdx, pos = index, len = errLen = tb.GetSpellingErrorLength(index) });
-					index += errLen;
-					//break;
-				}
-				wordIdx++;
-			}
-			return res;
+			return doRun(lng, wordIdx);
 		}
 
 		static Dictionary<Langs, TextBox> textBoxes = new Dictionary<Langs, TextBox>();
 
-		public static Task<Object> Check(Langs lang, string[] words) {
-			var res = STALib.Lib.Run(new RunSpellCheck(lang, words)) as Task<Object>;
+		public static Task<Object> Check(Langs lang, IEnumerable<WordIdx> words) {
+			var res = Lib.Run(new RunSpellCheckWords(lang, words)) as Task<Object>;
 			return res;
 		}
 
+		public static List<int> STACheck(Langs lng, IEnumerable<WordIdx> wordIdx) {
+			return doRun(lng, wordIdx);
+		}
+
+		}
+
+	public struct WordIdx : IEqualityComparer<WordIdx> {
+		public string word; public int idx;
+
+		bool IEqualityComparer<WordIdx>.Equals(WordIdx x, WordIdx y) { return x.word.Equals(y.word); }
+		int IEqualityComparer<WordIdx>.GetHashCode(WordIdx obj) { return obj.word.GetHashCode(); }
 	}
 
-		public struct TPosLen { public int idx; public int pos; public int len; }
-	public class SpellLangResult : List<TPosLen> { }
+	//public class RunSpellCheck : RunObject {
+
+	//	public RunSpellCheck(Langs lng, IEnumerable<string> words) {
+	//		this.lng = lng; this.words = words;
+	//	}
+
+	//	Langs lng; IEnumerable<string> words;
+
+	//	public override object Run() {
+	//		if (words == null) return null;
+	//		SpellLangResult res = null; int errLen; int wordIdx = 0;
+	//		TextBox tb = null;
+	//		foreach (var text in words) {
+	//			if (tb == null && !textBoxes.TryGetValue(lng, out tb)) {
+	//				tb = new TextBox(); tb.SpellCheck.IsEnabled = true; tb.Language = XmlLanguage.GetLanguage(LangsLib.Metas.lang2string(lng));
+	//				textBoxes.Add(lng, tb);
+	//			}
+	//			tb.Text = text; int index = 0;
+	//			while ((index = tb.GetNextSpellingErrorCharacterIndex(index, LogicalDirection.Forward)) != -1) {
+	//				if (res == null) res = new SpellLangResult();
+	//				res.Add(new TPosLen { idx = wordIdx, pos = index, len = errLen = tb.GetSpellingErrorLength(index) });
+	//				index += errLen;
+	//				//break;
+	//			}
+	//			wordIdx++;
+	//		}
+	//		return res;
+	//	}
+
+	//	static Dictionary<Langs, TextBox> textBoxes = new Dictionary<Langs, TextBox>();
+
+	//	public static Task<Object> Check(Langs lang, IEnumerable<string> words) {
+	//		var res = STALib.Lib.Run(new RunSpellCheck(lang, words)) as Task<Object>;
+	//		return res;
+	//	}
+
+	//}
+
+	public struct TPosLen { public int idx; public int pos; public int len; }
+	//public class SpellLangResult : List<TPosLen> { }
 
 	//public class SpellLang {
 
