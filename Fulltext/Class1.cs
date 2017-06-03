@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System;
 using SpellChecker;
 using STALib;
+using System.Configuration;
 
 namespace Fulltext {
 
@@ -23,6 +24,12 @@ namespace Fulltext {
 		public Int64 PhraseId { get; set; } //ID of phrase, containing word. Could be Hash64 of string, identifying phrase in its source repository.
 		[MaxLength(2)]
 		public byte[] DictId { get; set; } //First byte is Dict Lang, second is Phrase Lang. If Phrase Lang==_ => Phrase means source, otherwise translation.
+	}
+
+	//fake entity for dm_fts_parser result, see //https://github.com/aspnet/EntityFramework/issues/245 register entity
+	public class dm_fts_parser {
+		[Key]
+		public string display_term { get; set; }
 	}
 
 	public class RunInsertPhrase : RunObject<PhraseWords> {
@@ -45,22 +52,23 @@ namespace Fulltext {
 		public TaskCompletionSource<Int64[]> tcs { get; set; }
 		public void doRun() { tcs.TrySetResult(Run()); }
 
-		public RunSearchPhrase(PhraseSide phraseSide, string text) {
-			this.phraseSide = phraseSide; this.text = text;
+		public RunSearchPhrase(PhraseSide phraseSide, string text, bool isDBStemming) {
+			this.phraseSide = phraseSide; this.text = text; this.isDBStemming = isDBStemming;
 		}
-		PhraseSide phraseSide; string text;
+		PhraseSide phraseSide; string text; bool isDBStemming;
 
 		public Int64[] Run() {
-			return FulltextContext.STASearchPhrase(phraseSide, text);
+			return FulltextContext.STASearchPhrase(phraseSide, text, isDBStemming);
 		}
 	}
 
 	public class FulltextContext : DbContext {
 		public DbSet<PhraseWord> PhraseWords { get; set; }
-		//public DbSet<Phrase> Phrases { get; set; }
+		//https://github.com/aspnet/EntityFramework/issues/245 register fake dm_fts_parser entity
+		public DbSet<dm_fts_parser> dm_fts_parser { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-			optionsBuilder.UseSqlServer(@"Data Source=PZ-W8VIRTUAL\SQLEXPRESS;Initial Catalog=test;Integrated Security=True;");
+			optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["FulltextDatabase"].ConnectionString);
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder) {
@@ -119,22 +127,34 @@ namespace Fulltext {
 			return Lib.Run(new RunInsertPhrase(phraseId, phraseSide, oldText, newWords));
 		}
 
-		public static Int64[] STASearchPhrase(PhraseSide phraseSide, string text) {
+		public static Int64[] STASearchPhrase(PhraseSide phraseSide, string text, bool isDBStemming) {
 			var ctx = new FulltextContext(); var lang = phraseSide.langOfText(); var txt = new PhraseWords { Text = text }; var dict = phraseSide.getDictId();
+
 			txt.Idxs = StemmerBreaker.RunBreaker.STAWordBreak(lang, text);
 			var words = getWordIdx(txt);
 			List<string> res = new List<string>();
-			foreach (var w in words) res.AddRange(StemmerBreaker.RunStemmer.STAStemm(lang, w.word));
+			foreach (var w in words) {
+				var st = isDBStemming ? (IEnumerable<string>)DBStemming(lang, w.word) : StemmerBreaker.RunStemmer.STAStemm(lang, w.word);
+				//var st1 = StemmerBreaker.RunStemmer.STAStemm(lang, w.word);
+				//var st2 = DBStemming(lang, w.word);
+				res.AddRange(st);
+			}
 			res = res.Distinct().ToList();
 			var ids = ctx.PhraseWords.Where(w => w.DictId == dict && res.Contains(w.Word)).Select(w => w.PhraseId).Distinct().ToArray();
 			return ids;
 		}
 
-		public static Task<Int64[]> SearchPhrase(PhraseSide phraseSide, string text) {
-			return Lib.Run(new RunSearchPhrase(phraseSide, text));
+		public static Task<Int64[]> SearchPhrase(PhraseSide phraseSide, string text, bool isDBStemming) {
+			return Lib.Run(new RunSearchPhrase(phraseSide, text, isDBStemming));
 		}
 
 		static Func<PhraseWords, WordIdx[]> getWordIdx = phr => phr.Idxs.Where(idx => idx.Len > 0).Select((idx, i) => new WordIdx { idx = i, word = phr.Text.Substring(idx.Pos, Math.Min(idx.Len, PhraseWord.maxWordLen)).ToLower() }).ToArray();
+
+		public static string[] DBStemming(Langs lang, string phrase) {
+			var ctx = new FulltextContext();
+			var sql = string.Format("SELECT display_term FROM sys.dm_fts_parser('FormsOf(INFLECTIONAL, \"{0}\")', {1}, 0, 1)", phrase.Replace("'", "''")/*https://stackoverflow.com/questions/5528972/how-do-i-convert-a-string-into-safe-sql-string*/, Metas.lang2LCID(lang));
+			return ctx.Set<dm_fts_parser>().FromSql(sql).Select(p => p.display_term).ToArray();
+		}
 
 		public static async void test() {
 
@@ -143,7 +163,8 @@ namespace Fulltext {
 			ctx.Database.ExecuteSqlCommand("delete PhraseWords");
 			for (var idx = 0; idx < 100; idx++) {
 				var phrase = await Insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, null, "Ahoj, jak se máš?");
-				var search = await SearchPhrase(new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, "měj");
+				var search = await SearchPhrase(new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, "měj", true);
+				search = await SearchPhrase(new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, "měj", false);
 				phrase = await Insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, phrase, "Ahoj, jak se máš? Asi dobře Kadle.");
 				phrase = await Insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, phrase, "Asi dobře, Karle.");
 				phrase = await Insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, null, null);
@@ -232,3 +253,4 @@ namespace Fulltext {
 		}
 	}
 }
+
