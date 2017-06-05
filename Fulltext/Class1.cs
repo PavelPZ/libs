@@ -134,10 +134,13 @@ namespace Fulltext {
 			var words = getWordIdx(txt);
 			List<string> res = new List<string>();
 			foreach (var w in words) {
-				var st = isDBStemming ? (IEnumerable<string>)DBStemming(lang, w.word) : StemmerBreaker.RunStemmer.STAStemm(lang, w.word);
-				//var st1 = StemmerBreaker.RunStemmer.STAStemm(lang, w.word);
-				//var st2 = DBStemming(lang, w.word);
-				res.AddRange(st);
+				if (!StemmerBreaker.Lib.hasStemmer(lang)) res.Add(w.word); //stemmer does not exists => and single word (same as in the StemmerBreaker.Runner.stemm: if (stemmer == null) { onPutWord(PutTypes.put, word); return; })
+				else {
+					var st = isDBStemming ? (IEnumerable<string>)DBStemming(lang, w.word) : StemmerBreaker.RunStemmer.STAStemm(lang, w.word);
+					//var st1 = StemmerBreaker.RunStemmer.STAStemm(lang, w.word);
+					//var st2 = DBStemming(lang, w.word);
+					res.AddRange(st);
+				}
 			}
 			res = res.Distinct().ToList();
 			var ids = ctx.PhraseWords.Where(w => w.DictId == dict && res.Contains(w.Word)).Select(w => w.PhraseId).Distinct().ToArray();
