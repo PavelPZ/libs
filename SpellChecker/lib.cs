@@ -111,7 +111,7 @@
 
 	//}
 
-	public struct TPosLen { public int idx; public int pos; public int len; }
+	public struct TIdxPosLen { public int idx; public int pos; public int len; }
 	//public class SpellLangResult : List<TPosLen> { }
 
 	//public class SpellLang {

@@ -11,62 +11,100 @@ using LangsLib;
 
 namespace DesignConsole.ImportDicts {
 	public static class Import {
-		public static void importAll(Func<Meta, CVSDictItem[], Object, Task> run, Object data = null) {
+		public static void importAll(Func<Meta, CVSDictItem[], Task> run) {
 			var metas = Metas.read();
-			foreach (var meta in metas.Items) import(meta, run, data);
+			foreach (var meta in metas.Items)
+				import(meta, run);
 		}
 
-		public static void import(Meta meta, Func<Meta, CVSDictItem[], Object, Task> run, Object data) {
+		public static void import(Meta meta, Func<Meta, CVSDictItem[], Task> run) {
 			var engine = new FileHelperEngine(typeof(CVSDictItem));
 			var res = (CVSDictItem[])engine.ReadFile(meta.fullPath());
-			var task = run(meta, res, data); if (task!=null) task.Wait();
+			var task = run(meta, res); if (task != null) task.Wait();
 		}
 
 		public static void exportLogs(Meta meta, CVSDictItem[] items) {
 			var engine = new FileHelperEngine(typeof(CVSDictItem));
 			engine.HeaderText = "Src;Dest;SrcLog;DestLog";
-			var lp = meta.logPath();
-			engine.WriteFile(meta.logPath(), items);
+			File.WriteAllText (meta.logPath(), engine.WriteString(items), Encoding.UTF8);
 		}
 
-		public static Task spellCheckAction(Meta meta, CVSDictItem[] items, Object data) {
-			spellCheckResult res = (spellCheckResult)data;
+		public static spellCheckResult STAExtendCSVDict(Meta meta, CVSDictItem[] items) {
+			Action<PhraseWords, HashSet<string>, bool> addWords = (phr, res, isWrong) => { foreach (var w in phr.Idxs.Where(idx => isWrong == idx.Len < 0).Select(idx => phr.Text.Substring(idx.Pos, Math.Abs(idx.Len)))) res.Add(w); };
+			spellCheckResult data = new spellCheckResult();
 			//Break and Spell check
 			foreach (var row in items) {
-				row.SrcLog = "srcLog"; row.DestLog = "destLog";
+				var txt = Fulltext.FulltextContext.STASpellCheck(meta.src, row.Src); row.SrcLog = TPosLen.encode(txt.Idxs);
+				addWords(txt, data.getWords(true, true), true); addWords(txt, data.getWords(true, false), false);
+				foreach (var bp in Fulltext.FulltextContext.BracketParse(row.Src)) data.getBracketsWords(true, bp.Br).Add(bp.Text);
+				txt = Fulltext.FulltextContext.STASpellCheck(meta.dest, row.Dest); row.DestLog = TPosLen.encode(txt.Idxs);
+				addWords(txt, data.getWords(false, true), true); addWords(txt, data.getWords(false, false), false);
+				foreach (var bp in Fulltext.FulltextContext.BracketParse(row.Dest)) data.getBracketsWords(false, bp.Br).Add(bp.Text);
 			}
 			exportLogs(meta, items);
-			return new Task(() => { });
+			data.save(meta);
+			return data;
+		}
+
+		public static Task ExtendCSVDict(Meta meta, CVSDictItem[] items) {
+			return STALib.Lib.Run(new RunExtendCSVDict(meta, items));
 		}
 
 		public static CVSDictItem[] import(string fn) {
-			Metas metas = new Metas {
-				Items = new Meta[] {
-				new Meta {src = Langs.ru_ru, dest = Langs.cs_cz, path=@"__Lingea\XX-CZ\Russian-Czech.csv" },
-				new Meta {src = Langs.en_gb, dest = Langs.cs_cz, path=@"__Lingea\XX-CZ\English-Czech.csv" },
-			}
-			};
-
-			File.WriteAllText(@"d:\temp\dictmetas.json", JsonConvert.SerializeObject(metas), Encoding.UTF8);
 			return null;
+			//Metas metas = new Metas {
+			//	Items = new Meta[] {
+			//	new Meta {src = Langs.ru_ru, dest = Langs.cs_cz, path=@"__Lingea\XX-CZ\Russian-Czech.csv" },
+			//	new Meta {src = Langs.en_gb, dest = Langs.cs_cz, path=@"__Lingea\XX-CZ\English-Czech.csv" },
+			//}
+			//};
 
-			//create a CSV engine using FileHelpers for your CSV file
-			var engine = new FileHelperEngine(typeof(CVSDictItem));
-			//read the CSV file into your object Arrary
-			return (CVSDictItem[])engine.ReadFile(fn);
+			//File.WriteAllText(@"d:\temp\dictmetas.json", JsonConvert.SerializeObject(metas), Encoding.UTF8);
+			//return null;
+
+			////create a CSV engine using FileHelpers for your CSV file
+			//var engine = new FileHelperEngine(typeof(CVSDictItem));
+			////read the CSV file into your object Arrary
+			//return (CVSDictItem[])engine.ReadFile(fn);
 		}
 	}
 
 	public class spellCheckResult {
-		public Dictionary<Langs, HashSet<string>> wrongWords = new Dictionary<Langs, HashSet<string>>();
-		public Dictionary<Langs, HashSet<string>> correctWords = new Dictionary<Langs, HashSet<string>>();
-		public HashSet<string> getWords(Langs lang, bool isWrong) {
-			HashSet<string> res;
-			Dictionary<Langs, HashSet<string>> act = isWrong ? wrongWords : correctWords;
-			if (act.TryGetValue(lang, out res)) act[lang] = res = new HashSet<string>();
-			return res;
+		public spellCheckResult() { }
+		HashSet<string>[] wordLists = new HashSet<string>[] { new HashSet<string>(), new HashSet<string>(), new HashSet<string>(), new HashSet<string>(), new HashSet<string>(), new HashSet<string>(), new HashSet<string>(), new HashSet<string>(), new HashSet<string>(), new HashSet<string>() };
+		public HashSet<string> getWords(bool isSrc, bool isWrong) { return wordLists[isSrc ? (isWrong ? 1 : 0) : (isWrong ? 3 : 2)]; }
+		public HashSet<string> getBracketsWords(bool isSrc, char br) { return wordLists[(isSrc ? 0 : 3) + (br == '(' ? 4 : (br == '{' ? 5 : 6))]; } //0 for (, 1 for {, 2 for [
+		[DelimitedRecord(";"), IgnoreEmptyLines(), IgnoreFirst()]
+		public class TRow { public string SrcOK; public string SrcWrong; public string DestOK; public string DestWrong; public string SrcRoundBR; public string SrcCurlyBR; public string SrcSquareBR; public string DestRoundBR; public string DestCurlyBR; public string DestSquareBR; }
+		IEnumerable<object> getRows() {
+			var wls = wordLists.Select(w => w.Select(ww => ww.Replace(';', '|')).OrderBy(ww => ww).ToArray()).ToArray();
+			Func<int, int, string> val = (idx, i) => { return i < wls[idx].Length ? wls[idx][i] : ""; };
+			for (var i = 0; i < wordLists.Max(w => w.Count); i++)
+				yield return new TRow { SrcOK = val(0, i), SrcWrong = val(1, i), DestOK = val(2, i), DestWrong = val(3, i), SrcRoundBR = val(4, i), SrcCurlyBR = val(5, i), SrcSquareBR = val(6, i), DestRoundBR = val(7, i), DestCurlyBR = val(8, i), DestSquareBR = val(9, i) };
+		}
+		public void save(Meta meta) {
+			var engine = new FileHelperEngine(typeof(TRow));
+			engine.HeaderText = "SrcOK;SrcWrong;DestOK;DestWrong;SrcRoundBR;SrcCurlyBR;SrcSquareBR;DestRoundBR;DestCurlyBR;DestSquareBR";
+			File.WriteAllText(meta.logPath().Replace(@"\ex-", @"\br-"), engine.WriteString(getRows()), Encoding.UTF8);
 		}
 	}
+
+	public class RunExtendCSVDict : STALib.RunObject<spellCheckResult> {
+
+		public TaskCompletionSource<spellCheckResult> tcs { get; set; }
+		public void doRun() { tcs.TrySetResult(Run()); }
+
+		public RunExtendCSVDict(Meta meta, CVSDictItem[] items) {
+			this.meta = meta; this.items = items;
+		}
+		Meta meta; CVSDictItem[] items;
+
+		public spellCheckResult Run() {
+			return Import.STAExtendCSVDict(meta, items);
+		}
+
+	}
+
 
 }
 

@@ -61,6 +61,8 @@ namespace LangsLib {
 	public struct TPosLen {
 		public int Pos;
 		public int Len; //could be negative when SpellChecker error
+		public string encode() { return string.Format("{0}-{1}", Pos, Len); }
+		public static string encode(IEnumerable<TPosLen> items) { return items == null ? null : items.DefaultIfEmpty().Select(it => it.encode()).Aggregate((r, i) => r + "|" + i); }
 	}
 
 	public class PhraseWords {

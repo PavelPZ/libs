@@ -8,6 +8,7 @@ using System;
 using SpellChecker;
 using STALib;
 using System.Configuration;
+using System.Text.RegularExpressions;
 
 namespace Fulltext {
 
@@ -62,6 +63,26 @@ namespace Fulltext {
 		}
 	}
 
+	public class RunSpellCheck : RunObject<PhraseWords> {
+
+		public TaskCompletionSource<PhraseWords> tcs { get; set; }
+		public void doRun() { tcs.TrySetResult(Run()); }
+
+		public RunSpellCheck(Langs lang, string phrase) {
+			this.lang = lang; this.phrase = phrase; 
+		}
+		Langs lang; string phrase;
+
+		public PhraseWords Run() {
+			return FulltextContext.STASpellCheck(lang, phrase);
+		}
+
+		public static Task<PhraseWords> SpellCheck(Langs lang, string phrase) {
+			return Lib.Run(new RunSpellCheck(lang, phrase));
+		}
+
+	}
+
 	public class FulltextContext : DbContext {
 		public DbSet<PhraseWord> PhraseWords { get; set; }
 		//https://github.com/aspnet/EntityFramework/issues/245 register fake dm_fts_parser entity
@@ -81,16 +102,27 @@ namespace Fulltext {
 			Database.EnsureCreated();
 		}
 
+		public static PhraseWords STASpellCheck(Langs lang, string phrase) {
+			var newText = new PhraseWords { Text = phrase };
+			//WordBreaking without brackets
+			STAWordBreak(lang, newText);
+			//lowercased correct words of PhraseWord.maxWordLen
+			var newWordIdx = getWordIdx(newText);
+			STASpellCheck(lang, newWordIdx, newText); //low level spell check
+			return newText;
+		}
+
+		//Bracket parsing
+		public static IEnumerable<Bracket> BracketParse(string s) { foreach (Match match in brackets.Matches(s))  yield return new Bracket { Br = match.Value[0], Text = match.Value.Substring(1, match.Value.Length-2) }; }
+		public struct Bracket { public char Br; public string Text; }
+		static Regex brackets = new Regex(@"\((.*?)\)|\{(.*?)\}|\[(.*?)\]");
+
 		public static PhraseWords STAInsert(Int64 phraseId, PhraseSide phraseSide /*dict and its side, e.g. czech part of English-Czech dict*/, PhraseWords oldText /*null => insert, else update*/, string newWords /*null => delete, else update or insert*/) {
 			var ctx = new FulltextContext(); var lang = phraseSide.langOfText(); var newText = new PhraseWords { Text = newWords };
 
 			Action<WordIdx[]> addNews = nws => {
-				//Spell check
-				var errorIdxs = RunSpellCheckWords.STACheck(lang, nws);
-				//update Len for wrong words
-				if (errorIdxs != null) foreach (var errIdx in errorIdxs) newText.Idxs[errIdx] = new LangsLib.TPosLen() { Pos = newText.Idxs[errIdx].Pos, Len = -newText.Idxs[errIdx].Len };
-				//
-				for (var i = 0; i < nws.Length; i++) if (newText.Idxs[nws[i].idx].Len > 0)
+				STASpellCheck(lang, nws, newText); //low level spell check
+				for (var i = 0; i < nws.Length; i++) if (newText.Idxs[nws[i].idx].Len > 0) //new correct words to fulltext DB
 						ctx.PhraseWords.Add(new PhraseWord() { DictId = phraseSide.getDictId(), Word = nws[i].word, PhraseId = phraseId });
 			};
 
@@ -99,9 +131,7 @@ namespace Fulltext {
 				return null;
 			}
 			//Word breaking
-			//var x = new StemmerBreaker.Runner(Langs.cs_cz).wordBreak("Ahoj");
-			newText.Idxs = StemmerBreaker.RunBreaker.STAWordBreak(lang, newText.Text);
-			//using (var st = new StemmerBreaker.Runner(lang)) newText.Idxs = st.wordBreak(newText.Text);
+			STAWordBreak(lang, newText);
 
 			var newWordIdx = getWordIdx(newText);
 			if (oldText == null) { //insert
@@ -152,6 +182,19 @@ namespace Fulltext {
 		}
 
 		static Func<PhraseWords, WordIdx[]> getWordIdx = phr => phr.Idxs.Where(idx => idx.Len > 0).Select((idx, i) => new WordIdx { idx = i, word = phr.Text.Substring(idx.Pos, Math.Min(idx.Len, PhraseWord.maxWordLen)).ToLower() }).ToArray();
+
+		static void STAWordBreak(Langs lang, PhraseWords text) {
+			var noBrackets = brackets.Replace(text.Text, match => new String(' ', match.Length));
+			text.Idxs = StemmerBreaker.RunBreaker.STAWordBreak(lang, noBrackets);
+		}
+
+		static void STASpellCheck(Langs lang, WordIdx[] nws, PhraseWords newText) {
+			//Spell check
+			var errorIdxs = RunSpellCheckWords.STACheck(lang, nws);
+			//update Len for wrong words
+			if (errorIdxs != null) foreach (var errIdx in errorIdxs) newText.Idxs[errIdx] = new TPosLen() { Pos = newText.Idxs[errIdx].Pos, Len = -newText.Idxs[errIdx].Len };
+		}
+
 
 		public static string[] DBStemming(Langs lang, string phrase) {
 			var ctx = new FulltextContext();
