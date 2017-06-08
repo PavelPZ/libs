@@ -43,6 +43,7 @@ namespace Fulltext {
 		public byte[] TextIdxs { get; set; } //word breking and stemming result (<pos, len> array)
 		public byte SrcLang { get; set; }
 		public byte DestLang { get; set; }
+		public int? SrcRef { get; set; }
 
 		[MaxLength(maxPhraseBaseLen), Required]
 		public string Base { get; set; } //normalized text for duplicity search
@@ -80,7 +81,9 @@ namespace Fulltext {
 				.OnDelete(DeleteBehavior.Cascade);
 			modelBuilder.Entity<Phrase>()
 				.HasMany(c => c.Dests)
-				.WithOne(e => e.Src);
+				.WithOne(e => e.Src)
+				.HasForeignKey(b => b.SrcRef) 
+				.OnDelete(DeleteBehavior.Restrict); //https://stackoverflow.com/questions/22681352/entity-framework-6-code-first-cascade-delete-on-self-referencing-entity
 			modelBuilder.Entity<Phrase>().HasIndex(p => p.Base);
 		}
 
