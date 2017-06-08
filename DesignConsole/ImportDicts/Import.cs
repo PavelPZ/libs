@@ -26,7 +26,11 @@ namespace DesignConsole.ImportDicts {
 		public static void exportLogs(Meta meta, CVSDictItem[] items) {
 			var engine = new FileHelperEngine(typeof(CVSDictItem));
 			engine.HeaderText = "Src;Dest;SrcLog;DestLog";
-			File.WriteAllText (meta.logPath(), engine.WriteString(items), Encoding.UTF8);
+			engine.Encoding = Encoding.UTF8;
+			engine.WriteFile(meta.logPath(), items);
+		}
+
+		public static void STAImportCSVDict(Meta meta, CVSDictItem[] items) {
 		}
 
 		public static spellCheckResult STAExtendCSVDict(Meta meta, CVSDictItem[] items) {
@@ -34,12 +38,12 @@ namespace DesignConsole.ImportDicts {
 			spellCheckResult data = new spellCheckResult();
 			//Break and Spell check
 			foreach (var row in items) {
-				var txt = Fulltext.FulltextContext.STASpellCheck(meta.src, row.Src); row.SrcLog = TPosLen.encode(txt.Idxs);
+				var txt = Fulltext.FtxLib.STABreakAndCheck(meta.src, row.Src); row.SrcLog = TPosLen.encode(txt.Idxs);
 				addWords(txt, data.getWords(true, true), true); addWords(txt, data.getWords(true, false), false);
-				foreach (var bp in Fulltext.FulltextContext.BracketParse(row.Src)) data.getBracketsWords(true, bp.Br).Add(bp.Text);
-				txt = Fulltext.FulltextContext.STASpellCheck(meta.dest, row.Dest); row.DestLog = TPosLen.encode(txt.Idxs);
+				foreach (var bp in Fulltext.FtxLib.BracketParse(row.Src)) data.getBracketsWords(true, bp.Br).Add(bp.Text);
+				txt = Fulltext.FtxLib.STABreakAndCheck(meta.dest, row.Dest); row.DestLog = TPosLen.encode(txt.Idxs);
 				addWords(txt, data.getWords(false, true), true); addWords(txt, data.getWords(false, false), false);
-				foreach (var bp in Fulltext.FulltextContext.BracketParse(row.Dest)) data.getBracketsWords(false, bp.Br).Add(bp.Text);
+				foreach (var bp in Fulltext.FtxLib.BracketParse(row.Dest)) data.getBracketsWords(false, bp.Br).Add(bp.Text);
 			}
 			exportLogs(meta, items);
 			data.save(meta);
@@ -85,7 +89,8 @@ namespace DesignConsole.ImportDicts {
 		public void save(Meta meta) {
 			var engine = new FileHelperEngine(typeof(TRow));
 			engine.HeaderText = "SrcOK;SrcWrong;DestOK;DestWrong;SrcRoundBR;SrcCurlyBR;SrcSquareBR;DestRoundBR;DestCurlyBR;DestSquareBR";
-			File.WriteAllText(meta.logPath().Replace(@"\ex-", @"\br-"), engine.WriteString(getRows()), Encoding.UTF8);
+			engine.Encoding = Encoding.UTF8;
+			engine.WriteFile(meta.logPath().Replace(@"\ex-", @"\br-"), getRows()); //, Encoding.UTF8);
 		}
 	}
 

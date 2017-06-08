@@ -12,7 +12,7 @@ namespace DesignConsole {
 				//ImportAllLangs.Run();
 				//SpellChecker.SpellLang.test().Wait();
 				//StemmerBreaker.Runner.test();
-				//Fulltext.FulltextContext.test();
+				//Fulltext.FtxLib.test();
 				ImportDicts.Import.importAll(ImportDicts.Import.ExtendCSVDict);
 				//var res = await Fulltext.RunSpellCheck.SpellCheck(LangsLib.Langs.cs_cz, "ahoj (jak se) máš? {Já} docela [dobře] xxxx.)");
 			});

@@ -1,56 +1,34 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.ComponentModel.DataAnnotations;
-using LangsLib;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System;
+﻿using LangsLib;
+using Microsoft.EntityFrameworkCore;
 using SpellChecker;
 using STALib;
-using System.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Fulltext {
 
-	public class PhraseWord {
-
-		public const int maxWordLen = 24;
-		public const string PhraseIdName = "PhraseId";
-		public const string DictIdName = "DictId";
-
-		[Key]
-		public int Id { get; set; } //internal unique ID
-		[MaxLength(maxWordLen)]
-		public string Word { get; set; }
-		public Int64 PhraseId { get; set; } //ID of phrase, containing word. Could be Hash64 of string, identifying phrase in its source repository.
-		[MaxLength(2)]
-		public byte[] DictId { get; set; } //First byte is Dict Lang, second is Phrase Lang. If Phrase Lang==_ => Phrase means source, otherwise translation.
-	}
-
-	//fake entity for dm_fts_parser result, see //https://github.com/aspnet/EntityFramework/issues/245 register entity
-	public class dm_fts_parser {
-		[Key]
-		public string display_term { get; set; }
-	}
 
 	public class RunInsertPhrase : RunObject<PhraseWords> {
 
 		public TaskCompletionSource<PhraseWords> tcs { get; set; }
 		public void doRun() { tcs.TrySetResult(Run()); }
 
-		public RunInsertPhrase(Int64 phraseId, PhraseSide phraseSide, PhraseWords oldText, string newWords) {
+		public RunInsertPhrase(int phraseId, PhraseSide phraseSide, PhraseWords oldText, string newWords) {
 			this.phraseId = phraseId; this.phraseSide = phraseSide; this.oldText = oldText; this.newWords = newWords;
 		}
-		Int64 phraseId; PhraseSide phraseSide; PhraseWords oldText; string newWords;
+		int phraseId; PhraseSide phraseSide; PhraseWords oldText; string newWords;
 
 		public PhraseWords Run() {
-			return FulltextContext.STAInsert(phraseId, phraseSide, oldText, newWords);
+			return FtxLib.STAInsert(phraseId, phraseSide, oldText, newWords);
 		}
 	}
 
-	public class RunSearchPhrase : RunObject<Int64[]> {
+	public class RunSearchPhrase : RunObject<int[]> {
 
-		public TaskCompletionSource<Int64[]> tcs { get; set; }
+		public TaskCompletionSource<int[]> tcs { get; set; }
 		public void doRun() { tcs.TrySetResult(Run()); }
 
 		public RunSearchPhrase(PhraseSide phraseSide, string text, bool isDBStemming) {
@@ -58,51 +36,34 @@ namespace Fulltext {
 		}
 		PhraseSide phraseSide; string text; bool isDBStemming;
 
-		public Int64[] Run() {
-			return FulltextContext.STASearchPhrase(phraseSide, text, isDBStemming);
+		public int[] Run() {
+			return FtxLib.STASearchPhrase(phraseSide, text, isDBStemming);
 		}
 	}
 
-	public class RunSpellCheck : RunObject<PhraseWords> {
+	public class RunBreakAndCheck : RunObject<PhraseWords> {
 
 		public TaskCompletionSource<PhraseWords> tcs { get; set; }
 		public void doRun() { tcs.TrySetResult(Run()); }
 
-		public RunSpellCheck(Langs lang, string phrase) {
-			this.lang = lang; this.phrase = phrase; 
+		public RunBreakAndCheck(Langs lang, string phrase) {
+			this.lang = lang; this.phrase = phrase;
 		}
 		Langs lang; string phrase;
 
 		public PhraseWords Run() {
-			return FulltextContext.STASpellCheck(lang, phrase);
+			return FtxLib.STABreakAndCheck(lang, phrase);
 		}
 
 		public static Task<PhraseWords> SpellCheck(Langs lang, string phrase) {
-			return Lib.Run(new RunSpellCheck(lang, phrase));
+			return Lib.Run(new RunBreakAndCheck(lang, phrase));
 		}
 
 	}
 
-	public class FulltextContext : DbContext {
-		public DbSet<PhraseWord> PhraseWords { get; set; }
-		//https://github.com/aspnet/EntityFramework/issues/245 register fake dm_fts_parser entity
-		public DbSet<dm_fts_parser> dm_fts_parser { get; set; }
+	public class FtxLib {
 
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-			optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["FulltextDatabase"].ConnectionString);
-		}
-
-		protected override void OnModelCreating(ModelBuilder modelBuilder) {
-			modelBuilder.Entity<PhraseWord>().HasIndex(p => p.Word);
-			modelBuilder.Entity<PhraseWord>().HasIndex(p => p.PhraseId);
-		}
-
-		public void recreate() {
-			Database.EnsureDeleted();
-			Database.EnsureCreated();
-		}
-
-		public static PhraseWords STASpellCheck(Langs lang, string phrase) {
+		public static PhraseWords STABreakAndCheck(Langs lang, string phrase) {
 			var newText = new PhraseWords { Text = phrase };
 			//WordBreaking without brackets
 			STAWordBreak(lang, newText);
@@ -113,21 +74,21 @@ namespace Fulltext {
 		}
 
 		//Bracket parsing
-		public static IEnumerable<Bracket> BracketParse(string s) { foreach (Match match in brackets.Matches(s))  yield return new Bracket { Br = match.Value[0], Text = match.Value.Substring(1, match.Value.Length-2) }; }
+		public static IEnumerable<Bracket> BracketParse(string s) { foreach (Match match in brackets.Matches(s)) yield return new Bracket { Br = match.Value[0], Text = match.Value.Substring(1, match.Value.Length - 2) }; }
 		public struct Bracket { public char Br; public string Text; }
 		static Regex brackets = new Regex(@"\((.*?)\)|\{(.*?)\}|\[(.*?)\]");
 
-		public static PhraseWords STAInsert(Int64 phraseId, PhraseSide phraseSide /*dict and its side, e.g. czech part of English-Czech dict*/, PhraseWords oldText /*null => insert, else update*/, string newWords /*null => delete, else update or insert*/) {
+		public static PhraseWords STAInsert(int phraseId, PhraseSide phraseSide /*dict and its side, e.g. czech part of English-Czech dict*/, PhraseWords oldText /*null => insert, else update*/, string newWords /*null => delete, else update or insert*/) {
 			var ctx = new FulltextContext(); var lang = phraseSide.langOfText(); var newText = new PhraseWords { Text = newWords };
 
-			Action<WordIdx[]> addNews = nws => {
-				STASpellCheck(lang, nws, newText); //low level spell check
-				for (var i = 0; i < nws.Length; i++) if (newText.Idxs[nws[i].idx].Len > 0) //new correct words to fulltext DB
-						ctx.PhraseWords.Add(new PhraseWord() { DictId = phraseSide.getDictId(), Word = nws[i].word, PhraseId = phraseId });
+			Action<WordIdx[]> addNews = wordIdxs => {
+				STASpellCheck(lang, wordIdxs, newText); //low level spell check
+				for (var i = 0; i < wordIdxs.Length; i++) if (newText.Idxs[wordIdxs[i].idx].Len > 0) //new correct words to fulltext DB
+						ctx.PhraseWords.Add(new PhraseWord() { SrcLang = (byte)phraseSide.src, DestLang = (byte)phraseSide.dest, Word = wordIdxs[i].word, PhraseRef = phraseId });
 			};
 
 			if (newWords == null) { //DELETE
-				ctx.Database.ExecuteSqlCommand(string.Format("delete PhraseWords where {0}={{0}} and {1}={{1}}", PhraseWord.PhraseIdName, PhraseWord.DictIdName), new object[] { phraseId, phraseSide.getDictId() });
+				ctx.Database.ExecuteSqlCommand(string.Format("delete PhraseWords where {0}={{0}} and {1}={{1}} and {2}={{2}}", PhraseWord.PhraseIdName, PhraseWord.SrcLangName, PhraseWord.DestLangName), new object[] { phraseId, (byte)phraseSide.src, (byte)phraseSide.dest });
 				return null;
 			}
 			//Word breaking
@@ -141,7 +102,7 @@ namespace Fulltext {
 				//Delete olds
 				var olds = getWordIdx(oldText);
 				var dict = phraseSide.getDictId();
-				var oldsDB = ctx.PhraseWords.Where(pw => pw.PhraseId == phraseId && pw.DictId == dict).ToArray();
+				var oldsDB = ctx.PhraseWords.Where(pw => pw.PhraseRef == phraseId && pw.SrcLang == (byte)phraseSide.src && pw.DestLang == (byte)phraseSide.dest).ToArray();
 				foreach (var w in olds.Except(newWordIdx)) ctx.PhraseWords.Remove(oldsDB.First(db => db.Word == w.word)); //oldsDB.Where(ww => !boths.Contains(ww.Word))) ctx.PhraseWords.Remove(w);
 
 				//Add news
@@ -153,12 +114,12 @@ namespace Fulltext {
 			return newText;
 		}
 
-		public static Task<PhraseWords> Insert(Int64 phraseId, PhraseSide phraseSide /*dict and its side, e.g. czech part of English-Czech dict*/, PhraseWords oldText /*null => insert, else update*/, string newWords /*null => delete, else update or insert*/) {
+		public static Task<PhraseWords> Insert(int phraseId, PhraseSide phraseSide /*dict and its side, e.g. czech part of English-Czech dict*/, PhraseWords oldText /*null => insert, else update*/, string newWords /*null => delete, else update or insert*/) {
 			return Lib.Run(new RunInsertPhrase(phraseId, phraseSide, oldText, newWords));
 		}
 
-		public static Int64[] STASearchPhrase(PhraseSide phraseSide, string text, bool isDBStemming) {
-			var ctx = new FulltextContext(); var lang = phraseSide.langOfText(); var txt = new PhraseWords { Text = text }; var dict = phraseSide.getDictId();
+		public static int[] STASearchPhrase(PhraseSide phraseSide, string text, bool isDBStemming) {
+			var ctx = new FulltextContext(); var lang = phraseSide.langOfText(); var txt = new PhraseWords { Text = text }; //var dict = phraseSide.getDictId();
 
 			txt.Idxs = StemmerBreaker.RunBreaker.STAWordBreak(lang, text);
 			var words = getWordIdx(txt);
@@ -166,22 +127,25 @@ namespace Fulltext {
 			foreach (var w in words) {
 				if (!StemmerBreaker.Lib.hasStemmer(lang)) res.Add(w.word); //stemmer does not exists => and single word (same as in the StemmerBreaker.Runner.stemm: if (stemmer == null) { onPutWord(PutTypes.put, word); return; })
 				else {
-					var st = isDBStemming ? (IEnumerable<string>)DBStemming(lang, w.word) : StemmerBreaker.RunStemmer.STAStemm(lang, w.word);
+					var st = isDBStemming ? (IEnumerable<string>)StemmingWithSQLServer(lang, w.word) : StemmerBreaker.RunStemmer.STAStemm(lang, w.word);
 					//var st1 = StemmerBreaker.RunStemmer.STAStemm(lang, w.word);
 					//var st2 = DBStemming(lang, w.word);
 					res.AddRange(st);
 				}
 			}
 			res = res.Distinct().ToList();
-			var ids = ctx.PhraseWords.Where(w => w.DictId == dict && res.Contains(w.Word)).Select(w => w.PhraseId).Distinct().ToArray();
+			var ids = ctx.PhraseWords.Where(w => w.SrcLang == (byte)phraseSide.src && w.DestLang == (byte)phraseSide.dest && res.Contains(w.Word)).Select(w => w.PhraseRef).Distinct().ToArray();
 			return ids;
 		}
 
-		public static Task<Int64[]> SearchPhrase(PhraseSide phraseSide, string text, bool isDBStemming) {
+		public static Task<int[]> SearchPhrase(PhraseSide phraseSide, string text, bool isDBStemming) {
 			return Lib.Run(new RunSearchPhrase(phraseSide, text, isDBStemming));
 		}
 
-		static Func<PhraseWords, WordIdx[]> getWordIdx = phr => phr.Idxs.Where(idx => idx.Len > 0).Select((idx, i) => new WordIdx { idx = i, word = phr.Text.Substring(idx.Pos, Math.Min(idx.Len, PhraseWord.maxWordLen)).ToLower() }).ToArray();
+		static Func<PhraseWords, WordIdx[]> getWordIdx = phr => {
+			string pomStr;
+			return phr.Idxs.Where(idx => idx.Len > 0).Select((idx, i) => new WordIdx { idx = i, fullWord = pomStr = phr.Text.Substring(idx.Pos, idx.Len), word = pomStr.Substring(0, Math.Min(idx.Len, PhraseWord.maxWordLen)).ToLower() }).ToArray();
+		};
 
 		static void STAWordBreak(Langs lang, PhraseWords text) {
 			var noBrackets = brackets.Replace(text.Text, match => new String(' ', match.Length));
@@ -196,7 +160,7 @@ namespace Fulltext {
 		}
 
 
-		public static string[] DBStemming(Langs lang, string phrase) {
+		public static string[] StemmingWithSQLServer(Langs lang, string phrase) {
 			var ctx = new FulltextContext();
 			var sql = string.Format("SELECT display_term FROM sys.dm_fts_parser('FormsOf(INFLECTIONAL, \"{0}\")', {1}, 0, 1)", phrase.Replace("'", "''")/*https://stackoverflow.com/questions/5528972/how-do-i-convert-a-string-into-safe-sql-string*/, Metas.lang2LCID(lang));
 			return ctx.Set<dm_fts_parser>().FromSql(sql).Select(p => p.display_term).ToArray();
@@ -205,7 +169,7 @@ namespace Fulltext {
 		public static async void test() {
 
 			var ctx = new FulltextContext();
-			//ctx.recreate();
+			ctx.recreate();
 			ctx.Database.ExecuteSqlCommand("delete PhraseWords");
 			for (var idx = 0; idx < 100; idx++) {
 				var phrase = await Insert(123, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, null, "Ahoj, jak se máš?");
@@ -291,12 +255,5 @@ namespace Fulltext {
 		}
 	}
 
-	public class Class1 {
-		protected void Page_Load() {
-			var ctx = new FulltextContext();
-			ctx.recreate();
-			//var all = ctx.Blogs.ToArray();
-		}
-	}
 }
 

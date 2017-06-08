@@ -37,7 +37,7 @@
 						tb = new TextBox(); tb.SpellCheck.IsEnabled = true; tb.Language = XmlLanguage.GetLanguage(Metas.lang2string(lang));
 						textBoxes.Add(lang, tb);
 					}
-					tb.Text = wi.word;
+					tb.Text = wi.fullWord;
 					if (tb.GetNextSpellingErrorCharacterIndex(0, LogicalDirection.Forward) != -1) isError = true;
 				}
 				if (isError) {
@@ -67,7 +67,7 @@
 		}
 
 	public struct WordIdx : IEqualityComparer<WordIdx> {
-		public string word; public int idx;
+		public string fullWord; public string word; public int idx;
 
 		bool IEqualityComparer<WordIdx>.Equals(WordIdx x, WordIdx y) { return x.word.Equals(y.word); }
 		int IEqualityComparer<WordIdx>.GetHashCode(WordIdx obj) { return obj.word.GetHashCode(); }
