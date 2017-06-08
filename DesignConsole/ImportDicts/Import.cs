@@ -8,9 +8,19 @@ using FileHelpers;
 using System.IO;
 using Newtonsoft.Json;
 using LangsLib;
+using Microsoft.EntityFrameworkCore;
 
 namespace DesignConsole.ImportDicts {
 	public static class Import {
+		public static void importAll() {
+			var ctx = new Fulltext.FulltextContext();
+			//ctx.recreate();
+			ctx.Database.ExecuteSqlCommand("ALTER DATABASE test SET RECOVERY SIMPLE");
+			//ctx.Database.ExecuteSqlCommand("delete Dicts");
+			ctx.Database.ExecuteSqlCommand("DBCC SHRINKDATABASE (test, 0);");
+			ctx.Database.ExecuteSqlCommand("DBCC SHRINKFILE (test_log, 0);");
+			importAll(ImportCSVDict);
+		}
 		public static void importAll(Func<Meta, CVSDictItem[], Task> run) {
 			var metas = Metas.read();
 			foreach (var meta in metas.Items)
@@ -30,7 +40,25 @@ namespace DesignConsole.ImportDicts {
 			engine.WriteFile(meta.logPath(), items);
 		}
 
-		public static void STAImportCSVDict(Meta meta, CVSDictItem[] items) {
+		public static List<int> STAImportCSVDict(Meta meta, CVSDictItem[] items) {
+			var ids = new List<int>();
+			var ctx = new Fulltext.FulltextContext(); int count = 0;
+			var dict = ctx.Dicts.Include(d => d.Phrases).FirstOrDefault(d => d.Name == meta.path);
+			if (dict != null) { ctx.Dicts.Remove(dict); ctx.SaveChanges(); ctx = new Fulltext.FulltextContext(); }
+			ctx.Dicts.Add(dict = new Fulltext.Dict { Name = meta.path, Imported = DateTime.UtcNow, SrcLang = (byte) meta.src });
+			foreach (var row in items) {
+				var srcPhrase = Fulltext.FtxLib.STAInsert(ctx, row.Src, null, dict, new PhraseSide { src = meta.src, dest = meta.src }, null);
+				var destPhrase = Fulltext.FtxLib.STAInsert(ctx, row.Dest, null, dict, new PhraseSide { src = meta.src, dest = meta.dest }, srcPhrase.Id);
+				ids.Add(destPhrase.Id);
+				if (count++ > 1000) { ctx.SaveChanges(); ctx = new Fulltext.FulltextContext(); ctx.Dicts.Attach(dict); count = 0; }
+			}
+			ctx.SaveChanges();
+			new Fulltext.FulltextContext().Database.ExecuteSqlCommand("DBCC SHRINKFILE (test_log, 0);");
+			return ids;
+		}
+
+		public static Task<List<int>> ImportCSVDict(Meta meta, CVSDictItem[] items) {
+			return STALib.Lib.Run(new RunImportCSVDict(meta, items));
 		}
 
 		public static spellCheckResult STAExtendCSVDict(Meta meta, CVSDictItem[] items) {
@@ -50,7 +78,7 @@ namespace DesignConsole.ImportDicts {
 			return data;
 		}
 
-		public static Task ExtendCSVDict(Meta meta, CVSDictItem[] items) {
+		public static Task<spellCheckResult> ExtendCSVDict(Meta meta, CVSDictItem[] items) {
 			return STALib.Lib.Run(new RunExtendCSVDict(meta, items));
 		}
 
@@ -109,6 +137,23 @@ namespace DesignConsole.ImportDicts {
 		}
 
 	}
+
+	public class RunImportCSVDict : STALib.RunObject<List<int>> {
+
+		public TaskCompletionSource<List<int>> tcs { get; set; }
+		public void doRun() { tcs.TrySetResult(Run()); }
+
+		public RunImportCSVDict(Meta meta, CVSDictItem[] items) {
+			this.meta = meta; this.items = items;
+		}
+		Meta meta; CVSDictItem[] items;
+
+		public List<int> Run() {
+			return Import.STAImportCSVDict(meta, items);
+		}
+
+	}
+
 
 
 }

@@ -16,13 +16,13 @@ namespace Fulltext {
 		public TaskCompletionSource<Phrase> tcs { get; set; }
 		public void doRun() { tcs.TrySetResult(Run()); }
 
-		public RunInsertPhrase(string newWords, int? phraseId, PhraseSide? phraseSide, int? srcSideId) {
-			this.phraseId = phraseId; this.phraseSide = phraseSide; this.newWords = newWords; this.srcSideId = srcSideId;
+		public RunInsertPhrase(FulltextContext ctx, string newWords, int? phraseId, Dict dict, PhraseSide? phraseSide, int? srcSideId) {
+			this.phraseId = phraseId; this.phraseSide = phraseSide; this.newWords = newWords; this.srcSideId = srcSideId; this.ctx = ctx; this.dict = dict;
 		}
-		int? phraseId; PhraseSide? phraseSide; string newWords; int? srcSideId;
+		int? phraseId; PhraseSide? phraseSide; string newWords; int? srcSideId; FulltextContext ctx; Dict dict;
 
 		public Phrase Run() {
-			return FtxLib.STAInsert(newWords, phraseId, phraseSide, srcSideId);
+			return FtxLib.STAInsert(ctx, newWords, phraseId, dict, phraseSide, srcSideId);
 		}
 	}
 
@@ -78,35 +78,34 @@ namespace Fulltext {
 		public struct Bracket { public char Br; public string Text; }
 		static Regex brackets = new Regex(@"\((.*?)\)|\{(.*?)\}|\[(.*?)\]");
 
-		public static Phrase STAInsert(string newWords /*NullOrEmpty => delete, else update or insert*/, int? phraseId /*==null => insert else update or delete*/, PhraseSide? phraseSide /*for Insert: dict and its side, e.g. czech part of English-Czech dict*/, int? srcSideId /*for inserting Destination side*/) {
-			var ctx = new FulltextContext();
+		public static Phrase STAInsert(FulltextContext ctx, string newWords /*NullOrEmpty => delete, else update or insert*/, int? phraseId /*==null => insert else update or delete*/, Dict dict /*my dict for insert*/, PhraseSide? phraseSide /*for Insert: dict and its side, e.g. czech part of English-Czech dict*/, int? srcSideId /*for inserting Destination side*/) {
 
 			if (string.IsNullOrEmpty(newWords)) { //DELETE
-				if (phraseId == null || phraseSide!=null) throw new Exception("phraseId == null || phraseSide!=null");
+				if (phraseId == null || phraseSide != null || dict != null) throw new Exception("phraseId == null || phraseSide!=null || dict!=null");
 				var delPh = ctx.Phrases.Include(p => p.Dests).First(p => p.Id == phraseId);
 				ctx.Phrases.RemoveRange(delPh.Dests);
 				ctx.Phrases.Remove(delPh);
-				ctx.SaveChanges();
+				//ctx.SaveChanges();
 				return null;
 			}
 
 			Phrase ph; PhraseWords oldText = null; PhraseSide ps;
 			if (phraseId != null) { //UPDATE
-				if (srcSideId != null) throw new Exception("srcSideId != null");
+				if (srcSideId != null || dict != null) throw new Exception("srcSideId != null || dict!=null");
 				ph = ctx.Phrases.Include(p => p.Words).First(p => p.Id == phraseId);
 				oldText = new PhraseWords { Text = ph.Text, Idxs = TPosLen.fromBytes(ph.TextIdxs) };
-				ps = new PhraseSide { src = (Langs)ph.SrcLang, dest = (Langs)ph.DestLang };
+				ps = new PhraseSide { src = (Langs)ph.Dict.SrcLang, dest = (Langs)ph.DestLang };
 			} else { //INSERT
-				if (phraseSide == null) throw new Exception("phraseSide == null");
+				if (phraseSide == null || dict == null) throw new Exception("phraseSide == null || dict == null");
 				ps = (PhraseSide)phraseSide;
-				if (ps.src!=ps.dest && srcSideId == null) throw new Exception("ps.src!=ps.dest && srcSideId == null");
-				ctx.Phrases.Add(ph = new Phrase { SrcLang = (byte)ps.src, DestLang = (byte)ps.dest, SrcRef = srcSideId }); 
+				if (ps.src != ps.dest && srcSideId == null) throw new Exception("ps.src!=ps.dest && srcSideId == null");
+				ctx.Phrases.Add(ph = new Phrase { DestLang = (byte)ps.dest, SrcRef = srcSideId, Dict = dict });
 			}
 
 			var lang = ps.langOfText(); var newText = new PhraseWords { Text = newWords };
 
 			Action<WordIdx[]> addNews = wordIdxs => {
-				STASpellCheck(lang, wordIdxs, newText); //low level spell check
+				//STASpellCheck(lang, wordIdxs, newText); //low level spell check
 				for (var i = 0; i < wordIdxs.Length; i++) if (newText.Idxs[wordIdxs[i].idx].Len > 0) //new correct words to fulltext DB
 						ctx.PhraseWords.Add(new PhraseWord() { SrcLang = (byte)ps.src, DestLang = (byte)ps.dest, Word = wordIdxs[i].word, Phrase = ph });
 			};
@@ -131,14 +130,16 @@ namespace Fulltext {
 
 			ph.Text = newText.Text;
 			ph.TextIdxs = TPosLen.toBytes(newText.Idxs);
-			ph.Base = ""; 
+			ph.Base = newText.Idxs.Select(idx => newText.Text.Substring(idx.Pos, Math.Abs(idx.Len)).ToLower()).DefaultIfEmpty().Aggregate((r, i) => r + "|" + i);
+			if (string.IsNullOrEmpty(ph.Base)) ph.Base = ""; //error
+			if (ph.Base.Length > Phrase.maxPhraseBaseLen) ph.Base = ph.Base.Substring(0, Phrase.maxPhraseBaseLen);
 
-			ctx.SaveChanges();
+			//ctx.SaveChanges();
 			return ph;
 		}
 
-		public static Task<Phrase> Insert(string newWords, int? phraseId, PhraseSide? phraseSide, int? srcSideId = null) {
-			return Lib.Run(new RunInsertPhrase(newWords, phraseId, phraseSide, srcSideId));
+		public static Task<Phrase> Insert(FulltextContext ctx, string newWords, int? phraseId, Dict dict, PhraseSide? phraseSide, int? srcSideId = null) {
+			return Lib.Run(new RunInsertPhrase(ctx, newWords, phraseId, dict, phraseSide, srcSideId));
 		}
 
 		public static int[] STASearchPhrase(PhraseSide phraseSide, string text, bool isDBStemming) {
@@ -193,15 +194,19 @@ namespace Fulltext {
 
 			var ctx = new FulltextContext();
 			//ctx.recreate();
-			ctx.Database.ExecuteSqlCommand("delete Phrases");
+			ctx.Database.ExecuteSqlCommand("delete Dicts");
+			Dict dict;
+			ctx.Dicts.Add(dict = new Dict { Name = "Dict 1" });
 			for (var idx = 0; idx < 100; idx++) {
-				var engPhrase = await Insert("Now are you?", null, new PhraseSide { src = Langs.en_gb, dest = Langs.en_gb });
-				var phrase = await Insert("Ahoj, jak se máš?", null, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz}, engPhrase.Id);
+				var engPhrase = await Insert(ctx, "Now are you?", null, dict, new PhraseSide { src = Langs.en_gb, dest = Langs.en_gb });
+				var phrase = await Insert(ctx, "Ahoj, jak se máš?", null, dict, new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, engPhrase.Id);
+				ctx.SaveChanges();
 				var search = await SearchPhrase(new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, "měj", true);
 				search = await SearchPhrase(new PhraseSide { src = Langs.en_gb, dest = Langs.cs_cz }, "měj", false);
-				await Insert("Ahoj, jak se máš? Asi dobře Kadle.", phrase.Id, null);
-				await Insert("Asi dobře, Karle.", phrase.Id, null);
-				await Insert(null, engPhrase.Id, null);
+				await Insert(ctx, "Ahoj, jak se máš? Asi dobře Kadle.", phrase.Id, null, null);
+				await Insert(ctx, "Asi dobře, Karle.", phrase.Id, null, null);
+				await Insert(ctx, null, engPhrase.Id, null, null);
+				ctx.SaveChanges();
 				//await Insert(null, phrase.Id, null);
 			}
 

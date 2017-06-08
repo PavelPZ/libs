@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿//https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/powershell
+//Add-Migration InitialCreate or v1 or v10 ...
+//drop-database
+//update-database 
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using LangsLib;
@@ -41,7 +45,6 @@ namespace Fulltext {
 		public string Text { get; set; }
 		[Required]
 		public byte[] TextIdxs { get; set; } //word breking and stemming result (<pos, len> array)
-		public byte SrcLang { get; set; }
 		public byte DestLang { get; set; }
 		public int? SrcRef { get; set; }
 
@@ -51,7 +54,17 @@ namespace Fulltext {
 		public ICollection<PhraseWord> Words { get; set; } //stemmed words
 		public ICollection<Phrase> Dests { get; set; }
 		public Phrase Src { get; set; }
+		public Dict Dict { get; set; }
 	}
+
+	public class Dict {
+		public int Id { get; set; }
+		public string Name { get; set; }
+		public byte SrcLang { get; set; }
+		public DateTime Imported { get; set; }
+		public ICollection<Phrase> Phrases { get; set; } 
+	}
+
 
 
 	//fake entity for dm_fts_parser result, see //https://github.com/aspnet/EntityFramework/issues/245 register entity
@@ -63,6 +76,7 @@ namespace Fulltext {
 	public class FulltextContext : DbContext {
 		public DbSet<PhraseWord> PhraseWords { get; set; }
 		public DbSet<Phrase> Phrases { get; set; }
+		public DbSet<Dict> Dicts { get; set; }
 		//https://github.com/aspnet/EntityFramework/issues/245 register fake dm_fts_parser entity
 		public DbSet<dm_fts_parser> dm_fts_parser { get; set; }
 
@@ -74,17 +88,26 @@ namespace Fulltext {
 			//http://www.learnentityframeworkcore.com/configuration/one-to-many-relationship-configuration
 			modelBuilder.Entity<PhraseWord>().HasIndex(p => p.Word);
 			modelBuilder.Entity<PhraseWord>().HasIndex(p => p.SrcLang);
+
 			modelBuilder.Entity<Phrase>()
 				.HasMany(c => c.Words)
 				.WithOne(e => e.Phrase)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Cascade);
+
 			modelBuilder.Entity<Phrase>()
 				.HasMany(c => c.Dests)
 				.WithOne(e => e.Src)
-				.HasForeignKey(b => b.SrcRef) 
+				.HasForeignKey(b => b.SrcRef)
 				.OnDelete(DeleteBehavior.Restrict); //https://stackoverflow.com/questions/22681352/entity-framework-6-code-first-cascade-delete-on-self-referencing-entity
 			modelBuilder.Entity<Phrase>().HasIndex(p => p.Base);
+
+			modelBuilder.Entity<Dict>().HasIndex(p => p.Name);
+			modelBuilder.Entity<Dict>()
+				.HasMany(c => c.Phrases)
+				.WithOne(e => e.Dict)
+				.IsRequired()
+				.OnDelete(DeleteBehavior.Cascade);
 		}
 
 		public void recreate() {
@@ -92,7 +115,7 @@ namespace Fulltext {
 			Database.EnsureCreated();
 		}
 
-		
+
 	}
 
 }
