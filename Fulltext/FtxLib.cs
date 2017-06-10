@@ -99,7 +99,7 @@ namespace Fulltext {
 				if (phraseSide == null || dict == null) throw new Exception("phraseSide == null || dict == null");
 				ps = (PhraseSide)phraseSide;
 				if (ps.src != ps.dest && srcSideId == null) throw new Exception("ps.src!=ps.dest && srcSideId == null");
-				ctx.Phrases.Add(ph = new Phrase { DestLang = (byte)ps.dest, SrcRef = srcSideId, Dict = dict });
+				ctx.Phrases.Add(ph = new Phrase { SrcLang = (byte)ps.src, DestLang = (byte)ps.dest, SrcRef = srcSideId, Dict = dict });
 			}
 
 			var lang = ps.langOfText(); var newText = new PhraseWords { Text = newWords };

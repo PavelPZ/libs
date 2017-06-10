@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Fulltext.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class v1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,8 @@ namespace Fulltext.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Imported = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    SrcLang = table.Column<byte>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -89,9 +90,9 @@ namespace Fulltext.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Phrases_Base",
-                table: "Phrases",
-                column: "Base");
+                name: "IX_Dicts_Name",
+                table: "Dicts",
+                column: "Name");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Phrases_DictId",
@@ -104,19 +105,19 @@ namespace Fulltext.Migrations
                 column: "SrcRef");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Phrases_Base_SrcLang_DestLang",
+                table: "Phrases",
+                columns: new[] { "Base", "SrcLang", "DestLang" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PhraseWords_PhraseId",
                 table: "PhraseWords",
                 column: "PhraseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PhraseWords_SrcLang",
+                name: "IX_PhraseWords_Word_SrcLang_DestLang",
                 table: "PhraseWords",
-                column: "SrcLang");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PhraseWords_Word",
-                table: "PhraseWords",
-                column: "Word");
+                columns: new[] { "Word", "SrcLang", "DestLang" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

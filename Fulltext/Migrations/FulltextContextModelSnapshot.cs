@@ -58,6 +58,8 @@ namespace Fulltext.Migrations
                     b.Property<int?>("DictId")
                         .IsRequired();
 
+                    b.Property<byte>("SrcLang");
+
                     b.Property<int?>("SrcRef");
 
                     b.Property<string>("Text")
@@ -68,11 +70,11 @@ namespace Fulltext.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Base");
-
                     b.HasIndex("DictId");
 
                     b.HasIndex("SrcRef");
+
+                    b.HasIndex("Base", "SrcLang", "DestLang");
 
                     b.ToTable("Phrases");
                 });
@@ -99,9 +101,7 @@ namespace Fulltext.Migrations
 
                     b.HasIndex("PhraseId");
 
-                    b.HasIndex("SrcLang");
-
-                    b.HasIndex("Word");
+                    b.HasIndex("Word", "SrcLang", "DestLang");
 
                     b.ToTable("PhraseWords");
                 });

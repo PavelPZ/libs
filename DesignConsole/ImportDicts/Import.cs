@@ -9,6 +9,7 @@ using System.IO;
 using Newtonsoft.Json;
 using LangsLib;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace DesignConsole.ImportDicts {
 	public static class Import {
@@ -81,6 +82,13 @@ namespace DesignConsole.ImportDicts {
 		public static Task<spellCheckResult> ExtendCSVDict(Meta meta, CVSDictItem[] items) {
 			return STALib.Lib.Run(new RunExtendCSVDict(meta, items));
 		}
+
+		public static void Duplicities() {
+			var ctx = new Fulltext.FulltextContext();
+			var dupls = ctx.Phrases.Where(p => p.SrcRef != null).Select(p => new { destLang = p.DestLang, srcLang = p.Src.DestLang, text = p.Src.Text + " = " + p.Text, baseText = p.Src.Base + " = " + p.Base }).GroupBy(p => new { p.srcLang, p.destLang, p.baseText }).Where(g => g.Count() > 1).ToArray();
+			new XElement("root", dupls.Select(d => new XElement("dupl", d.Select(e => new XElement("phrase", e.text))))).Save(@"d:\temp\dupls.xml");
+		}
+
 
 		public static CVSDictItem[] import(string fn) {
 			return null;

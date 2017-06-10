@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace DesignConsole {
 	class Program {
@@ -15,9 +16,10 @@ namespace DesignConsole {
 				//SpellChecker.SpellLang.test().Wait();
 				//StemmerBreaker.Runner.test();
 				//Fulltext.FtxLib.test();
-				//ImportDicts.Import.importAll(ImportDicts.Import.ExtendCSVDict);
+				ImportDicts.Import.importAll(ImportDicts.Import.ExtendCSVDict);
 				//var res = await Fulltext.RunSpellCheck.SpellCheck(LangsLib.Langs.cs_cz, "ahoj (jak se) máš? {Já} docela [dobře] xxxx.)");
-				new Fulltext.FulltextContext().Database.ExecuteSqlCommand("delete Dicts");
+				//ImportDicts.Import.Duplicities();
+				//new Fulltext.FulltextContext().Database.ExecuteSqlCommand("delete Dicts");
 				ImportDicts.Import.importAll();
 			});
 			th.Start();

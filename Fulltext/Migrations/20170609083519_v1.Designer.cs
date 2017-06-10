@@ -8,7 +8,7 @@ using Fulltext;
 namespace Fulltext.Migrations
 {
     [DbContext(typeof(FulltextContext))]
-    [Migration("20170608215656_v1")]
+    [Migration("20170609083519_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,8 @@ namespace Fulltext.Migrations
                     b.Property<DateTime>("Imported");
 
                     b.Property<string>("Name");
+
+                    b.Property<byte>("SrcLang");
 
                     b.HasKey("Id");
 
@@ -69,11 +71,11 @@ namespace Fulltext.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Base");
-
                     b.HasIndex("DictId");
 
                     b.HasIndex("SrcRef");
+
+                    b.HasIndex("Base", "SrcLang", "DestLang");
 
                     b.ToTable("Phrases");
                 });
@@ -100,9 +102,7 @@ namespace Fulltext.Migrations
 
                     b.HasIndex("PhraseId");
 
-                    b.HasIndex("SrcLang");
-
-                    b.HasIndex("Word");
+                    b.HasIndex("Word", "SrcLang", "DestLang");
 
                     b.ToTable("PhraseWords");
                 });

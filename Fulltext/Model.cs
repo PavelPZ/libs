@@ -45,6 +45,7 @@ namespace Fulltext {
 		public string Text { get; set; }
 		[Required]
 		public byte[] TextIdxs { get; set; } //word breking and stemming result (<pos, len> array)
+		public byte SrcLang { get; set; }
 		public byte DestLang { get; set; }
 		public int? SrcRef { get; set; }
 
@@ -86,8 +87,8 @@ namespace Fulltext {
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder) {
 			//http://www.learnentityframeworkcore.com/configuration/one-to-many-relationship-configuration
-			modelBuilder.Entity<PhraseWord>().HasIndex(p => p.Word);
-			modelBuilder.Entity<PhraseWord>().HasIndex(p => p.SrcLang);
+			//modelBuilder.Entity<PhraseWord>().HasIndex(p => p.Word);
+			modelBuilder.Entity<PhraseWord>().HasIndex(p => new { p.Word, p.SrcLang, p.DestLang });
 
 			modelBuilder.Entity<Phrase>()
 				.HasMany(c => c.Words)
@@ -100,7 +101,7 @@ namespace Fulltext {
 				.WithOne(e => e.Src)
 				.HasForeignKey(b => b.SrcRef)
 				.OnDelete(DeleteBehavior.Restrict); //https://stackoverflow.com/questions/22681352/entity-framework-6-code-first-cascade-delete-on-self-referencing-entity
-			modelBuilder.Entity<Phrase>().HasIndex(p => p.Base);
+			modelBuilder.Entity<Phrase>().HasIndex(p => new { p.Base, p.SrcLang, p.DestLang });
 
 			modelBuilder.Entity<Dict>().HasIndex(p => p.Name);
 			modelBuilder.Entity<Dict>()

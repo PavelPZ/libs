@@ -163,17 +163,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\20170608214347_InitialCreate.cs" />
-    <Compile Include="Migrations\20170608214347_InitialCreate.designer.cs">
-      <DependentUpon>20170608214347_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20170608215656_v1.cs" />
-    <Compile Include="Migrations\20170608215656_v1.designer.cs">
-      <DependentUpon>20170608215656_v1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20170608220527_v2.cs" />
-    <Compile Include="Migrations\20170608220527_v2.designer.cs">
-      <DependentUpon>20170608220527_v2.cs</DependentUpon>
+    <Compile Include="Migrations\20170609083519_v1.cs" />
+    <Compile Include="Migrations\20170609083519_v1.designer.cs">
+      <DependentUpon>20170609083519_v1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\FulltextContextModelSnapshot.cs" />
     <Compile Include="Model.cs" />
