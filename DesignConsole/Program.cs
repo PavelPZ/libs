@@ -13,14 +13,14 @@ namespace DesignConsole {
 		static void Main(string[] args) {
 			var th = new Thread(/*async*/ () => {
 				//ImportAllLangs.Run();
-				//SpellChecker.SpellLang.test().Wait();
+				//ImportAllLangs.FrequencyDirs();
 				//StemmerBreaker.Runner.test();
 				//Fulltext.FtxLib.test();
 				ImportDicts.Import.importAll(ImportDicts.Import.ExtendCSVDict);
-				//var res = await Fulltext.RunSpellCheck.SpellCheck(LangsLib.Langs.cs_cz, "ahoj (jak se) máš? {Já} docela [dobře] xxxx.)");
+				//var res = await Fulltext.RunBreakAndCheck.SpellCheck(Langs.en_gb, "automatization.)");
 				//ImportDicts.Import.Duplicities();
-				//new Fulltext.FulltextContext().Database.ExecuteSqlCommand("delete Dicts");
-				ImportDicts.Import.importAll();
+				//new Fulltext.FulltextContext().Database.ExecuteSqlCommand("delete Dicts"); ImportDicts.Import.importAll();
+				//if (SpellChecker.Frequency.forLangs == null) return;
 			});
 			th.Start();
 		}

@@ -105,7 +105,7 @@ namespace Fulltext {
 			var lang = ps.langOfText(); var newText = new PhraseWords { Text = newWords };
 
 			Action<WordIdx[]> addNews = wordIdxs => {
-				//STASpellCheck(lang, wordIdxs, newText); //low level spell check
+				STASpellCheck(lang, wordIdxs, newText); //low level spell check
 				for (var i = 0; i < wordIdxs.Length; i++) if (newText.Idxs[wordIdxs[i].idx].Len > 0) //new correct words to fulltext DB
 						ctx.PhraseWords.Add(new PhraseWord() { SrcLang = (byte)ps.src, DestLang = (byte)ps.dest, Word = wordIdxs[i].word, Phrase = ph });
 			};
