@@ -2,6 +2,7 @@
 	using LangsLib;
 	using STALib;
 	using System.Collections.Generic;
+	using System.Configuration;
 	using System.Threading.Tasks;
 	using System.Windows.Controls;
 	using System.Windows.Documents;
@@ -9,6 +10,11 @@
 
 	//STA runner
 	public class RunSpellCheckWords : RunObject<List<int>> {
+
+		static RunSpellCheckWords() {
+			NoFrequency = ConfigurationManager.AppSettings["SpellChecker.NoFrequency"] == "true";
+		}
+		static bool NoFrequency = false;
 
 		public TaskCompletionSource<List<int>> tcs { get; set; }
 		public void doRun() { tcs.TrySetResult(Run()); }
@@ -24,7 +30,7 @@
 			if (wordIdx == null) return null;
 			List<int> wrongIdxs = null;
 			TextBox tb = null;
-			HashSet<string> freq = Frequency.forLangs.Contains(lang) ? Frequency.isWord[lang] : null;
+			HashSet<string> freq = NoFrequency ? null : (Frequency.forLangs.Contains(lang) ? Frequency.isWord[lang] : null);
 			foreach (var wi in wordIdx) {
 				var isError = false;
 				if (wi.word.Length > maxWordLen) //too long word => error

@@ -74,9 +74,13 @@ namespace Fulltext {
 		}
 
 		//Bracket parsing
-		public static IEnumerable<Bracket> BracketParse(string s) { foreach (Match match in brackets.Matches(s)) yield return new Bracket { Br = match.Value[0], Text = match.Value.Substring(1, match.Value.Length - 2) }; }
+		public static IEnumerable<Bracket> BracketParse(string s) {
+			foreach (Match match in otherBrackets.Matches(s)) yield return new Bracket { Br = match.Value[0], Text = match.Value.Substring(1, match.Value.Length - 2) };
+			foreach (Match match in roundBrackets.Matches(s)) yield return new Bracket { Br = match.Value[0], Text = match.Value.Substring(1, match.Value.Length - 2) };
+		}
 		public struct Bracket { public char Br; public string Text; }
-		static Regex brackets = new Regex(@"\((.*?)\)|\{(.*?)\}|\[(.*?)\]");
+		static Regex roundBrackets = new Regex(@"\((.*?)\)");
+		static Regex otherBrackets = new Regex(@"\{(.*?)\}|\[(.*?)\]");
 
 		public static Phrase STAInsert(FulltextContext ctx, string newWords /*NullOrEmpty => delete, else update or insert*/, int? phraseId /*==null => insert else update or delete*/, Dict dict /*my dict for insert*/, PhraseSide? phraseSide /*for Insert: dict and its side, e.g. czech part of English-Czech dict*/, int? srcSideId /*for inserting Destination side*/) {
 
@@ -172,7 +176,7 @@ namespace Fulltext {
 		};
 
 		static void STAWordBreak(Langs lang, PhraseWords text) {
-			var noBrackets = brackets.Replace(text.Text, match => new String(' ', match.Length));
+			var noBrackets = roundBrackets.Replace(otherBrackets.Replace(text.Text, match => new String(' ', match.Length)), match => new String(' ', match.Length));
 			text.Idxs = StemmerBreaker.RunBreaker.STAWordBreak(lang, noBrackets);
 		}
 

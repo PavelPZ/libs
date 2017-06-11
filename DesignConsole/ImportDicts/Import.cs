@@ -30,7 +30,8 @@ namespace DesignConsole.ImportDicts {
 
 		public static void import(Meta meta, Func<Meta, CVSDictItem[], Task> run) {
 			var engine = new FileHelperEngine(typeof(CVSDictItem));
-			var res = (CVSDictItem[])engine.ReadFile(meta.fullPath());
+			Func<string, string> tooLong = s => s.Length >= 255 ? s.Substring(0, 245) + "XTOOLONGX" : s;
+			var res = engine.ReadFile(meta.fullPath()).Cast<CVSDictItem>().SelectMany(it => it.Dest.Split('^').Select(d => new CVSDictItem { Src = tooLong(it.Src), Dest = tooLong(d) })).ToArray();
 			var task = run(meta, res); if (task != null) task.Wait();
 		}
 
@@ -118,7 +119,7 @@ namespace DesignConsole.ImportDicts {
 		public class TRow { public string SrcOK; public string SrcWrong; public string DestOK; public string DestWrong; public string SrcRoundBR; public string SrcCurlyBR; public string SrcSquareBR; public string DestRoundBR; public string DestCurlyBR; public string DestSquareBR; }
 		IEnumerable<object> getRows() {
 			var wls = wordLists.Select(w => w.Select(ww => ww.Replace(';', '|')).OrderBy(ww => ww).ToArray()).ToArray();
-			Func<int, int, string> val = (idx, i) => { return i < wls[idx].Length ? wls[idx][i] : ""; };
+			Func<int, int, string> val = (idx, i) => i < wls[idx].Length ? wls[idx][i] : "";
 			for (var i = 0; i < wordLists.Max(w => w.Count); i++)
 				yield return new TRow { SrcOK = val(0, i), SrcWrong = val(1, i), DestOK = val(2, i), DestWrong = val(3, i), SrcRoundBR = val(4, i), SrcCurlyBR = val(5, i), SrcSquareBR = val(6, i), DestRoundBR = val(7, i), DestCurlyBR = val(8, i), DestSquareBR = val(9, i) };
 		}
