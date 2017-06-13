@@ -28,9 +28,12 @@ namespace LangsLib {
 	//}
 
 	public class PhraseWords {
+		public PhraseWords(string text, List<TPosLen> idxs = null) { Text = text; Idxs = idxs; }
+		public PhraseWords(PhraseWords phr) : this(phr.Text) { Idxs = phr.Idxs; }
 		public const sbyte maxWordLen = 24;
 		public string Text;
 		public List<TPosLen> Idxs;
+
 		//public IEnumerable<TWord> toWords() {
 		//	int lastPos = 0;
 		//	return Idxs.Select(idx => new TWord { isWrong = idx.Len<0, word = Text.Substring(lastPos = lastPos + idx.Pos, Math.Abs(idx.Len))});
@@ -53,11 +56,12 @@ namespace LangsLib {
 		int IEqualityComparer<SelectedWord>.GetHashCode(SelectedWord obj) { return obj.ftxWord.GetHashCode(); }
 	}
 
-	public class SelectedWords : PhraseWords {
-		public SelectedWords(PhraseWords words, bool correctOnly) {
+	public class SelectedWords {
+		public SelectedWords(PhraseWords phrase, bool correctOnly) {
 			string pomStr;
-			selected = Idxs.Where(idx => correctOnly ? idx.Len > 0 : true).Select((idx, i) => new SelectedWord { idx = i, word = pomStr = Text.Substring(idx.Pos, idx.Len), ftxWord = pomStr.Substring(0, Math.Min(idx.Len, PhraseWords.maxWordLen)).ToLower() }).ToArray();
+			selected = phrase.Idxs.Where(idx => correctOnly ? idx.Len > 0 : true).Select((idx, i) => new SelectedWord { idx = i, word = pomStr = phrase.Text.Substring(idx.Pos, idx.Len), ftxWord = pomStr.Substring(0, Math.Min(idx.Len, PhraseWords.maxWordLen)).ToLower() }).ToArray();
 		}
+		public PhraseWords phrase;
 		public SelectedWord[] selected;
 	}
 

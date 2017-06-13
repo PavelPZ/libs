@@ -25,7 +25,7 @@ namespace Fulltext {
 
 		[Key]
 		public int Id { get; set; } //internal unique ID
-		[MaxLength(maxWordLen), Required]
+		[MaxLength(PhraseWords.maxWordLen), Required]
 		public string Word { get; set; }
 		public int PhraseRef { get; set; } //ID of phrase, containing word. Could be Hash64 of string, identifying phrase in its source repository.
 		public byte SrcLang { get; set; }

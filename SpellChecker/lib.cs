@@ -71,11 +71,6 @@
 
 	}
 
-	//public struct SomePhraseWords {
-	//	public PhraseWords phrase;
-	//	public SomePhraseWord[] selected;
-	//}
 
-	//public struct TIdxPosLen { public int idx; public int pos; public int len; }
 }
 
