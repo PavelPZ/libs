@@ -19,7 +19,6 @@ namespace Fulltext {
 
 	public class PhraseWord {
 
-		public const sbyte maxWordLen = 24;
 		public const string PhraseIdName = "PhraseId";
 		public const string SrcLangName = "SrcLang";
 		public const string DestLangName = "DestLang";

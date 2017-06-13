@@ -65,9 +65,9 @@ namespace Fulltext {
 
 		public static PhraseWords STABreakAndCheck(Langs lang, string phrase) {
 			var newText = new PhraseWords { Text = phrase };
-			//WordBreaking without brackets
+			//WordBreaking text (text in brackets excluded)
 			STAWordBreak(lang, newText);
-			//lowercased correct words of PhraseWord.maxWordLen
+			//Spell check
 			var newWordIdx = getCorrectPhraseWords(newText);
 			STASpellCheck(lang, newWordIdx, newText); //low level spell check
 			return newText;
@@ -82,64 +82,62 @@ namespace Fulltext {
 		static Regex roundBrackets = new Regex(@"\((.*?)\)");
 		static Regex otherBrackets = new Regex(@"\{(.*?)\}|\[(.*?)\]");
 
-		public static Phrase STAInsert(FulltextContext ctx, string newWords /*NullOrEmpty => delete, else update or insert*/, int? phraseId /*==null => insert else update or delete*/, Dict dict /*my dict for insert*/, PhraseSide? phraseSide /*for Insert: dict and its side, e.g. czech part of English-Czech dict*/, int? srcSideId /*for inserting Destination side*/) {
+		public static Phrase STAInsert(FulltextContext ctx, string newPhrase /*NullOrEmpty => delete, else update or insert*/, int? phraseId /*==null => insert else update or delete*/, Dict dict /*my dict for insert*/, PhraseSide? phraseSide /*for Insert: dict and its side, e.g. czech part of English-Czech dict*/, int? srcSideId /*for inserting Destination side*/) {
 
-			if (string.IsNullOrEmpty(newWords)) { //DELETE
+			if (string.IsNullOrEmpty(newPhrase)) { //DELETE
 				if (phraseId == null || phraseSide != null || dict != null) throw new Exception("phraseId == null || phraseSide!=null || dict!=null");
 				var delPh = ctx.Phrases.Include(p => p.Dests).First(p => p.Id == phraseId);
 				ctx.Phrases.RemoveRange(delPh.Dests);
 				ctx.Phrases.Remove(delPh);
-				//ctx.SaveChanges();
 				return null;
 			}
 
-			Phrase ph; PhraseWords oldText = null; PhraseSide ps;
+			Phrase dbPhrase; PhraseWords oldText = null; PhraseSide ps;
 			if (phraseId != null) { //UPDATE
 				if (srcSideId != null || dict != null) throw new Exception("srcSideId != null || dict!=null");
-				ph = ctx.Phrases.Include(p => p.Words).First(p => p.Id == phraseId);
-				oldText = new PhraseWords { Text = ph.Text, Idxs = TPosLen.fromBytes(ph.TextIdxs) };
-				ps = new PhraseSide { src = (Langs)ph.Dict.SrcLang, dest = (Langs)ph.DestLang };
+				dbPhrase = ctx.Phrases.Include(p => p.Words).First(p => p.Id == phraseId);
+				oldText = new PhraseWords { Text = dbPhrase.Text, Idxs = TPosLen.fromBytes(dbPhrase.TextIdxs) };
+				ps = new PhraseSide { src = (Langs)dbPhrase.Dict.SrcLang, dest = (Langs)dbPhrase.DestLang };
 			} else { //INSERT
 				if (phraseSide == null || dict == null) throw new Exception("phraseSide == null || dict == null");
 				ps = (PhraseSide)phraseSide;
 				if (ps.src != ps.dest && srcSideId == null) throw new Exception("ps.src!=ps.dest && srcSideId == null");
-				ctx.Phrases.Add(ph = new Phrase { SrcLang = (byte)ps.src, DestLang = (byte)ps.dest, SrcRef = srcSideId, Dict = dict });
+				ctx.Phrases.Add(dbPhrase = new Phrase { SrcLang = (byte)ps.src, DestLang = (byte)ps.dest, SrcRef = srcSideId, Dict = dict });
 			}
 
-			var lang = ps.langOfText(); var newText = new PhraseWords { Text = newWords };
+			var lang = ps.langOfText(); var newText = new PhraseWords { Text = newPhrase };
 
-			Action<SomePhraseWord[]> addNews = wordIdxs => {
+			Action<SelectedWord[]> spellCheckAndDBInsert = wordIdxs => {
 				STASpellCheck(lang, wordIdxs, newText); //low level spell check
 				for (var i = 0; i < wordIdxs.Length; i++) if (newText.Idxs[wordIdxs[i].idx].Len > 0) //new correct words to fulltext DB
-						ctx.PhraseWords.Add(new PhraseWord() { SrcLang = (byte)ps.src, DestLang = (byte)ps.dest, Word = wordIdxs[i].word, Phrase = ph });
+						ctx.PhraseWords.Add(new PhraseWord() { SrcLang = (byte)ps.src, DestLang = (byte)ps.dest, Word = wordIdxs[i].ftxWord, Phrase = dbPhrase });
 			};
 
 			//Word breaking
 			STAWordBreak(lang, newText);
 
 			var newWordIdx = getCorrectPhraseWords(newText);
-			if (oldText == null) { //insert
-				addNews(newWordIdx); //Add news 
-			} else { //update
+			if (oldText == null) { //INSERT
+				spellCheckAndDBInsert(newWordIdx); //Spell check and add to DB
+			} else { //UPDATE
 
-				//Delete olds
-				var olds = getCorrectPhraseWords(oldText);
-				var oldsDB = ph.Words;
-				foreach (var w in olds.Except(newWordIdx)) ctx.PhraseWords.Remove(oldsDB.First(db => db.Word == w.word)); //oldsDB.Where(ww => !boths.Contains(ww.Word))) ctx.PhraseWords.Remove(w);
+				//Delete olds from DB
+				var oldWordIdx = getCorrectPhraseWords(oldText);
+				var dbOldWords = dbPhrase.Words;
+				foreach (var w in oldWordIdx.Except(newWordIdx)) ctx.PhraseWords.Remove(dbOldWords.First(db => db.Word == w.ftxWord));
 
-				//Add news
-				var news = newWordIdx.Except(olds).ToArray();
-				addNews(news);
+				//Spell check and add to DB
+				var newWithoutOldWordIdx = newWordIdx.Except(oldWordIdx).ToArray();
+				spellCheckAndDBInsert(newWithoutOldWordIdx);
 			}
 
-			ph.Text = newText.Text;
-			ph.TextIdxs = TPosLen.toBytes(newText.Idxs);
-			ph.Base = newText.Idxs.Select(idx => newText.Text.Substring(idx.Pos, Math.Abs(idx.Len)).ToLower()).DefaultIfEmpty().Aggregate((r, i) => r + "|" + i);
-			if (string.IsNullOrEmpty(ph.Base)) ph.Base = ""; //error
-			if (ph.Base.Length > Phrase.maxPhraseBaseLen) ph.Base = ph.Base.Substring(0, Phrase.maxPhraseBaseLen);
+			dbPhrase.Text = newText.Text;
+			dbPhrase.TextIdxs = TPosLen.toBytes(newText.Idxs);
+			dbPhrase.Base = newText.Idxs.Select(idx => newText.Text.Substring(idx.Pos, Math.Abs(idx.Len)).ToLower()).DefaultIfEmpty().Aggregate((r, i) => r + "|" + i);
+			if (string.IsNullOrEmpty(dbPhrase.Base)) dbPhrase.Base = ""; //error
+			if (dbPhrase.Base.Length > Phrase.maxPhraseBaseLen) dbPhrase.Base = dbPhrase.Base.Substring(0, Phrase.maxPhraseBaseLen);
 
-			//ctx.SaveChanges();
-			return ph;
+			return dbPhrase;
 		}
 
 		public static Task<Phrase> Insert(FulltextContext ctx, string newWords, int? phraseId, Dict dict, PhraseSide? phraseSide, int? srcSideId = null) {
@@ -153,9 +151,9 @@ namespace Fulltext {
 			var words = getCorrectPhraseWords(txt);
 			List<string> res = new List<string>();
 			foreach (var w in words) {
-				if (!StemmerBreaker.Lib.hasStemmer(lang)) res.Add(w.word); //stemmer does not exists => and single word (same as in the StemmerBreaker.Runner.stemm: if (stemmer == null) { onPutWord(PutTypes.put, word); return; })
+				if (!StemmerBreaker.Lib.hasStemmer(lang)) res.Add(w.ftxWord); //stemmer does not exists => and single word (same as in the StemmerBreaker.Runner.stemm: if (stemmer == null) { onPutWord(PutTypes.put, word); return; })
 				else {
-					var st = isDBStemming ? (IEnumerable<string>)StemmingWithSQLServer(lang, w.word) : StemmerBreaker.RunStemmer.STAStemm(lang, w.word);
+					var st = isDBStemming ? (IEnumerable<string>)StemmingWithSQLServer(lang, w.ftxWord) : StemmerBreaker.RunStemmer.STAStemm(lang, w.ftxWord);
 					//var st1 = StemmerBreaker.RunStemmer.STAStemm(lang, w.word);
 					//var st2 = DBStemming(lang, w.word);
 					res.AddRange(st);
@@ -170,17 +168,19 @@ namespace Fulltext {
 			return Lib.Run(new RunSearchPhrase(phraseSide, text, isDBStemming));
 		}
 
-		static Func<PhraseWords, SomePhraseWord[]> getCorrectPhraseWords = phr => {
+		static Func<PhraseWords, SelectedWord[]> getCorrectPhraseWords = phr => {
 			string pomStr;
-			return phr.Idxs.Where(idx => idx.Len > 0).Select((idx, i) => new SomePhraseWord { idx = i, fullWord = pomStr = phr.Text.Substring(idx.Pos, idx.Len), word = pomStr.Substring(0, Math.Min(idx.Len, PhraseWord.maxWordLen)).ToLower() }).ToArray();
+			return phr.Idxs.Where(idx => idx.Len > 0).Select((idx, i) => new SelectedWord { idx = i, word = pomStr = phr.Text.Substring(idx.Pos, idx.Len), ftxWord = pomStr.Substring(0, Math.Min(idx.Len, PhraseWords.maxWordLen)).ToLower() }).ToArray();
 		};
 
+		//Doplni text.Idxs
 		static void STAWordBreak(Langs lang, PhraseWords text) {
 			var noBrackets = roundBrackets.Replace(otherBrackets.Replace(text.Text, match => new String(' ', match.Length)), match => new String(' ', match.Length));
 			text.Idxs = StemmerBreaker.RunBreaker.STAWordBreak(lang, noBrackets);
 		}
 
-		static void STASpellCheck(Langs lang, SomePhraseWord[] nws, PhraseWords newText) {
+		//Pro SpellCheck error nastavi zaporne Len
+		static void STASpellCheck(Langs lang, SelectedWord[] nws, PhraseWords newText) {
 			//Spell check
 			var errorIdxs = RunSpellCheckWords.STACheck(lang, nws);
 			//update Len for wrong words
