@@ -68,10 +68,10 @@ namespace DesignConsole.ImportDicts {
 			spellCheckResult data = new spellCheckResult();
 			//Break and Spell check
 			foreach (var row in items) {
-				var txt = Fulltext.FtxLib.STABreakAndCheck(meta.src, row.Src); row.SrcLog = TPosLen.encode(txt.Idxs);
+				var txt = Fulltext.FtxLib.STABreakAndCheck(meta.src, row.Src); row.SrcLog = TPosLen.fromString(txt.Idxs);
 				addWords(txt, data.getWords(true, true), true); addWords(txt, data.getWords(true, false), false);
 				foreach (var bp in Fulltext.FtxLib.BracketParse(row.Src)) data.getBracketsWords(true, bp.Br).Add(bp.Text);
-				txt = Fulltext.FtxLib.STABreakAndCheck(meta.dest, row.Dest); row.DestLog = TPosLen.encode(txt.Idxs);
+				txt = Fulltext.FtxLib.STABreakAndCheck(meta.dest, row.Dest); row.DestLog = TPosLen.fromString(txt.Idxs);
 				addWords(txt, data.getWords(false, true), true); addWords(txt, data.getWords(false, false), false);
 				foreach (var bp in Fulltext.FtxLib.BracketParse(row.Dest)) data.getBracketsWords(false, bp.Br).Add(bp.Text);
 			}

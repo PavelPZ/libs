@@ -61,8 +61,9 @@ namespace LangsLib {
 	public struct TPosLen {
 		public byte Pos;
 		public sbyte Len; //could be negative when SpellChecker error
-		public string encode() { return string.Format("{0}-{1}", Pos, Len); }
-		public static string encode(IEnumerable<TPosLen> items) { return items == null ? null : items.DefaultIfEmpty().Select(it => it.encode()).Aggregate((r, i) => r + "|" + i); }
+		public string toString() { return string.Format("{0}-{1}", Pos, Len); }
+		public static string fromString(IEnumerable<TPosLen> items) { return items == null ? null : items.DefaultIfEmpty().Select(it => it.toString()).Aggregate((r, i) => r + "|" + i); }
+
 		public static byte[] toBytes(List<TPosLen> idxs) {
 			var res = new byte[idxs.Count << 1];
 			for (var i = 0; i < idxs.Count; i++) { res[i << 1] = idxs[i].Pos; res[(i << 1) + 1] = (byte)idxs[i].Len; }
@@ -75,10 +76,18 @@ namespace LangsLib {
 		}
 	}
 
+	//public struct TWord {
+	//	public string word;
+	//	public bool isWrong;
+	//}
+
 	public class PhraseWords {
 		public string Text;
-		public List<TPosLen> Idxs; //list of 
-															 //public string[] getWords(bool toLower = true, bool incErrors = false) { return Idxs.Select(idx => !incErrors && idx.Len<0 ? null : Text.Substring(idx.Pos, Math.Abs(idx.Len))).Where(w => w!=null).Select(w => toLower ? w.ToLower() : w).ToArray(); }
+		public List<TPosLen> Idxs;
+		//public IEnumerable<TWord> toWords() {
+		//	int lastPos = 0;
+		//	return Idxs.Select(idx => new TWord { isWrong = idx.Len<0, word = Text.Substring(lastPos = lastPos + idx.Pos, Math.Abs(idx.Len))});
+		//}
 	}
 
 	public struct PhraseSide {

@@ -68,7 +68,7 @@ namespace Fulltext {
 			//WordBreaking without brackets
 			STAWordBreak(lang, newText);
 			//lowercased correct words of PhraseWord.maxWordLen
-			var newWordIdx = getWordIdx(newText);
+			var newWordIdx = getCorrectPhraseWords(newText);
 			STASpellCheck(lang, newWordIdx, newText); //low level spell check
 			return newText;
 		}
@@ -108,7 +108,7 @@ namespace Fulltext {
 
 			var lang = ps.langOfText(); var newText = new PhraseWords { Text = newWords };
 
-			Action<WordIdx[]> addNews = wordIdxs => {
+			Action<SomePhraseWord[]> addNews = wordIdxs => {
 				STASpellCheck(lang, wordIdxs, newText); //low level spell check
 				for (var i = 0; i < wordIdxs.Length; i++) if (newText.Idxs[wordIdxs[i].idx].Len > 0) //new correct words to fulltext DB
 						ctx.PhraseWords.Add(new PhraseWord() { SrcLang = (byte)ps.src, DestLang = (byte)ps.dest, Word = wordIdxs[i].word, Phrase = ph });
@@ -117,13 +117,13 @@ namespace Fulltext {
 			//Word breaking
 			STAWordBreak(lang, newText);
 
-			var newWordIdx = getWordIdx(newText);
+			var newWordIdx = getCorrectPhraseWords(newText);
 			if (oldText == null) { //insert
 				addNews(newWordIdx); //Add news 
 			} else { //update
 
 				//Delete olds
-				var olds = getWordIdx(oldText);
+				var olds = getCorrectPhraseWords(oldText);
 				var oldsDB = ph.Words;
 				foreach (var w in olds.Except(newWordIdx)) ctx.PhraseWords.Remove(oldsDB.First(db => db.Word == w.word)); //oldsDB.Where(ww => !boths.Contains(ww.Word))) ctx.PhraseWords.Remove(w);
 
@@ -150,7 +150,7 @@ namespace Fulltext {
 			var ctx = new FulltextContext(); var lang = phraseSide.langOfText(); var txt = new PhraseWords { Text = text }; //var dict = phraseSide.getDictId();
 
 			txt.Idxs = StemmerBreaker.RunBreaker.STAWordBreak(lang, text);
-			var words = getWordIdx(txt);
+			var words = getCorrectPhraseWords(txt);
 			List<string> res = new List<string>();
 			foreach (var w in words) {
 				if (!StemmerBreaker.Lib.hasStemmer(lang)) res.Add(w.word); //stemmer does not exists => and single word (same as in the StemmerBreaker.Runner.stemm: if (stemmer == null) { onPutWord(PutTypes.put, word); return; })
@@ -170,9 +170,9 @@ namespace Fulltext {
 			return Lib.Run(new RunSearchPhrase(phraseSide, text, isDBStemming));
 		}
 
-		static Func<PhraseWords, WordIdx[]> getWordIdx = phr => {
+		static Func<PhraseWords, SomePhraseWord[]> getCorrectPhraseWords = phr => {
 			string pomStr;
-			return phr.Idxs.Where(idx => idx.Len > 0).Select((idx, i) => new WordIdx { idx = i, fullWord = pomStr = phr.Text.Substring(idx.Pos, idx.Len), word = pomStr.Substring(0, Math.Min(idx.Len, PhraseWord.maxWordLen)).ToLower() }).ToArray();
+			return phr.Idxs.Where(idx => idx.Len > 0).Select((idx, i) => new SomePhraseWord { idx = i, fullWord = pomStr = phr.Text.Substring(idx.Pos, idx.Len), word = pomStr.Substring(0, Math.Min(idx.Len, PhraseWord.maxWordLen)).ToLower() }).ToArray();
 		};
 
 		static void STAWordBreak(Langs lang, PhraseWords text) {
@@ -180,7 +180,7 @@ namespace Fulltext {
 			text.Idxs = StemmerBreaker.RunBreaker.STAWordBreak(lang, noBrackets);
 		}
 
-		static void STASpellCheck(Langs lang, WordIdx[] nws, PhraseWords newText) {
+		static void STASpellCheck(Langs lang, SomePhraseWord[] nws, PhraseWords newText) {
 			//Spell check
 			var errorIdxs = RunSpellCheckWords.STACheck(lang, nws);
 			//update Len for wrong words

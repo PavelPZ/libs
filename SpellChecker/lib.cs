@@ -19,14 +19,14 @@
 		public TaskCompletionSource<List<int>> tcs { get; set; }
 		public void doRun() { tcs.TrySetResult(Run()); }
 
-		public RunSpellCheckWords(Langs lng, IEnumerable<WordIdx> wordIdx) {
+		public RunSpellCheckWords(Langs lng, IEnumerable<SomePhraseWord> wordIdx) {
 			this.lng = lng; this.wordIdx = wordIdx;
 		}
 
-		Langs lng; IEnumerable<WordIdx> wordIdx;
+		Langs lng; IEnumerable<SomePhraseWord> wordIdx;
 		const int maxWordLen = 48;
 
-		static List<int> doRun(Langs lang, IEnumerable<WordIdx> wordIdx) {
+		static List<int> doRun(Langs lang, IEnumerable<SomePhraseWord> wordIdx) {
 			if (wordIdx == null) return null;
 			List<int> wrongIdxs = null;
 			TextBox tb = null;
@@ -61,23 +61,28 @@
 
 		static Dictionary<Langs, TextBox> textBoxes = new Dictionary<Langs, TextBox>();
 
-		public static Task<List<int>> Check(Langs lang, IEnumerable<WordIdx> words) {
+		public static Task<List<int>> Check(Langs lang, IEnumerable<SomePhraseWord> words) {
 			return Lib.Run(new RunSpellCheckWords(lang, words));
 		}
 
-		public static List<int> STACheck(Langs lng, IEnumerable<WordIdx> wordIdx) {
+		public static List<int> STACheck(Langs lng, IEnumerable<SomePhraseWord> wordIdx) {
 			return doRun(lng, wordIdx);
 		}
 
 	}
 
-	public struct WordIdx : IEqualityComparer<WordIdx> {
-		public string fullWord; public string word; public int idx;
+	public struct SomePhraseWord : IEqualityComparer<SomePhraseWord> {
+		public string fullWord; /*puvodni slovo*/ public string word; /*lowercase, PhraseWord.maxWordLen*/ public int idx; /*index zdroje slova v PhraseWords.Idxs*/
 
-		bool IEqualityComparer<WordIdx>.Equals(WordIdx x, WordIdx y) { return x.word.Equals(y.word); }
-		int IEqualityComparer<WordIdx>.GetHashCode(WordIdx obj) { return obj.word.GetHashCode(); }
+		bool IEqualityComparer<SomePhraseWord>.Equals(SomePhraseWord x, SomePhraseWord y) { return x.word.Equals(y.word); }
+		int IEqualityComparer<SomePhraseWord>.GetHashCode(SomePhraseWord obj) { return obj.word.GetHashCode(); }
 	}
 
-	public struct TIdxPosLen { public int idx; public int pos; public int len; }
+	//public struct SomePhraseWords {
+	//	public PhraseWords phrase;
+	//	public SomePhraseWord[] selected;
+	//}
+
+	//public struct TIdxPosLen { public int idx; public int pos; public int len; }
 }
 

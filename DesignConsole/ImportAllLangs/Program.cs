@@ -11,7 +11,7 @@ using System.Text;
 internal class ImportAllLangs {
 	//const string importPath = @"c:\rw\libs\DesignConsole\ImportAllLangs\";
 	const string importPath = @"d:\rw\libs\DesignConsole\ImportAllLangs\";
-	internal static void FrequencyDirs() {
+	internal static void DirectoriesForFrequency() {
 		using (FileStream stream = File.Open(importPath + @"FrequencyDirs.xlsx", FileMode.Open, FileAccess.Read))
 		using (IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream)) {
 			excelReader.IsFirstRowAsColumnNames = true;
