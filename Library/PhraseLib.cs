@@ -4,6 +4,12 @@ using System.Linq;
 
 namespace LangsLib {
 
+	public struct PhraseSide {
+		public Langs src;
+		public Langs dest;
+		public Langs langOfText() { return dest == Langs._ ? src : dest; }
+	}
+
 	public struct TPosLen {
 		public byte Pos;
 		public sbyte Len; //could be negative when SpellChecker error
@@ -40,29 +46,27 @@ namespace LangsLib {
 		//}
 	}
 
-	public struct PhraseSide {
-		public Langs src;
-		public Langs dest;
-		public Langs langOfText() { return dest == Langs._ ? src : dest; }
-	}
-
 	public struct SelectedWord : IEqualityComparer<SelectedWord> {
 		public string word; //puvodni slovo (po WordBreak)
 		public string ftxWord; //lowercase, PhraseWord.maxWordLen
 		public int idx; //index zdroje slova v PhraseWords.Idxs
-		public bool isWrong; //word SpellCheck error
 
 		bool IEqualityComparer<SelectedWord>.Equals(SelectedWord x, SelectedWord y) { return x.ftxWord.Equals(y.ftxWord); }
 		int IEqualityComparer<SelectedWord>.GetHashCode(SelectedWord obj) { return obj.ftxWord.GetHashCode(); }
 	}
 
 	public class SelectedWords {
-		public SelectedWords(PhraseWords phrase, bool correctOnly) {
+		public SelectedWords(PhraseWords phrase, bool correctOnly = true) {
 			string pomStr;
 			selected = phrase.Idxs.Where(idx => correctOnly ? idx.Len > 0 : true).Select((idx, i) => new SelectedWord { idx = i, word = pomStr = phrase.Text.Substring(idx.Pos, idx.Len), ftxWord = pomStr.Substring(0, Math.Min(idx.Len, PhraseWords.maxWordLen)).ToLower() }).ToArray();
 		}
+		SelectedWords() { }
 		public PhraseWords phrase;
 		public SelectedWord[] selected;
+		public SelectedWords Except(SelectedWords s) {
+			if (phrase != s.phrase) throw new Exception("phrase != s.phrase");
+			return new SelectedWords { phrase = phrase, selected = selected.Except(s.selected).ToArray() };
+		}
 	}
 
 }

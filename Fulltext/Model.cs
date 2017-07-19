@@ -2,22 +2,17 @@
 //Add-Migration InitialCreate or v1 or v10 ...
 //drop-database
 //update-database 
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.ComponentModel.DataAnnotations;
 using LangsLib;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System;
-using SpellChecker;
-using STALib;
-using System.Configuration;
-using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 
 namespace Fulltext {
 
-	public class PhraseWord {
+  public class PhraseWord {
 
 		public const string PhraseIdName = "PhraseId";
 		public const string SrcLangName = "SrcLang";
@@ -47,8 +42,9 @@ namespace Fulltext {
 		public byte SrcLang { get; set; }
 		public byte DestLang { get; set; }
 		public int? SrcRef { get; set; }
+    public int DictRef { get; set; }
 
-		[MaxLength(maxPhraseBaseLen), Required]
+    [MaxLength(maxPhraseBaseLen), Required]
 		public string Base { get; set; } //normalized text for duplicity search
 
 		public ICollection<PhraseWord> Words { get; set; } //stemmed words
@@ -106,7 +102,8 @@ namespace Fulltext {
 			modelBuilder.Entity<Dict>()
 				.HasMany(c => c.Phrases)
 				.WithOne(e => e.Dict)
-				.IsRequired()
+        .HasForeignKey(e => e.DictRef)
+        .IsRequired()
 				.OnDelete(DeleteBehavior.Cascade);
 		}
 
