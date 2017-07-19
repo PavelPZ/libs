@@ -20,7 +20,7 @@ namespace FulltextDBModel {
   public class FtxWord {
 
     [Key]
-    public int Id { get; set; } //internal unique ID
+    public int Id { get; set; }
     [MaxLength(PhraseWords.maxWordLen)]
     public string Word { get; set; } //fulltext word
     public byte Lang { get; set; } //jazyk knihy
@@ -28,25 +28,53 @@ namespace FulltextDBModel {
 
 }
 
-namespace BookDBModel {
+namespace SoundDBModel {
+  public class SoundSource {
+    [Key]
+    public int Id { get; set; }
+    public string Name { get; set; }
+  }
 
-  public class PhraseSrcWord: FulltextDBModel.FtxWord {
+  public class SoundFile {
+    [Key]
+    public int Id { get; set; }
+    public byte Lang { get; set; }
+    [MaxLength(PhraseWords.maxWordLen)]
+    public string Text { get; set; } //text zvuku
+    public string Path { get; set; }
 
     //*** relations
-    public int PhraseRef { get; set; } 
-    public int BookRef { get; set; } 
+    public int SourceRef { get; set; }
+    public SoundSource Source { get; set; }
+  }
 
-		public PhraseSrc Phrase { get; set; }
+  public static class BookDBModelBuild {
+
+    public static void OnModelCreating(ModelBuilder modelBuilder) {
+      modelBuilder.Entity<SoundFile>().HasIndex(p => new { p.SourceRef, p.Text, p.Lang });
+    }
+  }
+}
+
+namespace BookDBModel {
+
+  public class PhraseSrcWord : FulltextDBModel.FtxWord {
+
+    //*** relations
+    public int PhraseRef { get; set; }
+    public int BookRef { get; set; }
+
+    public PhraseSrc Phrase { get; set; }
     public Book Book { get; set; }
-	}
+  }
 
   public class PhraseDestWord : FulltextDBModel.FtxWord {
 
     public byte BookSrcLang { get; set; } //jazyk knihy
 
     //*** relations
-    public int PhraseRef { get; set; } 
-    public int BookRef { get; set; } 
+    public int PhraseRef { get; set; }
+    public int BookRef { get; set; }
 
     public PhraseDest Phrase { get; set; }
     public Book Book { get; set; }
@@ -54,14 +82,14 @@ namespace BookDBModel {
   }
 
   public abstract class PhraseLow {
-		[Key]
-		public int Id { get; set; } //internal unique ID
-		public string Text { get; set; }
-		public byte[] TextIdxs { get; set; } //word breking result (zakodovane <pos, len> array). TODO: len musí být max. 127 :-(
+    [Key]
+    public int Id { get; set; }
+    public string Text { get; set; }
+    public byte[] TextIdxs { get; set; } //word breking result (zakodovane <pos, len> array). TODO: len musí být max. 127 :-(
     public byte Lang { get; set; }
-	}
+  }
 
-	public class PhraseSrc: PhraseLow {
+  public class PhraseSrc : PhraseLow {
     public byte LessonId;
 
     //*** relations
@@ -73,22 +101,22 @@ namespace BookDBModel {
 
   public class PhraseDest : PhraseLow {
 
-		//*** relations
-		public int SrcRef { get; set; }
-		public PhraseSrc Src { get; set; } //my localizations
+    //*** relations
+    public int SrcRef { get; set; }
+    public PhraseSrc Src { get; set; } //my localizations
     public ICollection<PhraseDestWord> Words { get; set; } //breaked words
   }
 
   public class Book {
-		public int Id { get; set; } //internal unique ID
-		public string Name { get; set; } //dict friendly name
-		public byte SrcLang { get; set; }
-		public DateTime Imported { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; } //dict friendly name
+    public byte SrcLang { get; set; }
+    public DateTime Imported { get; set; }
     public string Lessons { get; set; }
 
     public ICollection<PhraseSrc> SrcPhrases { get; set; }
-		public ICollection<PhraseSrcWord> Words { get; set; }
-	}
+    public ICollection<PhraseSrcWord> Words { get; set; }
+  }
 
   public static class BookDBModelBuild {
 
@@ -132,77 +160,77 @@ namespace BookDBModel {
 
 namespace Fulltext2 {
 
-	public class PhraseWord {
+  public class PhraseWord {
 
-		[Key]
-		public int Id { get; set; } //internal unique ID
-		[MaxLength(PhraseWords.maxWordLen)]
-		public string Word { get; set; } //fulltext word
+    [Key]
+    public int Id { get; set; }
+    [MaxLength(PhraseWords.maxWordLen)]
+    public string Word { get; set; } //fulltext word
 
-		//*** relations
-		public int PhraseRef { get; set; } //ID of phrase, containing word. Could be Hash64 of string, identifying phrase in its source repository.
-		public int DictRef { get; set; } //ID of dictionary
+    //*** relations
+    public int PhraseRef { get; set; } //ID of phrase, containing word. Could be Hash64 of string, identifying phrase in its source repository.
+    public int DictRef { get; set; } //ID of dictionary
 
-		public Phrase Phrase { get; set; }
-		public Book Dict { get; set; }
+    public Phrase Phrase { get; set; }
+    public Book Dict { get; set; }
 
-	}
+  }
 
-	public class Phrase {
+  public class Phrase {
 
-		//public const int maxPhraseBaseLen = 128;
+    //public const int maxPhraseBaseLen = 128;
 
-		[Key]
-		public int Id { get; set; } //internal unique ID
-		public string Text { get; set; }
-		public byte[] TextIdxs { get; set; } //word breking result (zakodovane <pos, len> array). TODO: len musí být max. 127 :-(
+    [Key]
+    public int Id { get; set; }
+    public string Text { get; set; }
+    public byte[] TextIdxs { get; set; } //word breking result (zakodovane <pos, len> array). TODO: len musí být max. 127 :-(
 
-		//*** relations
-		public int? SrcRef { get; set; } //source phrase. ==null iff source part of phrase
-		public int DictRef { get; set; }
+    //*** relations
+    public int? SrcRef { get; set; } //source phrase. ==null iff source part of phrase
+    public int DictRef { get; set; }
 
-		public ICollection<PhraseWord> Words { get; set; } //word breaked words
-		public Book Dict { get; set; }
+    public ICollection<PhraseWord> Words { get; set; } //word breaked words
+    public Book Dict { get; set; }
 
-		public ICollection<Phrase> Dests { get; set; } //my localizations
-		public Phrase Src { get; set; } //my source
+    public ICollection<Phrase> Dests { get; set; } //my localizations
+    public Phrase Src { get; set; } //my source
 
 
-	}
+  }
 
-	public class Book {
-		public int Id { get; set; } //internal unique ID
-		public string Name { get; set; } //dict friendly name
+  public class Book {
+    public int Id { get; set; }
+    public string Name { get; set; } //dict friendly name
     public string Lessons { get; set; } //struktura lekci
     public byte Lang { get; set; }
-		public DateTime Imported { get; set; }
+    public DateTime Imported { get; set; }
 
-		//*** relations
-		public int? SrcRef { get; set; } //source dict. ==null iff source part of dictionary
-		public int? UserRef { get; set; }
-		public int? TextBookRef { get; set; }
+    //*** relations
+    public int? SrcRef { get; set; } //source dict. ==null iff source part of dictionary
+    public int? UserRef { get; set; }
+    public int? TextBookRef { get; set; }
 
-		public ICollection<Phrase> Phrases { get; set; }
-		public ICollection<PhraseWord> Words { get; set; }
-		public User User { get; set; }
-		public TextBook TextBook { get; set; }
-		public ICollection<Book> Dests { get; set; } //my localizations
-		public Book Src { get; set; } //my source
-	}
+    public ICollection<Phrase> Phrases { get; set; }
+    public ICollection<PhraseWord> Words { get; set; }
+    public User User { get; set; }
+    public TextBook TextBook { get; set; }
+    public ICollection<Book> Dests { get; set; } //my localizations
+    public Book Src { get; set; } //my source
+  }
 
-	public class User {
-		public int Id { get; set; } //internal unique ID
+  public class User {
+    public int Id { get; set; }
 
-		//*** relations
-		public ICollection<Book> Dicts { get; set; }
-	}
+    //*** relations
+    public ICollection<Book> Dicts { get; set; }
+  }
 
-	public class TextBook {
-		public int Id { get; set; } //internal unique ID
+  public class TextBook {
+    public int Id { get; set; }
 
-		//*** relations
-		public ICollection<Book> Dicts { get; set; }
-	}
+    //*** relations
+    public ICollection<Book> Dicts { get; set; }
+  }
 
 
 

@@ -8,9 +8,8 @@ using System.Configuration;
 
 namespace RewiseDBModel {
 
-  public class FactWord : FulltextDBModel.FtxWord {
+  public abstract class FactWord : FulltextDBModel.FtxWord {
 
-    public bool IsSrc { get; set; }
     //*** relations
     public int FactRef { get; set; } //ID of PhraseLow, containing word
     public int DictRef { get; set; } //ID of dictionary
@@ -19,15 +18,19 @@ namespace RewiseDBModel {
     public UserDict Dict { get; set; }
   }
 
+  public class SrcFactWord: FactWord { }
+
+  public class DestFactWord : FactWord { }
+
   public class UserFact {
     [Key]
-    public long Id { get; set; } //internal unique ID
+    public int Id { get; set; } //internal unique ID
     public string Data { get; set; } //JSON data s faktem
 
     public int DictRef { get; set; }
     public UserDict Dict { get; set; }
-    public ICollection<FactWord> SrcWords { get; set; }
-    public ICollection<FactWord> DestWords { get; set; }
+    public ICollection<SrcFactWord> SrcWords { get; set; }
+    public ICollection<DestFactWord> DestWords { get; set; }
   }
 
   public class UserDict {
@@ -39,8 +42,8 @@ namespace RewiseDBModel {
     public int UserRef { get; set; }
     public User User { get; set; }
     public ICollection<UserFact> Facts { get; set; }
-    public ICollection<FactWord> SrcWords { get; set; }
-    public ICollection<FactWord> DestWords { get; set; }
+    public ICollection<SrcFactWord> SrcWords { get; set; }
+    public ICollection<DestFactWord> DestWords { get; set; }
   }
 
   public class User {
@@ -53,7 +56,8 @@ namespace RewiseDBModel {
 
     public static void OnModelCreating(ModelBuilder modelBuilder) {
 
-      modelBuilder.Entity<FactWord>().HasIndex(p => new { p.Word, p.IsSrc, p.DictRef });
+      modelBuilder.Entity<SrcFactWord>().HasIndex(p => new { p.Word, p.DictRef });
+      modelBuilder.Entity<DestFactWord>().HasIndex(p => new { p.Word, p.DictRef });
 
       modelBuilder.Entity<UserFact>()
         .HasMany(c => c.SrcWords)
@@ -75,6 +79,20 @@ namespace RewiseDBModel {
         .HasForeignKey(e => e.DictRef)
         .IsRequired()
         .OnDelete(DeleteBehavior.Cascade);
+
+      modelBuilder.Entity<UserDict>()
+        .HasMany(c => c.SrcWords)
+        .WithOne(e => e.Dict)
+        .HasForeignKey(e => e.DictRef)
+        .IsRequired()
+        .OnDelete(DeleteBehavior.Restrict);
+
+      modelBuilder.Entity<UserDict>()
+        .HasMany(c => c.DestWords)
+        .WithOne(e => e.Dict)
+        .HasForeignKey(e => e.DictRef)
+        .IsRequired()
+        .OnDelete(DeleteBehavior.Restrict);
 
       modelBuilder.Entity<User>()
         .HasMany(c => c.Dicts)

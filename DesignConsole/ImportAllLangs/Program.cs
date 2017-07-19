@@ -1,4 +1,4 @@
-﻿using Excel;
+﻿using ExcelDataReader;
 using LangsLib;
 using System;
 using System.Collections.Generic;
@@ -14,8 +14,8 @@ internal class ImportAllLangs {
 	internal static void DirectoriesForFrequency() {
 		using (FileStream stream = File.Open(importPath + @"FrequencyDirs.xlsx", FileMode.Open, FileAccess.Read))
 		using (IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream)) {
-			excelReader.IsFirstRowAsColumnNames = true;
-			DataSet result = excelReader.AsDataSet();
+      //excelReader.IsFirstRowAsColumnNames = true; Chybi ve verzi 3, co s tim? Cosi je tady: https://github.com/ExcelDataReader/ExcelDataReader
+      DataSet result = excelReader.AsDataSet();
 			var tb = result.Tables.OfType<DataTable>().First(t => t.TableName == "ToPZCode");
 			var rows = tb.Rows.Cast<DataRow>().Where(r => !r.IsNull(0)).ToArray();
 			var dirs =  rows.Select(r => new { dir = r[0].ToString(), lang = (Langs)Enum.Parse(typeof(Langs), r[1].ToString(), true) })/*.Where(r => Metas.SpellCheckLangs.Contains(r.lang))*/.ToArray();
@@ -34,8 +34,8 @@ internal class ImportAllLangs {
 	internal static void Run() {
 		using (FileStream stream = File.Open(importPath + @"RewiseJazyky.xlsx", FileMode.Open, FileAccess.Read))
 		using (IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream)) {
-			excelReader.IsFirstRowAsColumnNames = true;
-			DataSet result = excelReader.AsDataSet();
+      //excelReader.IsFirstRowAsColumnNames = true; Chybi ve verzi 3, co s tim?
+      DataSet result = excelReader.AsDataSet();
 			var tb = result.Tables.OfType<DataTable>().First(t => t.TableName == "ToPZCode");
 			var rows = tb.Rows.Cast<DataRow>().Where(r => !r.IsNull(0)).ToArray();
 			int lcid; CultureInfo lc; string SpellCheckId;
