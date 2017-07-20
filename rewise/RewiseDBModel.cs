@@ -14,81 +14,93 @@ namespace RewiseDBModel {
     public int FactRef { get; set; } //ID of PhraseLow, containing word
     public int DictRef { get; set; } //ID of dictionary
 
-    public UserFact Fact { get; set; }
-    public UserDict Dict { get; set; }
+    public Fact Fact { get; set; }
+    public Vocabulary Dict { get; set; }
   }
 
-  public class SrcFactWord: FactWord { }
+  public class PhraseWord: FactWord { }
 
-  public class DestFactWord : FactWord { }
+  public class LocaleWord : FactWord { }
 
-  public class UserFact {
+  public class WordError {
     [Key]
-    public int Id { get; set; } //internal unique ID
+    public long Id { get; set; } 
+    public byte Type { get; set; }
+  }
+
+  public class Fact  {
+    [Key]
+    public int Id { get; set; }
+
+    public string PhraseText { get; set; }
+    public byte[] PhraseTextIdxs { get; set; } 
+    public string LocaleText { get; set; }
+    public byte[] LocaleTextIdxs { get; set; } 
+
     public string Data { get; set; } //JSON data s faktem
 
     public int DictRef { get; set; }
-    public UserDict Dict { get; set; }
-    public ICollection<SrcFactWord> SrcWords { get; set; }
-    public ICollection<DestFactWord> DestWords { get; set; }
+    public Vocabulary Dict { get; set; }
+    public ICollection<PhraseWord> PhraseWords { get; set; }
+    public ICollection<LocaleWord> LocaleWords { get; set; }
   }
 
-  public class UserDict {
+  public class Vocabulary {
     [Key]
-    public int Id { get; set; } //internal unique ID
-    public byte SrcLang { get; set; }
-    public byte DestLang { get; set; }
+    public int Id { get; set; } 
+    public byte PhraseLang { get; set; }
+    public byte LocaleLang { get; set; }
 
     public int UserRef { get; set; }
     public User User { get; set; }
-    public ICollection<UserFact> Facts { get; set; }
-    public ICollection<SrcFactWord> SrcWords { get; set; }
-    public ICollection<DestFactWord> DestWords { get; set; }
+    public ICollection<Fact> Facts { get; set; }
+    public ICollection<PhraseWord> PhraseWords { get; set; }
+    public ICollection<LocaleWord> LocaleWords { get; set; }
   }
 
   public class User {
     [Key]
-    public int Id { get; set; } //internal unique ID
-    public ICollection<UserDict> Dicts { get; set; }
+    public int Id { get; set; } 
+    public ICollection<Vocabulary> Dicts { get; set; }
   }
 
   public static class RewiseDBModelBuild {
 
     public static void OnModelCreating(ModelBuilder modelBuilder) {
 
-      modelBuilder.Entity<SrcFactWord>().HasIndex(p => new { p.Word, p.DictRef });
-      modelBuilder.Entity<DestFactWord>().HasIndex(p => new { p.Word, p.DictRef });
+      modelBuilder.Entity<PhraseWord>().HasIndex(p => new { p.Word, p.DictRef });
+      modelBuilder.Entity<LocaleWord>().HasIndex(p => new { p.Word, p.DictRef });
 
-      modelBuilder.Entity<UserFact>()
-        .HasMany(c => c.SrcWords)
+      modelBuilder.Entity<Fact>()
+        .HasMany(c => c.PhraseWords)
         .WithOne(e => e.Fact)
         .HasForeignKey(e => e.FactRef)
         .IsRequired()
         .OnDelete(DeleteBehavior.Cascade);
 
-      modelBuilder.Entity<UserFact>()
-        .HasMany(c => c.DestWords)
+      modelBuilder.Entity<Fact>()
+        .HasMany(c => c.LocaleWords)
         .WithOne(e => e.Fact)
         .HasForeignKey(e => e.FactRef)
         .IsRequired()
         .OnDelete(DeleteBehavior.Cascade);
 
-      modelBuilder.Entity<UserDict>()
+      modelBuilder.Entity<Vocabulary>()
         .HasMany(c => c.Facts)
         .WithOne(e => e.Dict)
         .HasForeignKey(e => e.DictRef)
         .IsRequired()
         .OnDelete(DeleteBehavior.Cascade);
 
-      modelBuilder.Entity<UserDict>()
-        .HasMany(c => c.SrcWords)
+      modelBuilder.Entity<Vocabulary>()
+        .HasMany(c => c.PhraseWords)
         .WithOne(e => e.Dict)
         .HasForeignKey(e => e.DictRef)
         .IsRequired()
         .OnDelete(DeleteBehavior.Restrict);
 
-      modelBuilder.Entity<UserDict>()
-        .HasMany(c => c.DestWords)
+      modelBuilder.Entity<Vocabulary>()
+        .HasMany(c => c.LocaleWords)
         .WithOne(e => e.Dict)
         .HasForeignKey(e => e.DictRef)
         .IsRequired()
@@ -103,18 +115,19 @@ namespace RewiseDBModel {
     }
   }
 
-  //Javascript definice faktu
-  public class Fact {
-    //rewise
+  ////Javascript definice faktu
+  //public class Fact {
+  //  //rewise
 
-    //data
-    public Side srcData;
-    public Side destData;
-  }
-  public class Side {
-    public Langs lang;
-    public string text;
-    public int sound;
-  }
+  //  //data
+  //  public Side srcData;
+  //  public Side destData;
+  //}
+  //public class Side {
+  //  public Langs lang;
+  //  public string text;
+  //  public int sound;
+  //}
 
 }
+

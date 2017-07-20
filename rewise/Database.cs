@@ -14,19 +14,24 @@ using System.Threading.Tasks;
 
 namespace Database {
 
-  public class FulltextContext : DbContext {
-    public DbSet<BookDBModel.PhraseSrcWord> PhraseSrcWords { get; set; }
-    public DbSet<BookDBModel.PhraseDestWord> PhraseDestWords { get; set; }
-    public DbSet<BookDBModel.PhraseSrc> PhraseSrcs { get; set; }
-    public DbSet<BookDBModel.PhraseDest> PhraseDests { get; set; }
+  public class RewiseContext : DbContext {
+    public DbSet<BookDBModel.PhraseWord> BookPhraseWords { get; set; }
+    public DbSet<BookDBModel.LocaleWord> BookLocaleWords { get; set; }
+    public DbSet<BookDBModel.Phrase> BookPhrases { get; set; }
+    public DbSet<BookDBModel.Locale> BookLocales { get; set; }
     public DbSet<BookDBModel.Book> Books { get; set; }
+
     //https://github.com/aspnet/EntityFramework/issues/245 register fake dm_fts_parser entity
     public DbSet<FulltextDBModel.dm_fts_parser> dm_fts_parsers { get; set; }
-    public DbSet<RewiseDBModel.SrcFactWord> SrcFactWords { get; set; }
-    public DbSet<RewiseDBModel.DestFactWord> DestFactWords { get; set; }
-    public DbSet<RewiseDBModel.UserFact> UserFacts { get; set; }
-    public DbSet<RewiseDBModel.UserDict> UserDicts { get; set; }
+
+    public DbSet<RewiseDBModel.PhraseWord> UserPhraseWords { get; set; }
+    public DbSet<RewiseDBModel.LocaleWord> UserLocaleWords { get; set; }
+    public DbSet<RewiseDBModel.Fact> UserFacts { get; set; }
+    public DbSet<RewiseDBModel.Vocabulary> UserDicts { get; set; }
     public DbSet<RewiseDBModel.User> Users { get; set; }
+
+    public DbSet<SoundDBModel.Source> SoundSources { get; set; }
+    public DbSet<SoundDBModel.File> SoundFiles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
       optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["RewiseDatabase"].ConnectionString);
@@ -35,6 +40,7 @@ namespace Database {
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
       BookDBModel.BookDBModelBuild.OnModelCreating(modelBuilder);
       RewiseDBModel.RewiseDBModelBuild.OnModelCreating(modelBuilder);
+      SoundDBModel.BookDBModelBuild.OnModelCreating(modelBuilder);
     }
   }
 }
