@@ -8,6 +8,11 @@ using System.Text;
 namespace DesignImportBooks {
   class Program {
     static void Main(string[] args) {
+
+      PhraseLib.Test.Run();
+      return;
+
+
       var book = new Book {
         Name= "AEC_1",
         Lang = (byte)Langs.en_gb,

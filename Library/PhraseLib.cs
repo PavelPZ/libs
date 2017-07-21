@@ -10,30 +10,45 @@ namespace LangsLib {
 		public Langs langOfText() { return dest == Langs._ ? src : dest; }
 	}
 
-	public struct TPosLen {
-		public byte Pos;
-		public sbyte Len; //could be negative when SpellChecker error
-		public string toString() { return string.Format("{0}-{1}", Pos, Len); }
+  public class TPosLen {
+    public Int16 Pos;
+    public Int16 Len; //could be negative when SpellChecker error
+    public string toString() { return string.Format("{0}-{1}", Pos, Len); }
 		public static string fromString(IEnumerable<TPosLen> items) { return items == null ? null : items.DefaultIfEmpty().Select(it => it.toString()).Aggregate((r, i) => r + "|" + i); }
 
-		public static byte[] toBytes(List<TPosLen> idxs) {
-			var res = new byte[idxs.Count << 1];
+		public static Int16[] toArray(List<TPosLen> idxs) {
+      var res = new Int16[idxs.Count << 1];
 			for (var i = 0; i < idxs.Count; i++) { res[i << 1] = idxs[i].Pos; res[(i << 1) + 1] = (byte)idxs[i].Len; }
 			return res;
 		}
-		public static List<TPosLen> fromBytes(byte[] bytes) {
+
+    public static List<TPosLen> fromArray(Int16[] bytes) {
 			var res = new List<TPosLen>();
 			for (var i = 0; i < (bytes.Length >> 1); i++) res.Add(new TPosLen { Pos = bytes[i << 1], Len = (sbyte)bytes[(i << 1) + 1] });
 			return res;
 		}
-	}
 
-	//public struct TWord {
-	//	public string word;
-	//	public bool isWrong;
-	//}
+    public static byte[] toBytes(List<TPosLen> idxs) {
+      var array = toArray(idxs);
+      byte[] result = new byte[array.Length * sizeof(Int16)];
+      Buffer.BlockCopy(array, 0, result, 0, result.Length);
+      return result;
+    }
 
-	public class PhraseWords {
+    public static List<TPosLen> fromBytes(byte[] bytes) {
+      Int16[] result = new Int16[bytes.Length / sizeof(Int16)];
+      Buffer.BlockCopy(bytes, 0, result, 0, bytes.Length);
+      return fromArray(result);
+    }
+
+  }
+
+  //public struct TWord {
+  //	public string word;
+  //	public bool isWrong;
+  //}
+
+  public class PhraseWords {
 		public PhraseWords(string text, List<TPosLen> idxs = null) { Text = text; Idxs = idxs; }
 		public PhraseWords(PhraseWords phr) : this(phr.Text) { Idxs = phr.Idxs; }
 		public const sbyte maxWordLen = 24;
