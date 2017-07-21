@@ -13,6 +13,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace FulltextDBModel {
   public class dm_fts_parser {
@@ -222,20 +223,25 @@ namespace PhraseLib {
 
     //object array JSON code x encode
     public static PhraseText decode(string jsonArray) {
-      return parse(jsonArray);
+      //return parse(jsonArray);
       var objs = JsonConvert.DeserializeObject<Object[]>(jsonArray);
       return new PhraseText {
         items = objs.Select(v => PhraseTextItem.decode((Object[])v)).ToArray()
       };
     }
     public string encode(bool formated = false) {
-      return stringify(formated);
+      //return stringify(formated);
       return JsonConvert.SerializeObject(items.Select(it => it.encode()).ToArray());
+    }
+
+    public IEnumerable<string> getFtxWords() {
+      return items.SelectMany(it => it.getFtxWords()).Distinct();
     }
 
     //simply JSON code x encode for debugging
     public string stringify(bool formated = false) { return JsonConvert.SerializeObject(this, new JsonSerializerSettings { Formatting = formated ? Formatting.Indented : Formatting.None, DefaultValueHandling = DefaultValueHandling.Ignore }); }
     public static PhraseText parse(string json) { return JsonConvert.DeserializeObject<PhraseText>(json); }
+
   }
 
   public class PhraseTextItem {
@@ -264,24 +270,30 @@ namespace PhraseLib {
       wordIdxs = posLens.ToArray();
     }
 
-    public UInt16 pos;
-    public UInt16 len;
     public string text;
     public string soundText;
     public TPosLen[] wordIdxs;
 
+    public string getSoundText() {
+      if (soundText!=null) return soundText;
+      return rxBraket.Replace(text,"").Trim();
+    }
+    static Regex rxBraket = new Regex("\\(.*?\\)");
+
+    internal IEnumerable<string> getFtxWords() {
+      return wordIdxs.Where(pl => pl.type == ItemType.ok).Select(pl => text.Substring(pl.pos, pl.len).ToLower());
+    }
+
     //object array JSON code x encode
-    public static PhraseTextItem decode(Object[] v) {
+    internal static PhraseTextItem decode(Object[] v) {
       return new PhraseTextItem {
-        pos = (UInt16)v[0],
-        len = (UInt16)v[1],
-        text = (string)v[2],
-        soundText = (string)v[3],
+        text = (string)v[0],
+        soundText = (string)v[1],
         wordIdxs = v.Skip(3).Select(vv => TPosLen.decode((Object[])vv)).ToArray()
       };
     }
-    public IEnumerable<Object> encode() {
-      return new object[] { pos, len, text, soundText }.Concat(wordIdxs.Select(pl => pl.encode()));
+    internal IEnumerable<Object> encode() {
+      return new object[] { text, soundText }.Concat(wordIdxs.Select(pl => pl.encode()));
     }
   }
 
@@ -294,14 +306,14 @@ namespace PhraseLib {
     public ItemType type; //word type
 
     //object array JSON code x encode
-    public static TPosLen decode(Object[] v) {
+    internal static TPosLen decode(Object[] v) {
       return new TPosLen {
         pos = (short)v[0],
         len = (short)v[1],
         type = (ItemType)(byte)v[2]
       };
     }
-    public IEnumerable<Object> encode() {
+    internal IEnumerable<Object> encode() {
       return new object[] { pos, len, (byte)type };
     }
   }
@@ -309,9 +321,10 @@ namespace PhraseLib {
   public static class Test {
     public static void Run() {
       var text = new PhraseText(new StemmerBreaker.Runner(Langs.cs_cz), @"
-        Ahoj, jak (ako) se máš (máte)? {ahoj máš} ignored | já dobře 
+        Ahoj, jak (ako) se máš (máte)? {ahoj máš} ignored | Ahoj, jak (ako) se máš (máte)?  | já dobře 
 ");
       var str = text.encode(true);
+      var sounds = text.items.Select(it => it.getSoundText()).Aggregate((r, i) => r + "|" + i);
       str = null;
     }
   }

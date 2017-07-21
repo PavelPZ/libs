@@ -17,7 +17,7 @@ namespace rewise.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Imported = table.Column<DateTime>(nullable: false),
                     Lang = table.Column<byte>(nullable: false),
-                    Lessons = table.Column<string>(nullable: true),
+                    MetaData = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -70,8 +70,7 @@ namespace rewise.Migrations
                     BookRef = table.Column<int>(nullable: false),
                     Lang = table.Column<byte>(nullable: false),
                     LessonId = table.Column<byte>(nullable: false),
-                    Text = table.Column<string>(nullable: true),
-                    TextIdxs = table.Column<byte[]>(nullable: true),
+                    TextJSON = table.Column<string>(nullable: true),
                     isPhraseWord = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -134,14 +133,20 @@ namespace rewise.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    BookRef = table.Column<int>(nullable: false),
                     Lang = table.Column<byte>(nullable: false),
                     PhraseRef = table.Column<int>(nullable: false),
-                    Text = table.Column<string>(nullable: true),
-                    TextIdxs = table.Column<byte[]>(nullable: true)
+                    TextJSON = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BookLocales", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BookLocales_Books_BookRef",
+                        column: x => x.BookRef,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_BookLocales_BookPhrases_PhraseRef",
                         column: x => x.PhraseRef,
@@ -156,7 +161,6 @@ namespace rewise.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    BookId = table.Column<int>(nullable: true),
                     BookRef = table.Column<int>(nullable: false),
                     Lang = table.Column<byte>(nullable: false),
                     PhraseRef = table.Column<int>(nullable: false),
@@ -166,8 +170,8 @@ namespace rewise.Migrations
                 {
                     table.PrimaryKey("PK_BookPhraseWords", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BookPhraseWords_Books_BookId",
-                        column: x => x.BookId,
+                        name: "FK_BookPhraseWords_Books_BookRef",
+                        column: x => x.BookRef,
                         principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -209,7 +213,6 @@ namespace rewise.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    BookId = table.Column<int>(nullable: true),
                     BookRef = table.Column<int>(nullable: false),
                     BookSrcLang = table.Column<byte>(nullable: false),
                     Lang = table.Column<byte>(nullable: false),
@@ -220,8 +223,8 @@ namespace rewise.Migrations
                 {
                     table.PrimaryKey("PK_BookLocaleWords", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BookLocaleWords_Books_BookId",
-                        column: x => x.BookId,
+                        name: "FK_BookLocaleWords_Books_BookRef",
+                        column: x => x.BookRef,
                         principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -290,14 +293,24 @@ namespace rewise.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Books_Name_Lang",
+                table: "Books",
+                columns: new[] { "Name", "Lang" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BookLocales_PhraseRef",
                 table: "BookLocales",
                 column: "PhraseRef");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookLocaleWords_BookId",
+                name: "IX_BookLocales_BookRef_Lang",
+                table: "BookLocales",
+                columns: new[] { "BookRef", "Lang" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookLocaleWords_BookRef",
                 table: "BookLocaleWords",
-                column: "BookId");
+                column: "BookRef");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookLocaleWords_PhraseRef",
@@ -315,9 +328,9 @@ namespace rewise.Migrations
                 column: "BookRef");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookPhraseWords_BookId",
+                name: "IX_BookPhraseWords_BookRef",
                 table: "BookPhraseWords",
-                column: "BookId");
+                column: "BookRef");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookPhraseWords_PhraseRef",

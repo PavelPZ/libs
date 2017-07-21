@@ -9,8 +9,8 @@ namespace DesignImportBooks {
   class Program {
     static void Main(string[] args) {
 
-      PhraseLib.Test.Run();
-      return;
+      //PhraseLib.Test.Run();
+      //return;
 
 
       var book = new Book {
@@ -41,7 +41,7 @@ namespace DesignImportBooks {
             Locales = new Locale[] {
               new Locale{
                 Lang = (byte)Langs.cs_cz,
-                Text = "Jak se máš"
+                Text = "Ahoj, jak (ako) se máš (máte)? {ahoj máš} ignored | Ahoj, jak (ako) se máš (máte)?  | já dobře "
               },
               new Locale{
                 Lang = (byte)Langs.sk_sk,

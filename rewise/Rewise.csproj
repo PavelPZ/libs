@@ -176,15 +176,11 @@
   <ItemGroup>
     <Compile Include="BookDBModel.cs" />
     <Compile Include="Database.cs" />
-    <Compile Include="Migrations\20170720143244_v0.cs" />
-    <Compile Include="Migrations\20170720143244_v0.designer.cs">
-      <DependentUpon>20170720143244_v0.cs</DependentUpon>
+    <Compile Include="Migrations\20170721145502_v0.cs" />
+    <Compile Include="Migrations\20170721145502_v0.designer.cs">
+      <DependentUpon>20170721145502_v0.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20170720150919_v1.cs" />
-    <Compile Include="Migrations\20170720150919_v1.designer.cs">
-      <DependentUpon>20170720150919_v1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\FulltextContextModelSnapshot.cs" />
+    <Compile Include="Migrations\RewiseContextModelSnapshot.cs" />
     <Compile Include="RewiseDBModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

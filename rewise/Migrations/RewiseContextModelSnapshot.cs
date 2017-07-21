@@ -8,10 +8,9 @@ using Database;
 namespace rewise.Migrations
 {
     [DbContext(typeof(RewiseContext))]
-    [Migration("20170720150919_v1")]
-    partial class v1
+    partial class RewiseContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -26,13 +25,13 @@ namespace rewise.Migrations
 
                     b.Property<byte>("Lang");
 
-                    b.Property<string>("Lessons");
-
                     b.Property<string>("MetaData");
 
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name", "Lang");
 
                     b.ToTable("Books");
                 });
@@ -42,17 +41,19 @@ namespace rewise.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("BookRef");
+
                     b.Property<byte>("Lang");
 
                     b.Property<int>("PhraseRef");
 
-                    b.Property<string>("Text");
-
-                    b.Property<byte[]>("TextIdxs");
+                    b.Property<string>("TextJSON");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PhraseRef");
+
+                    b.HasIndex("BookRef", "Lang");
 
                     b.ToTable("BookLocales");
                 });
@@ -61,8 +62,6 @@ namespace rewise.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("BookId");
 
                     b.Property<int>("BookRef");
 
@@ -77,7 +76,7 @@ namespace rewise.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookId");
+                    b.HasIndex("BookRef");
 
                     b.HasIndex("PhraseRef");
 
@@ -97,9 +96,7 @@ namespace rewise.Migrations
 
                     b.Property<byte>("LessonId");
 
-                    b.Property<string>("Text");
-
-                    b.Property<byte[]>("TextIdxs");
+                    b.Property<string>("TextJSON");
 
                     b.Property<bool>("isPhraseWord");
 
@@ -115,8 +112,6 @@ namespace rewise.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("BookId");
-
                     b.Property<int>("BookRef");
 
                     b.Property<byte>("Lang");
@@ -128,7 +123,7 @@ namespace rewise.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookId");
+                    b.HasIndex("BookRef");
 
                     b.HasIndex("PhraseRef");
 
@@ -284,6 +279,10 @@ namespace rewise.Migrations
 
             modelBuilder.Entity("BookDBModel.Locale", b =>
                 {
+                    b.HasOne("BookDBModel.Book", "Book")
+                        .WithMany("Locales")
+                        .HasForeignKey("BookRef");
+
                     b.HasOne("BookDBModel.Phrase", "Phrase")
                         .WithMany("Locales")
                         .HasForeignKey("PhraseRef")
@@ -293,8 +292,8 @@ namespace rewise.Migrations
             modelBuilder.Entity("BookDBModel.LocaleWord", b =>
                 {
                     b.HasOne("BookDBModel.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId");
+                        .WithMany("LocaleWords")
+                        .HasForeignKey("BookRef");
 
                     b.HasOne("BookDBModel.Locale", "Locale")
                         .WithMany("Words")
@@ -313,8 +312,8 @@ namespace rewise.Migrations
             modelBuilder.Entity("BookDBModel.PhraseWord", b =>
                 {
                     b.HasOne("BookDBModel.Book", "Book")
-                        .WithMany("Words")
-                        .HasForeignKey("BookId");
+                        .WithMany("PhraseWords")
+                        .HasForeignKey("BookRef");
 
                     b.HasOne("BookDBModel.Phrase", "Phrase")
                         .WithMany("Words")

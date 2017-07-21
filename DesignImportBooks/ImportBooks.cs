@@ -1,6 +1,7 @@
 ﻿using BookDBModel;
 using Database;
 using LangsLib;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -29,15 +30,19 @@ namespace DesignImportBooks {
       foreach (var phr in book.Phrases) {
         if (!lessonIds.Contains(phr.LessonId)) errorLog.AppendLine(string.Format("Cannot find lesson in book={0}, lessonId={1}, phrase={2}", book.Name, phr.LessonId, phr.TextJSON));
         phr.Lang = book.Lang;
-        phr.TextJSON = new PhraseLib.PhraseText (breakers[phr.Lang], phr.Text).encode();
-        //breakers[phr.Lang].wordBreakTyBytes(phr.TextJSON);
-        foreach (var loc in phr.Locales) loc.TextJSON = new PhraseLib.PhraseText (breakers[loc.Lang], loc.Text).encode();//loc.TextIdxs = breakers[loc.Lang].wordBreakTyBytes(loc.TextJSON);
+        var phrase = new PhraseLib.PhraseText(breakers[phr.Lang], phr.Text);
+        phr.TextJSON = phrase.encode();
+        phr.Words = phrase.getFtxWords().Select(posLen => new PhraseWord { Lang = book.Lang, Word = posLen, Book = book }).ToArray();
+
+        foreach (var loc in phr.Locales) {
+          var locale = new PhraseLib.PhraseText(breakers[loc.Lang], loc.Text);
+          loc.Book = book;
+          loc.TextJSON = locale.encode();//loc.TextIdxs = breakers[loc.Lang].wordBreakTyBytes(loc.TextJSON);
+          loc.Words = locale.getFtxWords().Select(posLen => new LocaleWord { Lang = loc.Lang, Word = posLen, Book = book, BookSrcLang = book.Lang }).ToArray();
+        }
       }
       ctx.Books.Add(book);
       ctx.SaveChanges();
-    }
-
-    public static void buildFtxIndex(StringBuilder errorLog) {
 
     }
 
