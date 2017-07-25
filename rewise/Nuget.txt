@@ -1,0 +1,5 @@
+﻿Install-Package Microsoft.EntityFrameworkCore.SqlServer -Version 1.1.2
+Install-Package Microsoft.EntityFrameworkCore.Design -Version 1.1.2
+Install-Package Newtonsoft.Json
+DESIGN 
+ExcelDataReader.DataSet

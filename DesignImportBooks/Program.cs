@@ -51,9 +51,9 @@ namespace DesignImportBooks {
           }
         },
       };
-      File.WriteAllText(@"d:\temp\dict.json", JsonConvert.SerializeObject(book, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore, Formatting = Formatting.Indented } ), Encoding.UTF8);
+      File.WriteAllText(@"c:\temp\dict.json", JsonConvert.SerializeObject(book, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore, Formatting = Formatting.Indented } ), Encoding.UTF8);
       var errorLog = new StringBuilder();
-      ImportBooks.importBook(@"d:\temp\dict.json", errorLog);
+      ImportBooks.importBook(@"c:\temp\dict.json", errorLog);
       if (errorLog.Length > 0) {
         Console.WriteLine(@">>> ERROR: see d:\temp\error.txt");
         File.WriteAllText(@"d:\temp\error.txt", errorLog.ToString());
