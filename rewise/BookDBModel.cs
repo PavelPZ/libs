@@ -7,12 +7,11 @@ using LangsLib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Configuration;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace FulltextDBModel {
@@ -224,9 +223,9 @@ namespace PhraseLib {
     //object array JSON code x encode
     public static PhraseText decode(string jsonArray) {
       //return parse(jsonArray);
-      var objs = JsonConvert.DeserializeObject<Object[]>(jsonArray);
+      var objs  = JsonConvert.DeserializeObject<JArray>(jsonArray);
       return new PhraseText {
-        items = objs.Select(v => PhraseTextItem.decode((Object[])v)).ToArray()
+        items = objs.Select(v => PhraseTextItem.decode(v.ToArray())).ToArray()
       };
     }
     public string encode(bool formated = false) {
@@ -285,15 +284,15 @@ namespace PhraseLib {
     }
 
     //object array JSON code x encode
-    internal static PhraseTextItem decode(Object[] v) {
+    internal static PhraseTextItem decode(JToken[] v) {
       return new PhraseTextItem {
-        text = (string)v[0],
-        soundText = (string)v[1],
-        wordIdxs = v.Skip(3).Select(vv => TPosLen.decode((Object[])vv)).ToArray()
+        text = v[0].ToString(),
+        soundText = v[1].ToString(),
+        wordIdxs = v.Skip(2).OfType<JArray>().Select(vv => TPosLen.decode(vv.ToArray())).ToArray()
       };
     }
     internal IEnumerable<Object> encode() {
-      return new object[] { text, soundText }.Concat(wordIdxs.Select(pl => pl.encode()));
+      return new object[] { text, soundText ?? "" }.Concat(wordIdxs.Select(pl => pl.encode()));
     }
   }
 
@@ -306,11 +305,11 @@ namespace PhraseLib {
     public ItemType type; //word type
 
     //object array JSON code x encode
-    internal static TPosLen decode(Object[] v) {
+    internal static TPosLen decode(JToken[] v) {
       return new TPosLen {
-        pos = (short)v[0],
-        len = (short)v[1],
-        type = (ItemType)(byte)v[2]
+        pos = v[0].Value<short>(),
+        len = v[1].Value<short>(),
+        type = (ItemType)(byte)v[2].Value<byte>()
       };
     }
     internal IEnumerable<Object> encode() {
@@ -324,6 +323,7 @@ namespace PhraseLib {
         Ahoj, jak (ako) se máš (máte)? {ahoj máš} ignored | Ahoj, jak (ako) se máš (máte)?  | já dobře 
 ");
       var str = text.encode(true);
+      var str2 = PhraseText.decode(str).encode();
       var sounds = text.items.Select(it => it.getSoundText()).Aggregate((r, i) => r + "|" + i);
       str = null;
     }
